@@ -1,19 +1,21 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
+import { twMerge } from 'tailwind-merge'
 
 type Props = HTMLAttributes<'a'>;
 
-const { href, class: className, ...props } = Astro.props;
+const { href, class: className, ...props} = Astro.props;
 
 const { pathname } = Astro.url;
 const subpath = pathname.match(/[^/]+/g);
 const isActive = href === pathname || href === '/' + subpath?.[0];
 ---
 
-<a
+<a 
   data-is-active={isActive}
   href={href}
-  class="Button px-5 transition-all flex justify-center items-center gap-2 text-gray-600 text-base font-normal leading-6 border-b data-[is-active]:border-b-primary-600 data-[is-active]:text-primary-600 hover:text-primary-600"
+  class={twMerge("px-5 transition-all flex justify-center items-center gap-2 text-gray-600 text-base font-normal leading-6 border-b data-[is-active]:border-b-primary-600 data-[is-active]:text-primary-600 hover:text-primary-600", className)}
+  {...props}
 >
   <slot />
 </a>

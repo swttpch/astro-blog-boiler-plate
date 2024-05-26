@@ -34,9 +34,7 @@ body {
   margin: 0;
   padding: 0;
 }
-main {
-  width: 1080px;
-  max-width: calc(100%+ 4rem);
+header > main, section {
   margin: 0 auto;
   padding: 0rem 2rem;
   display: flex;
