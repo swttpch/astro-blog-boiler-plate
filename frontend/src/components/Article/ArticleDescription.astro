@@ -1,0 +1,10 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { twMerge } from "tailwind-merge";
+type Props = HTMLAttributes<'p'> & {noOfLines?: number};
+const { class: twClass, noOfLines, ...rest } = Astro.props;
+const lineClamp = noOfLines? `line-clamp-${noOfLines}` : '';
+---
+<p class={twMerge(['self-stretch text-lg text-gray-600 break-words text-ellipsis overflow-hidden', lineClamp, twClass])} {...rest}>
+  <slot/>
+</p>

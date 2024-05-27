@@ -1,0 +1,10 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+import { twMerge } from 'tailwind-merge'
+
+type Props = HTMLAttributes<'img'>
+const {class: className, ...props} = Astro.props
+---
+<div class={twMerge(['self-stretch relative overflow-hidden', className])} >
+  <img class={twMerge(['group-hover:scale-125 block w-full h-full object-cover object-center absolute top-0 left-0 z-0 transition-all'])} {...props} />
+</div>
