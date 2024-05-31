@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_list_paragraphs",
+  "info": {
+    "displayName": "paragraph",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "customField",
+      "options": {
+        "output": "Markdown",
+        "preset": "light"
+      },
+      "required": true,
+      "customField": "plugin::ckeditor.CKEditor"
+    }
+  }
+}

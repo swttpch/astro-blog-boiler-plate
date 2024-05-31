@@ -1,0 +1,48 @@
+{
+  "collectionName": "components_list_selects",
+  "info": {
+    "displayName": "Select",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "options": {
+      "type": "component",
+      "repeatable": true,
+      "component": "list.option"
+    },
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "defaultValue": {
+      "type": "string",
+      "unique": false,
+      "required": false
+    },
+    "errorMessage": {
+      "type": "string",
+      "required": true
+    },
+    "name": {
+      "type": "string",
+      "required": true,
+      "regex": "^\\S*$"
+    },
+    "placeholder": {
+      "type": "string",
+      "required": true
+    },
+    "size": {
+      "type": "enumeration",
+      "enum": [
+        "Size 100%",
+        "Size 66%",
+        "Size 50%",
+        "Size 33%"
+      ],
+      "default": "Size 100%",
+      "required": true
+    }
+  }
+}

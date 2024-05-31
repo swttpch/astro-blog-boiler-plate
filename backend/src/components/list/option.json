@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_list_options",
+  "info": {
+    "displayName": "Option",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "value": {
+      "type": "string",
+      "unique": false,
+      "required": true
+    },
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

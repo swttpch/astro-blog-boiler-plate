@@ -10,17 +10,23 @@
     "strapi": "strapi"
   },
   "dependencies": {
+    "@ckeditor/strapi-plugin-ckeditor": "^0.0.11",
     "@strapi/plugin-cloud": "4.24.4",
+    "@strapi/plugin-color-picker": "^4.24.4",
     "@strapi/plugin-graphql": "4.24.4",
     "@strapi/plugin-i18n": "4.24.4",
     "@strapi/plugin-users-permissions": "4.24.4",
     "@strapi/strapi": "4.24.4",
     "algoliasearch": "^4.23.3",
     "better-sqlite3": "8.6.0",
+    "nodemailer": "^6.9.13",
+    "nodemailer-express-handlebars": "^6.1.2",
     "pg": "^8.11.5",
+    "qs": "^6.12.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-router-dom": "5.3.4",
+    "reading-time": "^1.5.0",
     "styled-components": "5.3.3"
   },
   "author": {

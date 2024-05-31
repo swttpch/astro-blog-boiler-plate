@@ -1,6 +1,6 @@
-import algoliasearch from "algoliasearch";
+const algoliasearch = require("algoliasearch");
 
-const client = algoliasearch(
+const client = algoliasearch.default(
   process.env.ALGOLIA_PROVIDER_APPLICATION_ID,
   process.env.ALGOLIA_PROVIDER_ADMIN_API_KEY
 );

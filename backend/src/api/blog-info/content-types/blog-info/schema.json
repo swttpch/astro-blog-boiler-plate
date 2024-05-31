@@ -1,0 +1,37 @@
+{
+  "kind": "singleType",
+  "collectionName": "blog_infos",
+  "info": {
+    "singularName": "blog-info",
+    "pluralName": "blog-infos",
+    "displayName": "Blog Info",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "brand": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "summary": {
+      "type": "text",
+      "required": false
+    },
+    "socials": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::social.social"
+    }
+  }
+}
