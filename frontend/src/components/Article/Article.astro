@@ -1,13 +1,19 @@
 ---
-import type { HTMLAttributes } from 'astro/types'
-import { Image } from 'astro:assets'
-import { twMerge } from 'tailwind-merge'
-import type Img from '../../interfaces/image'
+import type { HTMLAttributes } from 'astro/types';
+import { Image } from 'astro:assets';
+import { twMerge } from 'tailwind-merge';
+import type Img from '../../interfaces/image';
 
-
-type Props  = HTMLAttributes<'a'> 
-const {class: className, ...props} = Astro.props
+type Props = HTMLAttributes<'a'>;
+const { class: className, ...props } = Astro.props;
 ---
-<a class={twMerge(['group p-2 items-center gap-4 flex rounded-lg border border-gray-200 bg-white cursor-pointer',className])} {...props}>
-  <slot/>
+
+<a
+  class={twMerge([
+    'group p-2 items-center gap-4 flex rounded-lg border border-gray-200 bg-white cursor-pointer',
+    className,
+  ])}
+  {...props}
+>
+  <slot />
 </a>

@@ -1,30 +1,47 @@
 ---
-import type Article from "../../interfaces/article";
-import fetchApi from "../../lib/strapi";
-import CategoryBadge from "../CategoryBadge.astro";
+import { getImage } from 'astro:assets';
+import type Article from '../../interfaces/article';
+import fetchApi from '../../lib/strapi';
+import CategoryBadge from '../CategoryBadge.astro';
+import Screen from '../Screen.astro';
+import Container from '../Container.astro';
 
 const articles = await fetchApi<Article[]>({
-  endpoint: 'articles', 
-  wrappedByKey: 'data', 
+  endpoint: 'articles',
+  wrappedByKey: 'data',
   query: {
     populate: {
       mainImage: {
-        fields: ['url', 'alternativeText', 'width', 'height', 'formats']
+        fields: ['url', 'alternativeText', 'width', 'height', 'formats'],
       },
       category: {
-        fields: ['title']
-      }
+        fields: ['title'],
+      },
     },
     pagination: {
       pageSize: 3,
     },
     publicationState: 'live',
-  }
+  },
+});
+const betterImages = await Promise.all(
+  articles.map((el) =>
+    getImage({
+      src: el.attributes.mainImage.data.attributes.url,
+      width: el.attributes.mainImage.data.attributes.width,
+      height: el.attributes.mainImage.data.attributes.height,
+      format: 'webp',
+    }),
+  ),
+);
+const bgs = betterImages.map((el) => {
+  return `background: linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, #000 100%), linear-gradient(0deg, #7367F0 0%, #7367F0 100%), url('${el.src}') lightgray 50% / cover no-repeat;`;
 });
 ---
-<hero-data data-articles={articles}>
-  <main style={`background: linear-gradient(180deg, rgba(0, 0, 0, 0.00) 27.39%, #000 100%);`} class="relative w-full h-[481px] flex flex-col justify-end items-start gap-[64px]">
-    {
+
+<hero-data data-articles={articles} data-bgs={bgs}>
+  <Screen id="hero" class="h-[481px] justify-end">
+    <!-- {
       articles.map((article, index) => {
         const def = article.attributes.mainImage.data.attributes;
         const small = article.attributes.mainImage.data.attributes.formats.small;
@@ -32,116 +49,132 @@ const articles = await fetchApi<Article[]>({
         const large = article.attributes.mainImage.data.attributes.formats.large;
 
         return (
-        <img src={article.attributes.mainImage.data.attributes.url} width={article.attributes.mainImage.data.attributes.width} height={article.attributes.mainImage.data.attributes.height} alt={article.attributes.title} class={`article-banner-${index} hidden data-[active]:block w-full h-full object-cover object-center absolute top-0 left-0 z-[-1]`} 
+        <img src={article.attributes.mainImage.data.attributes.url} width={article.attributes.mainImage.data.attributes.width} height={article.attributes.mainImage.data.attributes.height} alt={article.attributes.title} class={`bg-image article-banner-${index} hidden data-[active]:block w-full h-full object-cover object-center absolute top-0 left-0 z-[-1]`} 
         srcset={`${small.url} ${small.width}px, ${medium.url} ${medium.width}px, ${large.url} ${large.width}px, ${def.url} ${def.width}px`}
         /> 
       )})
-    }
-    <section class='container flex-row items-end gap-4 py-20 justify-between z-10'>
+    } -->
+    <Container class="items-end justify-between z-10">
       {
-        articles.map((article, index)=> (
-        <div class={`article-content-${index} hidden Row flex-1 data-[active]:flex justify-start items-end gap-[48px] max-w-[640px]`}>
-        <div class="Content flex-1 flex flex-col justify-start items-start gap-[24px] ">
-          <CategoryBadge>
-            {article.attributes.category.data[0].attributes.title}
-          </CategoryBadge>
-          <div class="TitleParagraph self-stretch flex flex-col justify-start items-start gap-[16px]">
-            <a href={article.attributes.url} class="AsTrSPaletasDeSombrasQuePossuoEComoReduzirSeuEstoque self-stretch text-white text-[36px] font-medium leading-[40px]">
-              {article.attributes.title}
-            </a>
+        articles.map((article, index) => (
+          <div
+            class={`article-content-${index} hidden Row flex-1 data-[active]:flex justify-start items-end gap-[48px] max-w-[640px]`}
+          >
+            <div class="Content flex-1 flex flex-col justify-start items-start gap-[24px] ">
+              <CategoryBadge>{article.attributes.category.data[0].attributes.title}</CategoryBadge>
+              <div class="TitleParagraph self-stretch flex flex-col justify-start items-start gap-[16px]">
+                <a
+                  href={article.attributes.url}
+                  class="AsTrSPaletasDeSombrasQuePossuoEComoReduzirSeuEstoque self-stretch text-white text-[36px] font-medium leading-[40px]"
+                >
+                  {article.attributes.title}
+                </a>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
         ))
       }
-      
-      <div class="Frame1261153263 flex justify-start items-start gap-[12px] ">
-        {articles?.map((el, index) => (
-          <button data-index={index} data-active={index === 0} class:list={["article-tab transition-all w-[12px] data-[active]:w-8 h-[12px] bg-white bg-opacity-60 data-[active]:bg-opacity-1 data-[active]:bg-[#C7CCFE] rounded-full", `article-tab-${index}`]}></button>
-        ))}
+
+      <div class="Frame1261153263 flex justify-start items-start gap-[12px]">
+        {
+          articles?.map((el, index) => (
+            <button
+              data-index={index}
+              data-active={index === 0}
+              class:list={[
+                'article-tab transition-all w-12 data-[active]:w-32 h-[12px] bg-white bg-opacity-60 data-[active]:bg-opacity-1 data-[active]:bg-primary-base rounded-full',
+                `article-tab-${index}`,
+              ]}
+            />
+          ))
+        }
       </div>
-    </section>
-  </main>
-  <main class="Hero w-full flex flex-col justify-end items-start gap-[64px] bg-primary-950">
-    <section class='container flex-row items-stretch justify-stretch'>
+    </Container>
+  </Screen>
+  <Screen class="bg-primary-950 py-0">
+    <Container class="items-stretch justify-stretch gap-0">
       {
-        articles?.map((el,index) => {
+        articles?.map((el, index) => {
           const category = el.attributes.category.data[0].attributes.title;
-          const published_at= new Date(el.attributes.createdAt).toLocaleDateString('pt-BR');
+          const published_at = new Date(el.attributes.createdAt).toLocaleDateString('pt-BR');
           const reading_time = el.attributes.readingTime;
           const title = el.attributes.title;
 
           return (
-          <article-template data-index={index} class='self-stretch flex-1'>
-            <a href="test" class='flex-1 self-stretch '>
-              <div data-active={index === 0} class:list={["Content p-[32px] data-[active]:bg-white data-[active]:bg-opacity-5 border-t-4 border-transparent data-[active]:border-[#7367F0] flex flex-col justify-center items-start gap-[16px] flex-1", `hero-article-${index}`]}>
-                <div class="HeadingParagraph self-stretch h-[56px] flex flex-col justify-start items-start gap-[16px]">
-                  <div class="CategoryTitle self-stretch h-[56px] flex flex-col justify-start items-start gap-[8px]">
-                    <p class="title self-stretch text-white text-[18px] font-medium leading-[28px]">
-                      {title}
-                    </p>
+            <article-template data-index={index} class="self-stretch flex-1">
+              <a href="test" class="flex-1 self-stretch ">
+                <div
+                  data-active={index === 0}
+                  class:list={[
+                    'Content p-32 data-[active]:bg-[rgb(255,255,255)]/5 border-t-4 border-transparent data-[active]:border-primary-base flex flex-col justify-center items-start gap-[16px] flex-1',
+                    `hero-article-${index}`,
+                  ]}
+                >
+                  <div class="HeadingParagraph self-stretch h-[56px] flex flex-col justify-start items-start gap-[16px]">
+                    <div class="CategoryTitle self-stretch h-[56px] flex flex-col justify-start items-start gap-[8px]">
+                      <p class="title self-stretch text-white text-lg font-medium">{title}</p>
+                    </div>
+                  </div>
+                  <div class="self-stretch flex justify-between items-center">
+                    <CategoryBadge class={'self-start'}>{category}</CategoryBadge>
+                    <div class="self-stretch text-primary-lighter text-xs font-medium">
+                      {published_at} • {reading_time} min read
+                    </div>
                   </div>
                 </div>
-                <div class="TypeTags self-stretch flex justify-between items-center">
-                  <CategoryBadge class={'self-start'}>
-                    {category}
-                  </CategoryBadge>
-                  <div class="DeMaio20212MinDeLeitura self-stretch text-[#C7CCFE] text-[12px] font-medium leading-[16px]">
-                    {published_at}  •  {reading_time} min read
-                  </div>
-                </div>
-              </div>
-            </a>
-          </article-template>
-        )})
+              </a>
+            </article-template>
+          );
+        })
       }
-     
-  
-      
-    </section>
-  </main>
+    </Container>
+  </Screen>
 </hero-data>
 <script>
-  const TIMER = 5000;
+  const TIMER = 50000000;
   class HeroData extends HTMLElement {
-    index = 0
-    readonly indexes = [0,1,2];
+    index = 0;
+    readonly indexes = [0, 1, 2];
+    bgs = this.dataset.bgs?.split(';');
+
     interval = setInterval(() => {
-        if(this.index === 2) {
-          this.index = 0;
+      if (this.index === 2) {
+        this.index = 0;
+      } else {
+        this.index++;
+      }
+      this.indexes.forEach((el, i) => {
+        const article = this.querySelector(`.hero-article-${i}`);
+        const tab = this.querySelector(`.article-tab-${i}`);
+        const articleContent = this.querySelector(`.article-content-${i}`);
+        const articleImage = this.querySelector(`.article-banner-${i}`);
+        if (i === this.index) {
+          article?.setAttribute('data-active', 'true');
+          tab?.setAttribute('data-active', 'true');
+          articleContent?.setAttribute('data-active', 'true');
+          articleImage?.setAttribute('data-active', 'true');
         } else {
-          this.index++;
+          article?.removeAttribute('data-active');
+          tab?.removeAttribute('data-active');
+          articleContent?.removeAttribute('data-active');
+          articleImage?.removeAttribute('data-active');
         }
-        this.indexes.forEach((el, i) => {
-          const article = this.querySelector(`.hero-article-${i}`);
-          const tab = this.querySelector(`.article-tab-${i}`);
-          const articleContent = this.querySelector(`.article-content-${i}`);
-          const articleImage = this.querySelector(`.article-banner-${i}`);
-          if(i === this.index) {
-            article?.setAttribute('data-active', 'true');
-            tab?.setAttribute('data-active', 'true');
-            articleContent?.setAttribute('data-active', 'true');
-            articleImage?.setAttribute('data-active', 'true');
-          } else {
-            article?.removeAttribute('data-active');
-            tab?.removeAttribute('data-active');
-            articleContent?.removeAttribute('data-active');
-            articleImage?.removeAttribute('data-active');
-          }
-        })
-      }, TIMER);
+        console.log(this.bgs?.[this.index]);
+        // document.querySelector('#hero')?.style = this.bgs?.[this.index]|| "" || '';
+      });
+    }, TIMER);
     constructor() {
       super();
-
+      this.querySelector('#hero').style = this.bgs?.[0] || '' + ';';
       this.querySelector(`.hero-article-0`)?.setAttribute('data-active', 'true');
       this.querySelector(`.article-tab-0`)?.setAttribute('data-active', 'true');
       this.querySelector(`.article-content-0`)?.setAttribute('data-active', 'true');
       this.querySelector(`.article-banner-0`)?.setAttribute('data-active', 'true');
-
+      console.log(this.bgs?.[0]);
       const buttons = this.querySelectorAll('.article-tab');
-      buttons.forEach(el => {
+      buttons.forEach((el) => {
         const index = el.attributes.getNamedItem('data-index')?.value;
-        if(!index) return;
+        if (!index) return;
         el.addEventListener('click', (e) => {
           this.indexes.forEach((el, i) => {
             const article = document.querySelector(`.hero-article-${i}`);
@@ -149,9 +182,9 @@ const articles = await fetchApi<Article[]>({
             const articleContent = document.querySelector(`.article-content-${i}`);
             const articleImage = document.querySelector(`.article-banner-${i}`);
             clearInterval(this.interval);
-            
+
             this.index = +index;
-            if(i === +index) {
+            if (i === +index) {
               article?.setAttribute('data-active', 'true');
               tab?.setAttribute('data-active', 'true');
               articleContent?.setAttribute('data-active', 'true');
@@ -163,7 +196,7 @@ const articles = await fetchApi<Article[]>({
               articleImage?.removeAttribute('data-active');
             }
             this.interval = setInterval(() => {
-              if(this.index === 2) {
+              if (this.index === 2) {
                 this.index = 0;
               } else {
                 this.index++;
@@ -173,7 +206,7 @@ const articles = await fetchApi<Article[]>({
                 const tab = this.querySelector(`.article-tab-${i}`);
                 const articleContent = this.querySelector(`.article-content-${i}`);
                 const articleImage = this.querySelector(`.article-banner-${i}`);
-                if(i === this.index) {
+                if (i === this.index) {
                   article?.setAttribute('data-active', 'true');
                   tab?.setAttribute('data-active', 'true');
                   articleContent?.setAttribute('data-active', 'true');
@@ -184,11 +217,11 @@ const articles = await fetchApi<Article[]>({
                   articleContent?.removeAttribute('data-active');
                   articleImage?.removeAttribute('data-active');
                 }
-              })
+              });
             }, TIMER);
-          })
-        })
-      })
+          });
+        });
+      });
     }
   }
 
@@ -200,5 +233,4 @@ const articles = await fetchApi<Article[]>({
 
   customElements.define('hero-data', HeroData);
   customElements.define('article-template', ArticleHtml);
-
 </script>

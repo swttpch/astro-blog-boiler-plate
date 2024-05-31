@@ -1,0 +1,41 @@
+---
+
+---
+
+<div id="progress-bar" class="bg-primary-800 sticky top-72 lg:top-96 left-0 h-8 self-start"></div>
+
+<style>
+  #progress-bar {
+    --scrollAmount: 0%;
+    width: var(--scrollAmount);
+    transition: width 0.1s;
+  }
+</style>
+
+<script>
+  let processScroll = () => {
+    let container = document.getElementById('article-content');
+
+    if (!container) return;
+    const values = container.getBoundingClientRect();
+    const containerHeight = values.height - 80;
+    if (values.y * -1 >= containerHeight) {
+      document.getElementById('progress-bar')?.style.setProperty('--scrollAmount', '100%');
+      document.getElementById('progress-bar')?.classList.add('hidden');
+      document.getElementById('progress-bar')?.classList.remove('sticky');
+    } else {
+      document.getElementById('progress-bar')?.classList.remove('hidden');
+      document.getElementById('progress-bar')?.classList.add('sticky');
+    }
+    if (values.y < 0 && values.y * -1 <= containerHeight) {
+      const val = ((values.y * -1) / containerHeight) * 100;
+      let scrollPercent = val + '%';
+
+      document.getElementById('progress-bar')?.style.setProperty('--scrollAmount', scrollPercent);
+    } else if (values.y >= 0) {
+      document.getElementById('progress-bar')?.style.setProperty('--scrollAmount', '0%');
+    } 
+  };
+
+  document.addEventListener('scroll', processScroll);
+</script>

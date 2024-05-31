@@ -1,0 +1,24 @@
+---
+import AuthorBox from '../AuthorBox/AuthorBox.astro';
+import AuthorBoxArticleInfo from '../AuthorBox/AuthorBoxArticleInfo.astro';
+import AuthorBoxAvatar from '../AuthorBox/AuthorBoxAvatar.astro';
+import AuthorBoxBody from '../AuthorBox/AuthorBoxBody.astro';
+import AuthorBoxName from '../AuthorBox/AuthorBoxName.astro';
+
+// add props
+---
+
+<div class="self-stretch items-start lg:items-center flex gap-8 lg:flex-row flex-col">
+  <AuthorBox class={'flex-1'}>
+    <AuthorBoxAvatar />
+    <AuthorBoxBody>
+      <AuthorBoxName class={'text-white'}> Fulano de tal </AuthorBoxName>
+      <AuthorBoxArticleInfo> SEO Expert </AuthorBoxArticleInfo>
+    </AuthorBoxBody>
+  </AuthorBox>
+  <div class='flex gap-8 items-center'>
+    <p class="font-normal text-base text-primary-lighter">25 de maio de 2023</p>
+    <div class="size-4 shrink-0 rounded-full bg-primary-light"></div>
+    <p class="font-semibold text-base text-primary-lighter">2 min de leitura</p>
+  </div>
+</div>

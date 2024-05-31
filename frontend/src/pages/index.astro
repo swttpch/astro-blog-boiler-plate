@@ -4,6 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import Hero from '../components/home/Hero.astro';
+import SectionHeader from '../components/SectionHeader.astro';
 ---
 
 <!doctype html>
@@ -13,7 +14,9 @@ import Hero from '../components/home/Hero.astro';
   </head>
   <body>
     <Header />
-    <Hero/>
+    <Hero />
+    <SectionHeader title="test" />
     <Footer />
   </body>
+  ```
 </html>

@@ -1,5 +1,17 @@
 ---
+import type { HTMLAttributes } from 'astro/types';
+import { twMerge } from 'tailwind-merge';
+
+type Props = HTMLAttributes<'span'>;
+const { class: className, ...rest } = Astro.props;
 ---
-<div class="self-stretch text-[#24292E] text-[14px] font-medium leading-[20px] break-words">
-  <slot/>
-</div>
+
+<span
+  class={twMerge([
+    'self-stretch text-[#24292E] text-[14px] font-medium leading-[20px] break-words',
+    className,
+  ])}
+  {...rest}
+>
+  <slot />
+</span>
