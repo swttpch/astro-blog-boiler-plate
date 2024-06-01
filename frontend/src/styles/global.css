@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   /* Colors */
   --primary-50: #eef0ff;
@@ -187,4 +191,11 @@ h3 {
 
 .test {
   outline: 1px dashed red;
+}
+
+@layer utilities {
+  .bg-custom-gradient {
+    @apply bg-cover bg-no-repeat;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.00) 27.39%, #000 100%);
+  }
 }

@@ -1,17 +1,21 @@
+import type Image from './image';
+import type { Socials } from './socials';
+
 export default interface Author {
   id: number;
   attributes: {
     name: string;
     jobTitle: string;
     description: string;
-    instagram: any;
-    twitter: any;
-    website: any;
     createdAt: string;
     updatedAt: string;
-    url: string;
-    metaTitle: string;
-    metaDescription: string;
-    canonicalUrl: any;
+    slug: string;
+    expertise: Array<{
+      id: number;
+      text: string;
+    }>;
+    avatar?: { data: Image };
+    seo?: object;
+    socials: Array<Socials>;
   };
 }

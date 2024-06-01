@@ -167,10 +167,6 @@ export default {
     plugin(function ({ addUtilities }) {
       addUtilities({
         '.bg-image': {
-          '-webkit-mask-image':
-            'linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, #000 100%), linear-gradient(0deg, #5439c9 0%, #5439c9 100%);',
-          'mask-image':
-            'linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, #000 100%), linear-gradient(0deg, #5439c9 0%, #5439c9 100%);',
           background:
             'linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, #000 100%), linear-gradient(0deg, #5439c9 0%, #5439c9 100%);',
         },

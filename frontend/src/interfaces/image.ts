@@ -2,8 +2,8 @@ export default interface Image {
   id: number;
   attributes: {
     name: string;
-    alternativeText: any;
-    caption: any;
+    alternativeText?: string;
+    caption?: string;
     width: number;
     height: number;
     formats: {
@@ -13,7 +13,7 @@ export default interface Image {
         hash: string;
         mime: string;
         name: string;
-        path: any;
+        path?: string;
         size: number;
         width: number;
         height: number;
@@ -24,7 +24,7 @@ export default interface Image {
         hash: string;
         mime: string;
         name: string;
-        path: any;
+        path?: string;
         size: number;
         width: number;
         height: number;
@@ -35,7 +35,7 @@ export default interface Image {
         hash: string;
         mime: string;
         name: string;
-        path: any;
+        path?: string;
         size: number;
         width: number;
         height: number;
@@ -46,7 +46,7 @@ export default interface Image {
         hash: string;
         mime: string;
         name: string;
-        path: any;
+        path?: string;
         size: number;
         width: number;
         height: number;
@@ -57,9 +57,9 @@ export default interface Image {
     mime: string;
     size: number;
     url: string;
-    previewUrl: any;
+    previewUrl?: string;
     provider: string;
-    provider_metadata: any;
+    provider_metadata?: string;
     createdAt: string;
     updatedAt: string;
   };

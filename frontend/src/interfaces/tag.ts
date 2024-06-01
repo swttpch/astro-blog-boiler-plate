@@ -1,12 +1,11 @@
-export default interface Category {
+export interface Tag {
   id: number;
   attributes: {
-    title: string;
+    name: string;
     description: string;
-    slug: string;
-    color: string;
     createdAt: string;
     updatedAt: string;
+    slug: string;
     seo?: object;
   };
 }

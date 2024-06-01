@@ -1,0 +1,22 @@
+---
+import InstagramIcon from "./InstagramIcon.astro";
+import TiktokIcon from "./TiktokIcon.astro";
+import {type Socials} from "../../interfaces/socials";
+import type { HTMLAttributes } from "astro/types";
+
+const socialIcons: {
+  [key in Socials['type']]?: (_props:HTMLAttributes<'svg'> ) =>  any;
+} = {
+  tiktok: TiktokIcon,
+  instagram: InstagramIcon,
+}
+type Props = {
+  social: Socials['type'];
+} & HTMLAttributes<'svg'>;
+const {social, ...rest} = Astro.props
+
+
+const Icon = socialIcons[social];
+if(!Icon) return null;
+---
+<Icon {...rest} />

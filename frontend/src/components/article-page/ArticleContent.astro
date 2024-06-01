@@ -1,0 +1,5 @@
+---
+type Props = {content: string}
+const {content} = Astro.props
+---
+<article id={'article-content'} class="prose max-w-[none] prose-sm lg:prose-lg lg:max-w-full flex-1" set:html={content}/>

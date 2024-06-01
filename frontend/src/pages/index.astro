@@ -3,8 +3,17 @@ import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
-import Hero from '../components/home/Hero.astro';
-import SectionHeader from '../components/SectionHeader.astro';
+import type { BlogInfo } from '../interfaces/blog-info';
+import fetchApi from '../lib/strapi';
+
+
+const blogInfo = await fetchApi<BlogInfo>({
+  endpoint: 'blog-info',
+  query: {
+    populate: '*',
+  }
+});
+
 ---
 
 <!doctype html>
@@ -13,10 +22,7 @@ import SectionHeader from '../components/SectionHeader.astro';
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
   </head>
   <body>
-    <Header />
-    <Hero />
-    <SectionHeader title="test" />
-    <Footer />
+    <Header brand={blogInfo.data.attributes.brand.data} />
+    <Footer brand={blogInfo.data.attributes.brand.data} description={blogInfo.data.attributes.summary} name={blogInfo.data.attributes.name} socials={blogInfo.data.attributes.socials}/>
   </body>
-  ```
 </html>

@@ -34,6 +34,8 @@ const betterImages = await Promise.all(
     }),
   ),
 );
+
+
 const bgs = betterImages.map((el) => {
   return `background: linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, #000 100%), linear-gradient(0deg, #7367F0 0%, #7367F0 100%), url('${el.src}') lightgray 50% / cover no-repeat;`;
 });
@@ -165,7 +167,7 @@ const bgs = betterImages.map((el) => {
     }, TIMER);
     constructor() {
       super();
-      this.querySelector('#hero').style = this.bgs?.[0] || '' + ';';
+      this.querySelector<HTMLElement>('#hero')?.style.setProperty('backgroung', this.bgs?.[0] || '') ;
       this.querySelector(`.hero-article-0`)?.setAttribute('data-active', 'true');
       this.querySelector(`.article-tab-0`)?.setAttribute('data-active', 'true');
       this.querySelector(`.article-content-0`)?.setAttribute('data-active', 'true');

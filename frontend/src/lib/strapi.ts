@@ -30,10 +30,10 @@ export default async function fetchApi<T>({
   if (query) {
     queryString = qs.stringify(query, { encode: false });
   }
-
-  const res = await fetch(url.toString() + `${query ? '?' + queryString : ''}`);
+  const res = await fetch(url.toString() + `${query ? '?' + queryString : ''}`, {
+    headers: { Authorization: `Bearer ${import.meta.env.STRAPI_JWT}` },
+  });
   let data = await res.json();
-
   if (wrappedByKey) {
     data = data[wrappedByKey];
   }

@@ -1,0 +1,49 @@
+---
+import ArrowLeftIcon from "../icons/ArrowLeftIcon.astro";
+import InstagramIcon from "../icons/InstagramIcon.astro";
+import TwitterIcon from "../icons/TwitterIcon.astro";
+import WebsiteIcon from "../icons/WebsiteIcon.astro";
+
+---
+<div class="p-40 bg-text-gray-100 rounded-2xl overflow-hidden border border-border-soft justify-center lg:justify-start lg:items-start gap-32 lg:gap-48 flex self-stretch flex-col lg:flex-row">
+  <div class="flex flex-col justify-start items-center lg:items-start gap-16">
+    <img class="w-[128px] h-[128px] rounded-full" src="https://via.placeholder.com/128x128" />
+    <div class="p-8 bg-text-gray-100 rounded-xs justify-start items-start gap-10 flex">
+      <div class="text-text-main text-sm font-semibold break-words">123 publicações</div>
+    </div>
+  </div>
+  <div class="flex-[1] flex flex-col justify-start items-start gap-24">
+    <div class="self-stretch h-48 flex flex-col justify-start items-start">
+      <div class="justify-start items-center gap-4 flex">
+        <div class="text-text-main text-lg font-bold break-words">John Doe</div>
+      </div>
+      <div class="self-stretch text-text-soft text-sm font-semibold break-words">Web Developer</div>
+    </div>
+    <div class="self-stretch flex flex-col justify-start items-start gap-8">
+      <div class="self-stretch text-text-sub text-base font-normal break-words">Sed commodo, est quis maximus fermentum, massa ipsum euismod neque, in varius risus tellus quis lacus. Sed ac bibendum odio.Sed commodo, est quis maximus fermentum, massa ipsum</div>
+      <a href='' class="justify-start items-center gap-[12px] flex">
+        <div class="text-primary-base text-base font-normal break-words">Ver mais</div>
+        <button class="w-[20px] h-[20px] rounded-full border border-primary-base justify-center items-center gap-8 flex">
+          <ArrowLeftIcon/>
+        </button>
+      </a>
+    </div>
+  </div>
+  <div class="flex flex-col justify-start items-start gap-24">
+    <div class="text-text-main text-lg font-bold break-words">Social Media</div>
+    <div class="self-stretch flex flex-col justify-start items-start gap-8">
+      <a href='' class="justify-start items-center gap-4 flex">
+        <InstagramIcon/>       
+        <div class="text-text-main text-base font-normal break-words">Instagram</div>
+      </a>
+      <a href='' class="justify-start items-center gap-4 flex">
+        <TwitterIcon color='#1DA1F2'/>
+        <div class="text-text-main text-base font-normal break-words">Twitter</div>
+      </a>
+      <a href='' class="justify-start items-center gap-4 flex">
+        <WebsiteIcon/>       
+        <div class="text-text-main text-base font-normal break-words">Website</div>
+      </a>
+    </div>
+  </div>
+</div>
