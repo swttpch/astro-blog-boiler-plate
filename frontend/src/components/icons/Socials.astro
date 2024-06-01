@@ -3,20 +3,51 @@ import InstagramIcon from "./InstagramIcon.astro";
 import TiktokIcon from "./TiktokIcon.astro";
 import {type Socials} from "../../interfaces/socials";
 import type { HTMLAttributes } from "astro/types";
+import WebsiteIcon from "./WebsiteIcon.astro";
+import YoutubeIcon from "./YoutubeIcon.astro";
+import TwitterIcon from "./TwitterIcon.astro";
+import FacebookIcon from "./FacebookIcon.astro";
+import LinkedinIcon from "./LinkedinIcon.astro";
+import EmailIcon from "./EmailIcon.astro";
 
-const socialIcons: {
-  [key in Socials['type']]?: (_props:HTMLAttributes<'svg'> ) =>  any;
-} = {
-  tiktok: TiktokIcon,
-  instagram: InstagramIcon,
-}
 type Props = {
   social: Socials['type'];
 } & HTMLAttributes<'svg'>;
 const {social, ...rest} = Astro.props
 
+let Icon;
 
-const Icon = socialIcons[social];
-if(!Icon) return null;
+switch (social) {
+  case "instagram":
+    Icon = InstagramIcon;
+    break;
+  case "tiktok":
+    Icon = TiktokIcon;
+    break;
+  case "website":
+    Icon = WebsiteIcon;
+    break;
+  case "youtube":
+    Icon = YoutubeIcon;
+    break;
+  case  "twitter":
+    Icon = TwitterIcon;
+    break;
+  case "facebook":
+    Icon = FacebookIcon;
+    break;
+  case "linkedin":  
+    Icon = LinkedinIcon;
+    break;
+  case "github":
+    Icon = WebsiteIcon;
+    break;
+  case "email":
+    Icon = EmailIcon;
+    break;
+  default:
+    Icon = WebsiteIcon;
+    break;
+}
 ---
-<Icon {...rest} />
+<Icon {...rest as typeof Icon}/>

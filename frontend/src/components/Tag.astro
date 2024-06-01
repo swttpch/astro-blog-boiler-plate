@@ -1,6 +1,12 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
+import { twMerge } from 'tailwind-merge'
+
+type Props = HTMLAttributes<'a'>
+
+const {class: className, href: hrefRaw , ...props} = Astro.props
 ---
-<a href='' class="p-8 bg-primary-lighter rounded-[4px] justify-center items-center gap-[4px] flex">
+<a href={'/tags/'+ hrefRaw} class={twMerge(['p-8 bg-primary-lighter rounded-[4px] justify-center items-center gap-[4px] flex', className])} {...props}>
   <div class="text-primary-base text-base font-medium break-words">
     #<slot />
   </div>

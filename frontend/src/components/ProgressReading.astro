@@ -18,8 +18,9 @@
 
     if (!container) return;
     const values = container.getBoundingClientRect();
-    const containerHeight = values.height - 80;
-    if (values.y * -1 >= containerHeight) {
+    const containerHeight = values.height;
+    const yPlacement = values.y - 100;
+    if (yPlacement * -1 >= containerHeight) {
       document.getElementById('progress-bar')?.style.setProperty('--scrollAmount', '100%');
       document.getElementById('progress-bar')?.classList.add('hidden');
       document.getElementById('progress-bar')?.classList.remove('sticky');
@@ -27,12 +28,12 @@
       document.getElementById('progress-bar')?.classList.remove('hidden');
       document.getElementById('progress-bar')?.classList.add('sticky');
     }
-    if (values.y < 0 && values.y * -1 <= containerHeight) {
-      const val = ((values.y * -1) / containerHeight) * 100;
+    if (yPlacement < 0 && yPlacement * -1 <= containerHeight) {
+      const val = ((yPlacement * -1) / containerHeight) * 100;
       let scrollPercent = val + '%';
 
       document.getElementById('progress-bar')?.style.setProperty('--scrollAmount', scrollPercent);
-    } else if (values.y >= 0) {
+    } else if (yPlacement >= 0) {
       document.getElementById('progress-bar')?.style.setProperty('--scrollAmount', '0%');
     } 
   };

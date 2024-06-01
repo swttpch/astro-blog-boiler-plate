@@ -27,89 +27,95 @@ const blogInfo = await fetchApi<BlogInfo>({
   endpoint: 'blog-info',
   query: {
     populate: '*',
-  }
+  },
 });
 
 const postData = await fetchApi<Article>({
   endpoint: '/articles',
   wrappedByList: true,
-  wrappedByKey: 'data', 
+  wrappedByKey: 'data',
   query: {
     filters: {
       slug: {
-        $eq: slug, 
-      }
+        $eq: slug,
+      },
     },
     populate: {
-      'author': '*',
-      'mainImage': '*',
+      author: {
+        fields: '*',
+        populate: '*',
+      },
+      mainImage: '*',
       categories: '*',
       tags: '*',
       relatedArticles: '*',
     },
     publicationState: 'live',
   },
-} )
-
-if(!postData || postData === undefined) {
+});
+if (!postData || postData === undefined) {
   Astro.redirect('/404');
-} 
+}
 
 const prevId = postData.id === 1 ? postData.id + 2 : postData.id - 1;
 const nextArticle = await fetchApi<Article | null>({
   endpoint: `/articles/${postData.id + 1}`,
-  wrappedByKey: 'data', 
+  wrappedByKey: 'data',
   query: {
     fields: ['slug', 'title'],
     publicationState: 'live',
-  },
-} )
-
-const prevArticle = await fetchApi<Article | null>({
-  endpoint: `/articles/${prevId}`,
-  wrappedByKey: 'data', 
-  query: {
-    fields: ['slug', 'title'],
-    publicationState: 'live',
-  },
-} )
-
-const safePrevArticle = await fetchApi<Article>({
-  endpoint: `/articles`,
-  wrappedByKey: 'data', 
-  wrappedByList: true,
-  query: {
-    fields: ['slug', 'title'],
-    publicationState: 'live',
-    pagination: {
-    pageSize: 1,
-    page:1,
-  }
-  },
-} );
-
-const safeNextArticle = await fetchApi<Article>({
-  endpoint: `/articles`,
-  wrappedByKey: 'data', 
-  wrappedByList: true,
-  query: {
-    fields: ['slug', 'title'],
-    publicationState: 'live',
-    pagination: {
-    pageSize: 1,
-    page:2,
-  }
   },
 });
 
-let def = postData.attributes.mainImage.data ?  await getImage({
-      src: postData.attributes.mainImage.data.attributes.url,
+const prevArticle = await fetchApi<Article | null>({
+  endpoint: `/articles/${prevId}`,
+  wrappedByKey: 'data',
+  query: {
+    fields: ['slug', 'title'],
+    publicationState: 'live',
+  },
+});
+
+const safePrevArticle = await fetchApi<Article>({
+  endpoint: `/articles`,
+  wrappedByKey: 'data',
+  wrappedByList: true,
+  query: {
+    fields: ['slug', 'title'],
+    publicationState: 'live',
+    pagination: {
+      pageSize: 1,
+      page: 1,
+    },
+  },
+});
+
+const safeNextArticle = await fetchApi<Article>({
+  endpoint: `/articles`,
+  wrappedByKey: 'data',
+  wrappedByList: true,
+  query: {
+    fields: ['slug', 'title'],
+    publicationState: 'live',
+    pagination: {
+      pageSize: 1,
+      page: 2,
+    },
+  },
+});
+const imgUrl = `${import.meta.env.NODE_ENV === 'development' ? import.meta.env.STRAPI_URL : ''}`;
+const def = postData.attributes.mainImage.data
+  ? await getImage({
+      src: imgUrl + postData.attributes.mainImage.data.attributes.url,
       width: postData.attributes.mainImage.data.attributes.width,
       height: postData.attributes.mainImage.data.attributes.height,
       format: 'webp',
       inferSize: true,
-    }) : undefined
+    })
+  : undefined;
+const categories = postData.attributes.categories.data || []
 ---
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -117,13 +123,20 @@ let def = postData.attributes.mainImage.data ?  await getImage({
   </head>
   <body>
     <Header brand={blogInfo.data.attributes.brand.data} />
-    <Screen class="h-[424px] lg:h-[481px] justify-end relative" style={getStyleBackgroundImage(def?.src)} >
+    <Screen
+      class="h-[424px] lg:h-[481px] justify-end relative"
+      style={getStyleBackgroundImage(def?.src)}
+    >
       <Container class={'flex-col gap-32 lg:gap-64 pb-32 pt-80 lg:py-80'}>
         <div></div>
         <h1 class="font-semibold text-white text-center w-full">
           {postData.attributes.title}
         </h1>
-        <AuthorComplement author={postData.attributes.author.data} date={postData.attributes.createdAt} readingTime={postData.attributes.readingTime} />
+        <AuthorComplement
+          author={postData.attributes.author.data}
+          date={postData.attributes.createdAt}
+          readingTime={postData.attributes.readingTime}
+        />
       </Container>
     </Screen>
     <ProgressReading />
@@ -131,19 +144,36 @@ let def = postData.attributes.mainImage.data ?  await getImage({
       <Container class={'gap-24 lg:gap-64'}>
         <Menu />
         <div class="flex flex-col gap-32 items-start flex-1">
-          <Breadcrumb/>  
+          <Breadcrumb
+            items={[
+              categories?.map((category) => ({
+                  title: category.attributes.title,
+                  url: `/categoria/${category.attributes.slug}`,
+                })),
+              { title: postData.attributes.title, url: postData.attributes.slug },
+            ]}
+          />
           <ArticleContent content={postData.attributes.content} />
           <ArticleFeedback />
-          <Pagination 
+          <Pagination
             nextArticle={nextArticle ?? safeNextArticle}
             prevArticle={prevArticle ?? safePrevArticle}
           />
-          <AuthorInfo />
-          <TagsAndShare />
+          {
+            postData.attributes.author.data && (
+              <AuthorInfo author={postData.attributes.author.data} />
+            )
+          }
+          <TagsAndShare tags={postData.attributes.tags.data} />
         </div>
       </Container>
     </Screen>
-    <NewsLetter/>
-    <Footer brand={blogInfo.data.attributes.brand.data} description={blogInfo.data.attributes.summary} name={blogInfo.data.attributes.name} socials={blogInfo.data.attributes.socials}/>
+    <NewsLetter />
+    <Footer
+      brand={blogInfo.data.attributes.brand.data}
+      description={blogInfo.data.attributes.summary}
+      name={blogInfo.data.attributes.name}
+      socials={blogInfo.data.attributes.socials}
+    />
   </body>
 </html>

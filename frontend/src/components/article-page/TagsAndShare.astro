@@ -1,22 +1,26 @@
 ---
-import Tag from "../Tag.astro";
+import TagComponent from "../Tag.astro";
 import TwitterIcon from "../icons/TwitterIcon.astro";
 import FacebookIcon from "../icons/FacebookIcon.astro";
 import EmailIcon from "../icons/EmailIcon.astro";
-
-
+import type { Tag } from "../../interfaces/tag";
+type Props = {
+  tags?: Tag[];
+};
+const {tags = []} = Astro.props
 ---
 
 <div class="justify-between items-start lg:items-center flex self-stretch flex-col lg:flex-row gap-y-32">
   <div class="flex items-center gap-16">
     <div class="text-text-sub text-base font-normal break-words">Tags:</div>
     <div class="flex items-center gap-8">
-      <Tag>
-        tutorial
-      </Tag>
-      <Tag>
-        SEO
-      </Tag>
+      {
+        tags.map(tag => (
+          <TagComponent href={tag.attributes.slug}>
+            {tag.attributes.name}
+          </TagComponent>
+        ))
+      }
     </div>
   </div>
   <div class="flex items-center gap-16">
@@ -25,7 +29,7 @@ import EmailIcon from "../icons/EmailIcon.astro";
     </div>
     <div class="flex items-center">
       <button class="w-32 transition-colors h-32 rounded-[9999px] overflow-hidden hover:bg-primary-light flex items-center justify-center">
-        <FacebookIcon />
+        <FacebookIcon/>
       </button>
       <button class="w-32 transition-colors h-32 rounded-[9999px] overflow-hidden hover:bg-primary-light flex items-center justify-center">
        <TwitterIcon/>

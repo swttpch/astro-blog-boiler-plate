@@ -161,7 +161,6 @@ const bgs = betterImages.map((el) => {
           articleContent?.removeAttribute('data-active');
           articleImage?.removeAttribute('data-active');
         }
-        console.log(this.bgs?.[this.index]);
         // document.querySelector('#hero')?.style = this.bgs?.[this.index]|| "" || '';
       });
     }, TIMER);
@@ -172,7 +171,6 @@ const bgs = betterImages.map((el) => {
       this.querySelector(`.article-tab-0`)?.setAttribute('data-active', 'true');
       this.querySelector(`.article-content-0`)?.setAttribute('data-active', 'true');
       this.querySelector(`.article-banner-0`)?.setAttribute('data-active', 'true');
-      console.log(this.bgs?.[0]);
       const buttons = this.querySelectorAll('.article-tab');
       buttons.forEach((el) => {
         const index = el.attributes.getNamedItem('data-index')?.value;

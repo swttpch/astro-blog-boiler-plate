@@ -10,5 +10,6 @@ export interface Socials {
     | 'dribbble'
     | 'github'
     | 'tiktok'
-    | 'youtube';
+    | 'youtube'
+    | 'email';
 }

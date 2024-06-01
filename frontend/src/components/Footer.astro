@@ -4,12 +4,7 @@ import Screen from './Screen.astro';
 import type Image from '../interfaces/image';
 import ApiImage from './ApiImage.astro';
 import type { Socials } from '../interfaces/socials';
-import TiktokIcon from './icons/TiktokIcon.astro';
-import InstagramIcon from './icons/InstagramIcon.astro';
-import FacebookIcon from './icons/FacebookIcon.astro';
-import YoutubeIcon from './icons/YoutubeIcon.astro';
-import TwitterIcon from './icons/TwitterIcon.astro';
-import LinkedinIcon from './icons/LinkedinIcon.astro';
+import SocialsComponent from './icons/Socials.astro';
 type Props = {
   brand: Image;
   description: string;
@@ -31,48 +26,11 @@ const today = new Date();
           </div>
           <div class="flex justify-start items-start gap-24">
             {
-              socials.map((social) => {
-                switch (social.type) {
-                  case 'tiktok':
-                    return (
-                      <a href={social.url}>
-                        <TiktokIcon class={'size-24 text-icon-strong'} />
-                      </a>
-                    );
-                  case 'instagram':
-                    return (
-                      <a href={social.url}>
-                        <InstagramIcon class={'size-24 text-icon-strong'} />
-                      </a>
-                    );
-                  case 'facebook':
-                    return (
-                      <a href={social.url}>
-                        <FacebookIcon class={'size-24 text-icon-strong'} />
-                      </a>
-                    );
-                  case 'youtube': 
-                    return (
-                      <a href={social.url}>
-                        <YoutubeIcon class={'size-24 text-icon-strong'} />
-                      </a>
-                    );
-                  case 'twitter':
-                    return (
-                      <a href={social.url}>
-                        <TwitterIcon class={'size-24 text-icon-strong'} />
-                      </a>
-                    ); 
-                  case 'linkedin':
-                    return (
-                      <a href={social.url}>
-                        <LinkedinIcon class={'size-24 text-icon-strong'} />
-                      </a>
-                    );
-                  default:
-                    return null;
-                }
-              })
+              socials.map((social) => (
+                <a href={social.url} target='_blank'>
+                  <SocialsComponent social={social.type} class={'size-24 text-icon-strong'}/>
+                </a>
+              ))
             }
           </div>
         </div>
