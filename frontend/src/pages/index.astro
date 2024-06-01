@@ -5,6 +5,7 @@ import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import type { BlogInfo } from '../interfaces/blog-info';
 import fetchApi from '../lib/strapi';
+import Hero from '../components/home/Hero.astro';
 
 
 const blogInfo = await fetchApi<BlogInfo>({
@@ -23,6 +24,7 @@ const blogInfo = await fetchApi<BlogInfo>({
   </head>
   <body>
     <Header brand={blogInfo.data.attributes.brand.data} />
+    <Hero/>
     <Footer brand={blogInfo.data.attributes.brand.data} description={blogInfo.data.attributes.summary} name={blogInfo.data.attributes.name} socials={blogInfo.data.attributes.socials}/>
   </body>
 </html>

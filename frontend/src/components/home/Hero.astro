@@ -5,6 +5,7 @@ import fetchApi from '../../lib/strapi';
 import CategoryBadge from '../CategoryBadge.astro';
 import Screen from '../Screen.astro';
 import Container from '../Container.astro';
+import { getStyleBackgroundImage } from '../../utils/getStyleBackgroundImage';
 
 const articles = await fetchApi<Article[]>({
   endpoint: 'articles',
@@ -14,7 +15,7 @@ const articles = await fetchApi<Article[]>({
       mainImage: {
         fields: ['url', 'alternativeText', 'width', 'height', 'formats'],
       },
-      category: {
+      categories: {
         fields: ['title'],
       },
     },
@@ -24,25 +25,27 @@ const articles = await fetchApi<Article[]>({
     publicationState: 'live',
   },
 });
+console.log(articles);
+const imgUrl = `${import.meta.env.NODE_ENV === 'development' ? import.meta.env.STRAPI_URL : ''}`;
 const betterImages = await Promise.all(
   articles.map((el) =>
-    getImage({
-      src: el.attributes.mainImage.data.attributes.url,
-      width: el.attributes.mainImage.data.attributes.width,
-      height: el.attributes.mainImage.data.attributes.height,
+  el.attributes.mainImage.data ? getImage({
+      src: imgUrl+el.attributes.mainImage.data?.attributes.url,
+      width: el.attributes.mainImage.data?.attributes.width,
+      height: el.attributes.mainImage.data?.attributes.height,
       format: 'webp',
-    }),
+    }): undefined
   ),
 );
 
-
 const bgs = betterImages.map((el) => {
-  return `background: linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, #000 100%), linear-gradient(0deg, #7367F0 0%, #7367F0 100%), url('${el.src}') lightgray 50% / cover no-repeat;`;
+  return getStyleBackgroundImage(el?.src);
 });
+console.log(bgs);
 ---
 
 <hero-data data-articles={articles} data-bgs={bgs}>
-  <Screen id="hero" class="h-[481px] justify-end">
+  <Screen id="hero" class="h-[481px] justify-end" style={bgs[0]}>
     <!-- {
       articles.map((article, index) => {
         const def = article.attributes.mainImage.data.attributes;
@@ -63,10 +66,14 @@ const bgs = betterImages.map((el) => {
             class={`article-content-${index} hidden Row flex-1 data-[active]:flex justify-start items-end gap-[48px] max-w-[640px]`}
           >
             <div class="Content flex-1 flex flex-col justify-start items-start gap-[24px] ">
-              <CategoryBadge>{article.attributes.category.data[0].attributes.title}</CategoryBadge>
+              {article.attributes.categories.data && (
+                <CategoryBadge>
+                  {article.attributes.categories.data[0].attributes.title}
+                </CategoryBadge>
+              )}
               <div class="TitleParagraph self-stretch flex flex-col justify-start items-start gap-[16px]">
                 <a
-                  href={article.attributes.url}
+                  href={article.attributes.slug}
                   class="AsTrSPaletasDeSombrasQuePossuoEComoReduzirSeuEstoque self-stretch text-white text-[36px] font-medium leading-[40px]"
                 >
                   {article.attributes.title}
@@ -93,11 +100,11 @@ const bgs = betterImages.map((el) => {
       </div>
     </Container>
   </Screen>
-  <Screen class="bg-primary-950 py-0">
-    <Container class="items-stretch justify-stretch gap-0">
+  <Screen class="bg-primary-950 py-0 lg:py-0">
+    <Container class="items-stretch justify-stretch gap-0 lg:py-0">
       {
         articles?.map((el, index) => {
-          const category = el.attributes.category.data[0].attributes.title;
+          const category = el.attributes.categories.data?.[0].attributes.title;
           const published_at = new Date(el.attributes.createdAt).toLocaleDateString('pt-BR');
           const reading_time = el.attributes.readingTime;
           const title = el.attributes.title;
@@ -118,7 +125,10 @@ const bgs = betterImages.map((el) => {
                     </div>
                   </div>
                   <div class="self-stretch flex justify-between items-center">
-                    <CategoryBadge class={'self-start'}>{category}</CategoryBadge>
+                    {
+                      category &&
+                      <CategoryBadge class={'self-start'}>{category}</CategoryBadge>
+                    }
                     <div class="self-stretch text-primary-lighter text-xs font-medium">
                       {published_at} • {reading_time} min read
                     </div>
@@ -137,8 +147,7 @@ const bgs = betterImages.map((el) => {
   class HeroData extends HTMLElement {
     index = 0;
     readonly indexes = [0, 1, 2];
-    bgs = this.dataset.bgs?.split(';');
-
+    bgs = this.dataset.bgs?.replaceAll(',b', 'b').split(';');
     interval = setInterval(() => {
       if (this.index === 2) {
         this.index = 0;
@@ -161,12 +170,17 @@ const bgs = betterImages.map((el) => {
           articleContent?.removeAttribute('data-active');
           articleImage?.removeAttribute('data-active');
         }
-        // document.querySelector('#hero')?.style = this.bgs?.[this.index]|| "" || '';
+        document.querySelector<HTMLElement>('#hero')?.setAttribute('style', this.bgs?.[this.index] || '');
       });
     }, TIMER);
     constructor() {
       super();
-      this.querySelector<HTMLElement>('#hero')?.style.setProperty('backgroung', this.bgs?.[0] || '') ;
+    console.log(this.bgs)
+
+      this.querySelector<HTMLElement>('#hero')?.style.setProperty(
+        'backgroung',
+        this.bgs?.[0] || '',
+      );
       this.querySelector(`.hero-article-0`)?.setAttribute('data-active', 'true');
       this.querySelector(`.article-tab-0`)?.setAttribute('data-active', 'true');
       this.querySelector(`.article-content-0`)?.setAttribute('data-active', 'true');
@@ -195,6 +209,8 @@ const bgs = betterImages.map((el) => {
               articleContent?.removeAttribute('data-active');
               articleImage?.removeAttribute('data-active');
             }
+            document.querySelector<HTMLElement>('#hero')?.setAttribute('style', this.bgs?.[this.index] || '');
+
             this.interval = setInterval(() => {
               if (this.index === 2) {
                 this.index = 0;
@@ -217,6 +233,7 @@ const bgs = betterImages.map((el) => {
                   articleContent?.removeAttribute('data-active');
                   articleImage?.removeAttribute('data-active');
                 }
+                document.querySelector<HTMLElement>('#hero')?.setAttribute('style', this.bgs?.[this.index] || '');
               });
             }, TIMER);
           });
