@@ -25,7 +25,6 @@ const articles = await fetchApi<Article[]>({
     publicationState: 'live',
   },
 });
-console.log(articles);
 const imgUrl = `${import.meta.env.NODE_ENV === 'development' ? import.meta.env.STRAPI_URL : ''}`;
 const betterImages = await Promise.all(
   articles.map((el) =>
@@ -41,24 +40,10 @@ const betterImages = await Promise.all(
 const bgs = betterImages.map((el) => {
   return getStyleBackgroundImage(el?.src);
 });
-console.log(bgs);
 ---
 
 <hero-data data-articles={articles} data-bgs={bgs}>
   <Screen id="hero" class="h-[481px] justify-end" style={bgs[0]}>
-    <!-- {
-      articles.map((article, index) => {
-        const def = article.attributes.mainImage.data.attributes;
-        const small = article.attributes.mainImage.data.attributes.formats.small;
-        const medium = article.attributes.mainImage.data.attributes.formats.medium;
-        const large = article.attributes.mainImage.data.attributes.formats.large;
-
-        return (
-        <img src={article.attributes.mainImage.data.attributes.url} width={article.attributes.mainImage.data.attributes.width} height={article.attributes.mainImage.data.attributes.height} alt={article.attributes.title} class={`bg-image article-banner-${index} hidden data-[active]:block w-full h-full object-cover object-center absolute top-0 left-0 z-[-1]`} 
-        srcset={`${small.url} ${small.width}px, ${medium.url} ${medium.width}px, ${large.url} ${large.width}px, ${def.url} ${def.width}px`}
-        /> 
-      )})
-    } -->
     <Container class="items-end justify-between z-10">
       {
         articles.map((article, index) => (
@@ -143,7 +128,7 @@ console.log(bgs);
   </Screen>
 </hero-data>
 <script>
-  const TIMER = 50000000;
+  const TIMER = 5000;
   class HeroData extends HTMLElement {
     index = 0;
     readonly indexes = [0, 1, 2];
@@ -175,7 +160,6 @@ console.log(bgs);
     }, TIMER);
     constructor() {
       super();
-    console.log(this.bgs)
 
       this.querySelector<HTMLElement>('#hero')?.style.setProperty(
         'backgroung',
