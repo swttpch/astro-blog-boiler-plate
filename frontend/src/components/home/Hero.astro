@@ -92,11 +92,12 @@ const bgs = betterImages.map((el) => {
           const category = el.attributes.categories.data?.[0].attributes.title;
           const published_at = new Date(el.attributes.createdAt).toLocaleDateString('pt-BR');
           const reading_time = el.attributes.readingTime;
+          const slug = el.attributes.slug;
           const title = el.attributes.title;
 
           return (
             <article-template data-index={index} class="self-stretch flex-1">
-              <a href="test" class="flex-1 self-stretch ">
+              <a href={slug} class="flex-1 self-stretch ">
                 <div
                   data-active={index === 0}
                   class:list={[
@@ -115,7 +116,7 @@ const bgs = betterImages.map((el) => {
                       <CategoryBadge class={'self-start'}>{category}</CategoryBadge>
                     }
                     <div class="self-stretch text-primary-lighter text-xs font-medium">
-                      {published_at} • {reading_time} min read
+                      {published_at} • {reading_time} min de leitura
                     </div>
                   </div>
                 </div>
@@ -139,7 +140,7 @@ const bgs = betterImages.map((el) => {
       } else {
         this.index++;
       }
-      this.indexes.forEach((el, i) => {
+      this.indexes.forEach((_, i) => {
         const article = this.querySelector(`.hero-article-${i}`);
         const tab = this.querySelector(`.article-tab-${i}`);
         const articleContent = this.querySelector(`.article-content-${i}`);
