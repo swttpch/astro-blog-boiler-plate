@@ -799,75 +799,26 @@ export interface ApiArticleArticle extends Schema.CollectionType {
   options: {
     draftAndPublish: true;
   };
-  pluginOptions: {
-    i18n: {
-      localized: true;
-    };
-  };
   attributes: {
-    title: Attribute.String &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    url: Attribute.UID<'api::article.article', 'title'> & Attribute.Required;
+    title: Attribute.String & Attribute.Required;
+    slug: Attribute.UID<'api::article.article', 'title'> & Attribute.Required;
     author: Attribute.Relation<
       'api::article.article',
       'oneToOne',
       'api::author.author'
     >;
-    mainImage: Attribute.Media<'images'> &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    isTrending: Attribute.Boolean &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }> &
-      Attribute.DefaultTo<false>;
-    isTopPick: Attribute.Boolean &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }> &
-      Attribute.DefaultTo<false>;
-    readingTime: Attribute.String &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
+    mainImage: Attribute.Media<'images'>;
+    isTrending: Attribute.Boolean & Attribute.DefaultTo<false>;
+    isTopPick: Attribute.Boolean & Attribute.DefaultTo<false>;
+    readingTime: Attribute.String;
     previewText: Attribute.Text &
       Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }> &
       Attribute.SetMinMaxLength<{
         maxLength: 100;
       }>;
-    seo: Attribute.Component<'shared.seo'> &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
+    seo: Attribute.Component<'shared.seo'>;
     isCategoryHighlight: Attribute.Boolean &
       Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }> &
       Attribute.DefaultTo<false>;
     relatedArticles: Attribute.Relation<
       'api::article.article',
@@ -881,19 +832,9 @@ export interface ApiArticleArticle extends Schema.CollectionType {
           output: 'HTML';
           preset: 'standard';
         }
-      > &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
+      >;
     isTagHighlight: Attribute.Boolean &
       Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }> &
       Attribute.DefaultTo<false>;
     categories: Attribute.Relation<
       'api::article.article',
@@ -920,12 +861,6 @@ export interface ApiArticleArticle extends Schema.CollectionType {
       'admin::user'
     > &
       Attribute.Private;
-    localizations: Attribute.Relation<
-      'api::article.article',
-      'oneToMany',
-      'api::article.article'
-    >;
-    locale: Attribute.String;
   };
 }
 
@@ -940,78 +875,15 @@ export interface ApiAuthorAuthor extends Schema.CollectionType {
   options: {
     draftAndPublish: false;
   };
-  pluginOptions: {
-    i18n: {
-      localized: true;
-    };
-  };
   attributes: {
-    name: Attribute.String &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: false;
-        };
-      }>;
-    jobTitle: Attribute.String &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    Expertise: Attribute.Component<'list.list', true> &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    instagram: Attribute.String &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: false;
-        };
-      }>;
-    twitter: Attribute.String &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: false;
-        };
-      }>;
-    website: Attribute.String &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: false;
-        };
-      }>;
-    avatar: Attribute.Media<'images'> &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: false;
-        };
-      }>;
-    description: Attribute.Text &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    seo: Attribute.Component<'shared.seo'> &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    url: Attribute.String &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: false;
-        };
-      }>;
-    socials: Attribute.Relation<
-      'api::author.author',
-      'oneToMany',
-      'api::social.social'
-    >;
+    name: Attribute.String;
+    jobTitle: Attribute.String;
+    expertise: Attribute.Component<'list.list', true>;
+    avatar: Attribute.Media<'images'>;
+    description: Attribute.Text;
+    seo: Attribute.Component<'shared.seo'>;
+    socials: Attribute.Component<'list.socials', true>;
+    slug: Attribute.UID<'api::author.author', 'name'> & Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -1026,12 +898,6 @@ export interface ApiAuthorAuthor extends Schema.CollectionType {
       'admin::user'
     > &
       Attribute.Private;
-    localizations: Attribute.Relation<
-      'api::author.author',
-      'oneToMany',
-      'api::author.author'
-    >;
-    locale: Attribute.String;
   };
 }
 
@@ -1050,11 +916,7 @@ export interface ApiBlogInfoBlogInfo extends Schema.SingleType {
     name: Attribute.String & Attribute.Required;
     brand: Attribute.Media<'images'>;
     summary: Attribute.Text;
-    socials: Attribute.Relation<
-      'api::blog-info.blog-info',
-      'oneToMany',
-      'api::social.social'
-    >;
+    socials: Attribute.Component<'list.socials', true>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1084,43 +946,11 @@ export interface ApiCategoryCategory extends Schema.CollectionType {
   options: {
     draftAndPublish: false;
   };
-  pluginOptions: {
-    i18n: {
-      localized: true;
-    };
-  };
   attributes: {
-    title: Attribute.String &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    description: Attribute.Text &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    icon: Attribute.Media<'images'> &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: false;
-        };
-      }>;
+    title: Attribute.String;
+    description: Attribute.Text;
     slug: Attribute.UID<'api::category.category', 'title'> & Attribute.Required;
-    subCategory: Attribute.Relation<
-      'api::category.category',
-      'oneToMany',
-      'api::category.category'
-    >;
-    seo: Attribute.Component<'shared.seo'> &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
+    seo: Attribute.Component<'shared.seo'>;
     color: Attribute.String &
       Attribute.Required &
       Attribute.CustomField<'plugin::color-picker.color'>;
@@ -1138,12 +968,6 @@ export interface ApiCategoryCategory extends Schema.CollectionType {
       'admin::user'
     > &
       Attribute.Private;
-    localizations: Attribute.Relation<
-      'api::category.category',
-      'oneToMany',
-      'api::category.category'
-    >;
-    locale: Attribute.String;
   };
 }
 
@@ -1153,33 +977,19 @@ export interface ApiCookieCookie extends Schema.CollectionType {
     singularName: 'cookie';
     pluralName: 'cookies';
     displayName: 'Cookies';
+    description: '';
   };
   options: {
     draftAndPublish: false;
   };
   pluginOptions: {
-    i18n: {
-      localized: true;
-    };
     'content-manager': {
       visible: false;
     };
   };
   attributes: {
-    name: Attribute.String &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    description: Attribute.Text &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
+    name: Attribute.String & Attribute.Required;
+    description: Attribute.Text & Attribute.Required;
     host: Attribute.String & Attribute.Required;
     category: Attribute.Relation<
       'api::cookie.cookie',
@@ -1192,19 +1002,9 @@ export interface ApiCookieCookie extends Schema.CollectionType {
       Attribute.Required;
     isVisible: Attribute.Boolean &
       Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }> &
       Attribute.DefaultTo<true>;
     duration: Attribute.JSON;
-    key: Attribute.String &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: false;
-        };
-      }>;
+    key: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -1219,12 +1019,6 @@ export interface ApiCookieCookie extends Schema.CollectionType {
       'admin::user'
     > &
       Attribute.Private;
-    localizations: Attribute.Relation<
-      'api::cookie.cookie',
-      'oneToMany',
-      'api::cookie.cookie'
-    >;
-    locale: Attribute.String;
   };
 }
 
@@ -1234,47 +1028,23 @@ export interface ApiCookieCategoryCookieCategory extends Schema.CollectionType {
     singularName: 'cookie-category';
     pluralName: 'cookie-categories';
     displayName: 'Cookie Categories';
+    description: '';
   };
   options: {
     draftAndPublish: false;
   };
   pluginOptions: {
-    i18n: {
-      localized: true;
-    };
     'content-manager': {
       visible: false;
     };
   };
   attributes: {
-    name: Attribute.String &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    description: Attribute.Text &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
+    name: Attribute.String & Attribute.Required;
+    description: Attribute.Text & Attribute.Required;
     isNecessary: Attribute.Boolean &
       Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: false;
-        };
-      }> &
       Attribute.DefaultTo<false>;
-    key: Attribute.String &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: false;
-        };
-      }>;
+    key: Attribute.String;
     cookies: Attribute.Relation<
       'api::cookie-category.cookie-category',
       'oneToMany',
@@ -1294,12 +1064,6 @@ export interface ApiCookieCategoryCookieCategory extends Schema.CollectionType {
       'admin::user'
     > &
       Attribute.Private;
-    localizations: Attribute.Relation<
-      'api::cookie-category.cookie-category',
-      'oneToMany',
-      'api::cookie-category.cookie-category'
-    >;
-    locale: Attribute.String;
   };
 }
 
@@ -1309,38 +1073,21 @@ export interface ApiCookiePopupCookiePopup extends Schema.CollectionType {
     singularName: 'cookie-popup';
     pluralName: 'cookie-popups';
     displayName: 'Cookie Popups';
+    description: '';
   };
   options: {
     draftAndPublish: false;
   };
   pluginOptions: {
-    i18n: {
-      localized: true;
-    };
     'content-manager': {
       visible: false;
     };
   };
   attributes: {
-    title: Attribute.String &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    description: Attribute.RichText &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
+    title: Attribute.String;
+    description: Attribute.RichText;
     hasCustomizability: Attribute.Boolean &
       Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }> &
       Attribute.DefaultTo<false>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -1356,12 +1103,6 @@ export interface ApiCookiePopupCookiePopup extends Schema.CollectionType {
       'admin::user'
     > &
       Attribute.Private;
-    localizations: Attribute.Relation<
-      'api::cookie-popup.cookie-popup',
-      'oneToMany',
-      'api::cookie-popup.cookie-popup'
-    >;
-    locale: Attribute.String;
   };
 }
 
@@ -1390,48 +1131,6 @@ export interface ApiFormForm extends Schema.CollectionType {
   };
 }
 
-export interface ApiSocialSocial extends Schema.CollectionType {
-  collectionName: 'socials';
-  info: {
-    singularName: 'social';
-    pluralName: 'socials';
-    displayName: 'Socials';
-    description: '';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  attributes: {
-    url: Attribute.String & Attribute.Required;
-    name: Attribute.String & Attribute.Required;
-    type: Attribute.Enumeration<
-      [
-        'twitter',
-        'facebook',
-        'website',
-        'instagram',
-        'linkedin',
-        'dribbble',
-        'github'
-      ]
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::social.social',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::social.social',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
 export interface ApiTagTag extends Schema.CollectionType {
   collectionName: 'tags';
   info: {
@@ -1443,49 +1142,17 @@ export interface ApiTagTag extends Schema.CollectionType {
   options: {
     draftAndPublish: false;
   };
-  pluginOptions: {
-    i18n: {
-      localized: true;
-    };
-  };
   attributes: {
-    name: Attribute.String &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: false;
-        };
-      }>;
-    seo: Attribute.Component<'shared.seo'> &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    description: Attribute.Text &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    url: Attribute.String &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: false;
-        };
-      }>;
+    name: Attribute.String & Attribute.Required;
+    seo: Attribute.Component<'shared.seo'>;
+    description: Attribute.Text;
+    slug: Attribute.UID<'api::tag.tag', 'name'>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<'api::tag.tag', 'oneToOne', 'admin::user'> &
       Attribute.Private;
     updatedBy: Attribute.Relation<'api::tag.tag', 'oneToOne', 'admin::user'> &
       Attribute.Private;
-    localizations: Attribute.Relation<
-      'api::tag.tag',
-      'oneToMany',
-      'api::tag.tag'
-    >;
-    locale: Attribute.String;
   };
 }
 
@@ -1515,7 +1182,6 @@ declare module '@strapi/types' {
       'api::cookie-category.cookie-category': ApiCookieCategoryCookieCategory;
       'api::cookie-popup.cookie-popup': ApiCookiePopupCookiePopup;
       'api::form.form': ApiFormForm;
-      'api::social.social': ApiSocialSocial;
       'api::tag.tag': ApiTagTag;
     }
   }

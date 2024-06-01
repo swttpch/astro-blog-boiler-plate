@@ -29,9 +29,9 @@
       "required": false
     },
     "socials": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::social.social"
+      "type": "component",
+      "repeatable": true,
+      "component": "list.socials"
     }
   }
 }

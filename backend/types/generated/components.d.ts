@@ -92,6 +92,31 @@ export interface ListSelect extends Schema.Component {
   };
 }
 
+export interface ListSocials extends Schema.Component {
+  collectionName: 'components_list_socials';
+  info: {
+    displayName: 'Socials';
+    icon: 'link';
+    description: '';
+  };
+  attributes: {
+    url: Attribute.String & Attribute.Required;
+    type: Attribute.Enumeration<
+      [
+        'twitter',
+        'facebook',
+        'website',
+        'instagram',
+        'linkedin',
+        'dribbble',
+        'github',
+        'tiktok',
+        'youtube'
+      ]
+    >;
+  };
+}
+
 export interface SharedInfoGroupSection extends Schema.Component {
   collectionName: 'components_shared_info_group_sections';
   info: {
@@ -158,6 +183,7 @@ declare module '@strapi/types' {
       'list.option': ListOption;
       'list.paragraph': ListParagraph;
       'list.select': ListSelect;
+      'list.socials': ListSocials;
       'shared.info-group-section': SharedInfoGroupSection;
       'shared.meta-social': SharedMetaSocial;
       'shared.seo': SharedSeo;

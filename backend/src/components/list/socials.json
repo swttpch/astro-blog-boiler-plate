@@ -1,22 +1,13 @@
 {
-  "kind": "collectionType",
-  "collectionName": "socials",
+  "collectionName": "components_list_socials",
   "info": {
-    "singularName": "social",
-    "pluralName": "socials",
     "displayName": "Socials",
+    "icon": "link",
     "description": ""
   },
-  "options": {
-    "draftAndPublish": false
-  },
-  "pluginOptions": {},
+  "options": {},
   "attributes": {
     "url": {
-      "type": "string",
-      "required": true
-    },
-    "name": {
       "type": "string",
       "required": true
     },
@@ -29,7 +20,9 @@
         "instagram",
         "linkedin",
         "dribbble",
-        "github"
+        "github",
+        "tiktok",
+        "youtube"
       ]
     }
   }

@@ -4,54 +4,36 @@
   "info": {
     "singularName": "cookie-category",
     "pluralName": "cookie-categories",
-    "displayName": "Cookie Categories"
+    "displayName": "Cookie Categories",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
   },
   "pluginOptions": {
-    "i18n": {
-      "localized": true
-    },
     "content-manager": {
       "visible": false
     }
   },
   "attributes": {
     "name": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
+      "pluginOptions": {},
       "type": "string",
       "required": true
     },
     "description": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
+      "pluginOptions": {},
       "type": "text",
       "required": true
     },
     "isNecessary": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": false
-        }
-      },
+      "pluginOptions": {},
       "type": "boolean",
       "default": false,
       "required": true
     },
     "key": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": false
-        }
-      },
+      "pluginOptions": {},
       "type": "string",
       "regex": "^(?!-)(?!.*?-$)[a-z0-9]*(?:-[a-z0-9]+)*$"
     },

@@ -4,42 +4,28 @@
   "info": {
     "singularName": "cookie-popup",
     "pluralName": "cookie-popups",
-    "displayName": "Cookie Popups"
+    "displayName": "Cookie Popups",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
   },
   "pluginOptions": {
-    "i18n": {
-      "localized": true
-    },
     "content-manager": {
       "visible": false
     }
   },
   "attributes": {
     "title": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
+      "pluginOptions": {},
       "type": "string"
     },
     "description": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
+      "pluginOptions": {},
       "type": "richtext"
     },
     "hasCustomizability": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
+      "pluginOptions": {},
       "type": "boolean",
       "default": false,
       "required": true
