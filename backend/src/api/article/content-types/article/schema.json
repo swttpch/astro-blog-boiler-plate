@@ -98,6 +98,18 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::tag.tag"
+    },
+    "likes": {
+      "required": true,
+      "default": 0,
+      "type": "integer",
+      "min": 0
+    },
+    "shares": {
+      "type": "integer",
+      "default": 0,
+      "required": true,
+      "min": 0
     }
   }
 }
