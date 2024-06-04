@@ -13,6 +13,15 @@ module.exports = {
       method: "PUT",
       path: "/article-interactivities/:id/likes/remove",
       handler: "article-interactivities.removeLike",
+      config: { 
+        policies: [],
+        middlewares: [],
+      },
+    },
+    {
+      method: "PUT",
+      path: "/article-interactivities/:id/usefull-count/add",
+      handler: "article-interactivities.addUsefullCount",
       config: {
         policies: [],
         middlewares: [],
@@ -20,8 +29,8 @@ module.exports = {
     },
     {
       method: "PUT",
-      path: "/article-interactivities/:id/shares/add",
-      handler: "article-interactivities.addShare",
+      path: "/article-interactivities/:id/usefull-count/remove",
+      handler: "article-interactivities.removeUsefullCount",
       config: {
         policies: [],
         middlewares: [],
@@ -29,8 +38,17 @@ module.exports = {
     },
     {
       method: "PUT",
-      path: "/article-interactivities/:id/shares/remove",
-      handler: "article-interactivities.removeShare",
+      path: "/article-interactivities/:id/useless-count/add",
+      handler: "article-interactivities.addUselessCount",
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
+    {
+      method: "PUT",
+      path: "/article-interactivities/:id/useless-count/remove",
+      handler: "article-interactivities.removeUselessCount",
       config: {
         policies: [],
         middlewares: [],

@@ -19,18 +19,32 @@ module.exports = {
       .setLike({ id: params.id, operation: "remove" });
     return data;
   },
-  addShare: async (ctx) => {
+  addUsefullCount: async (ctx) => {
     const params = ctx.params;
     const data = await strapi
       .service("api::article-interactivities.article-interactivities")
-      .setShare({ id: params.id, operation: "add" });
+      .setUsefullCount({ id: params.id, operation: "add" });
     return data;
   },
-  removeShare: async (ctx) => {
+  removeUsefullCount: async (ctx) => {
     const params = ctx.params;
     const data = await strapi
       .service("api::article-interactivities.article-interactivities")
-      .setShare({ id: params.id, operation: "remove" });
+      .setUsefullCount({ id: params.id, operation: "remove" });
+    return data;
+  },
+  addUselessCount: async (ctx) => {
+    const params = ctx.params;
+    const data = await strapi
+      .service("api::article-interactivities.article-interactivities")
+      .setUselessCount({ id: params.id, operation: "add" });
+    return data;
+  },
+  removeUselessCount: async (ctx) => {
+    const params = ctx.params;
+    const data = await strapi
+      .service("api::article-interactivities.article-interactivities")
+      .setUselessCount({ id: params.id, operation: "remove" });
     return data;
   },
 };

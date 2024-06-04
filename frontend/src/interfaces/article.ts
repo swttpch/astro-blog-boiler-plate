@@ -18,6 +18,9 @@ export default interface Article {
     updatedAt: string;
     publishedAt: string;
     slug: string;
+    likes: number;
+    usefullCount: number;
+    uselessCount: number;
     author: {
       data?: Author;
     };

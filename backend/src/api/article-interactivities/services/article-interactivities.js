@@ -15,7 +15,7 @@ module.exports = ({}) => ({
       "api::article.article",
       +id,
       {
-        fields: ["likes", "shares"],
+        fields: ["likes", "usefullCount", "uselessCount"],
         data: {
           likes: entry.likes + op,
         },
@@ -24,7 +24,8 @@ module.exports = ({}) => ({
 
     return newEntity;
   },
-  setShare: async ({ id, operation }) => {
+
+  setUsefullCount: async ({ id, operation }) => {
     const op = operation === "add" ? 1 : -1;
     const entry = await strapi.entityService.findOne(
       "api::article.article",
@@ -34,13 +35,33 @@ module.exports = ({}) => ({
       "api::article.article",
       +id,
       {
-        fields: ["likes", "shares"],
+        fields: ["likes", "usefullCount", "uselessCount"],
         data: {
-          shares: entry.shares + op,
+          usefullCount: entry.usefullCount + op,
         },
       }
     );
 
     return newEntity;
-  }
+  },
+
+  setUselessCount: async ({ id, operation }) => {
+    const op = operation === "add" ? 1 : -1;
+    const entry = await strapi.entityService.findOne(
+      "api::article.article",
+      +id
+    );
+    const newEntity = await strapi.entityService.update(
+      "api::article.article",
+      +id,
+      {
+        fields: ["likes", "usefullCount", "uselessCount"],
+        data: {
+          uselessCount: entry.uselessCount + op,
+        },
+      }
+    );
+
+    return newEntity;
+  },
 });

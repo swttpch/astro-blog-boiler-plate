@@ -1,24 +1,135 @@
 ---
+type Props = {
+  usefullCount: number;
+  id: number;
+};
+const { usefullCount, id } = Astro.props;
 ---
-<div class="p-24 bg-primary-lighter rounded-md border border-primary-light flex flex-col justify-start items-center gap-16 self-stretch">
+
+<feedback-component
+  data-id={id}
+  data-count={usefullCount}
+  class="p-24 bg-primary-lighter rounded-md border border-primary-light flex flex-col justify-start items-center gap-16 self-stretch"
+>
   <p class="text-primary-dark text-xl font-normal break-words">Esse artigo foi últil</p>
   <div class="flex justify-center items-start gap-8">
-    <button class="px-[18px] py-10 bg-primary-base rounded-xs flex justify-center items-center gap-8">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-        <path d="M12.0001 1.99902C17.5238 1.99902 22.0016 6.47687 22.0016 12.0006C22.0016 17.5243 17.5238 22.0021 12.0001 22.0021C6.47638 22.0021 1.99854 17.5243 1.99854 12.0006C1.99854 6.47687 6.47638 1.99902 12.0001 1.99902ZM12.0001 3.49902C7.30481 3.49902 3.49854 7.3053 3.49854 12.0006C3.49854 16.6959 7.30481 20.5021 12.0001 20.5021C16.6954 20.5021 20.5016 16.6959 20.5016 12.0006C20.5016 7.3053 16.6954 3.49902 12.0001 3.49902ZM8.46183 14.7839C9.31096 15.8616 10.602 16.5021 12.0001 16.5021C13.3963 16.5021 14.6858 15.8633 15.535 14.7881C15.7918 14.463 16.2634 14.4076 16.5884 14.6644C16.9135 14.9211 16.9689 15.3927 16.7122 15.7178C15.5814 17.1495 13.8602 18.0021 12.0001 18.0021C10.1374 18.0021 8.4142 17.1472 7.2836 15.7122C7.02725 15.3869 7.08319 14.9153 7.40855 14.6589C7.73391 14.4026 8.20548 14.4585 8.46183 14.7839ZM9.00053 8.75121C9.6905 8.75121 10.2498 9.31054 10.2498 10.0005C10.2498 10.6905 9.6905 11.2498 9.00053 11.2498C8.31057 11.2498 7.75124 10.6905 7.75124 10.0005C7.75124 9.31054 8.31057 8.75121 9.00053 8.75121ZM15.0005 8.75121C15.6905 8.75121 16.2498 9.31054 16.2498 10.0005C16.2498 10.6905 15.6905 11.2498 15.0005 11.2498C14.3106 11.2498 13.7512 10.6905 13.7512 10.0005C13.7512 9.31054 14.3106 8.75121 15.0005 8.75121Z" fill="white"/>
-        </svg>
+    <button
+      id="add-usefull-count"
+      class="px-[18px] py-10 bg-primary-base rounded-xs flex justify-center items-center gap-8 data-[active]:bg-primary-dark"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+      >
+        <path
+          d="M12.0001 1.99902C17.5238 1.99902 22.0016 6.47687 22.0016 12.0006C22.0016 17.5243 17.5238 22.0021 12.0001 22.0021C6.47638 22.0021 1.99854 17.5243 1.99854 12.0006C1.99854 6.47687 6.47638 1.99902 12.0001 1.99902ZM12.0001 3.49902C7.30481 3.49902 3.49854 7.3053 3.49854 12.0006C3.49854 16.6959 7.30481 20.5021 12.0001 20.5021C16.6954 20.5021 20.5016 16.6959 20.5016 12.0006C20.5016 7.3053 16.6954 3.49902 12.0001 3.49902ZM8.46183 14.7839C9.31096 15.8616 10.602 16.5021 12.0001 16.5021C13.3963 16.5021 14.6858 15.8633 15.535 14.7881C15.7918 14.463 16.2634 14.4076 16.5884 14.6644C16.9135 14.9211 16.9689 15.3927 16.7122 15.7178C15.5814 17.1495 13.8602 18.0021 12.0001 18.0021C10.1374 18.0021 8.4142 17.1472 7.2836 15.7122C7.02725 15.3869 7.08319 14.9153 7.40855 14.6589C7.73391 14.4026 8.20548 14.4585 8.46183 14.7839ZM9.00053 8.75121C9.6905 8.75121 10.2498 9.31054 10.2498 10.0005C10.2498 10.6905 9.6905 11.2498 9.00053 11.2498C8.31057 11.2498 7.75124 10.6905 7.75124 10.0005C7.75124 9.31054 8.31057 8.75121 9.00053 8.75121ZM15.0005 8.75121C15.6905 8.75121 16.2498 9.31054 16.2498 10.0005C16.2498 10.6905 15.6905 11.2498 15.0005 11.2498C14.3106 11.2498 13.7512 10.6905 13.7512 10.0005C13.7512 9.31054 14.3106 8.75121 15.0005 8.75121Z"
+          fill="white"></path>
+      </svg>
       <div class="text-white text-lg font-medium break-words">Sim</div>
     </button>
-    <button class="px-[18px] py-10 bg-primary-base rounded-xs flex justify-center items-center gap-8">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-        <path d="M12 2.00439C17.5228 2.00439 22 6.48155 22 12.0044C22 17.5272 17.5228 22.0044 12 22.0044C6.47715 22.0044 2 17.5272 2 12.0044C2 6.48155 6.47715 2.00439 12 2.00439ZM12 3.50439C7.30558 3.50439 3.5 7.30997 3.5 12.0044C3.5 16.6988 7.30558 20.5044 12 20.5044C16.6944 20.5044 20.5 16.6988 20.5 12.0044C20.5 7.30997 16.6944 3.50439 12 3.50439ZM12 13.4978C13.6312 13.4978 15.1604 14.1527 16.281 15.2932C16.5714 15.5887 16.5672 16.0635 16.2717 16.3538C15.9763 16.6441 15.5014 16.64 15.2111 16.3445C14.3696 15.4881 13.2247 14.9978 12 14.9978C10.7726 14.9978 9.62535 15.4903 8.78348 16.35C8.49367 16.646 8.01882 16.651 7.72287 16.3611C7.42693 16.0713 7.42195 15.5965 7.71175 15.3005C8.83296 14.1556 10.3652 13.4978 12 13.4978ZM7.16435 6.78125C7.39958 6.48721 7.81102 6.41714 8.1269 6.60123L8.21852 6.66412L10.7185 8.66412C11.042 8.92288 11.0944 9.39485 10.8357 9.71829C10.6876 9.9034 10.4696 9.99974 10.2497 9.9998C10.2497 10.6902 9.69041 11.2495 9.00045 11.2495C8.31048 11.2495 7.75116 10.6902 7.75116 10.0002C7.75116 9.47405 8.07645 9.02385 8.5369 8.83976L7.28148 7.83542C6.95803 7.57666 6.90559 7.1047 7.16435 6.78125ZM13.2825 8.66422L15.7813 6.66422C16.1047 6.40539 16.5767 6.45773 16.8355 6.78112C17.0708 7.07511 17.049 7.4919 16.8001 7.75971L16.7187 7.83532L15.4632 8.83944C15.9241 9.02334 16.2497 9.47375 16.2497 10.0002C16.2497 10.6902 15.6904 11.2495 15.0004 11.2495C14.3536 11.2495 13.8216 10.7579 13.7576 10.128L13.7512 9.99818C13.5317 9.99979 13.3137 9.9035 13.1656 9.71842C12.9303 9.42443 12.9522 9.00764 13.2011 8.73983L13.2825 8.66422L15.7813 6.66422L13.2825 8.66422Z" fill="white"/>
-        </svg>
+    <button
+      id="add-useless-count"
+      class="px-[18px] py-10 bg-primary-base rounded-xs flex justify-center items-center gap-8 data-[active]:bg-primary-dark"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+      >
+        <path
+          d="M12 2.00439C17.5228 2.00439 22 6.48155 22 12.0044C22 17.5272 17.5228 22.0044 12 22.0044C6.47715 22.0044 2 17.5272 2 12.0044C2 6.48155 6.47715 2.00439 12 2.00439ZM12 3.50439C7.30558 3.50439 3.5 7.30997 3.5 12.0044C3.5 16.6988 7.30558 20.5044 12 20.5044C16.6944 20.5044 20.5 16.6988 20.5 12.0044C20.5 7.30997 16.6944 3.50439 12 3.50439ZM12 13.4978C13.6312 13.4978 15.1604 14.1527 16.281 15.2932C16.5714 15.5887 16.5672 16.0635 16.2717 16.3538C15.9763 16.6441 15.5014 16.64 15.2111 16.3445C14.3696 15.4881 13.2247 14.9978 12 14.9978C10.7726 14.9978 9.62535 15.4903 8.78348 16.35C8.49367 16.646 8.01882 16.651 7.72287 16.3611C7.42693 16.0713 7.42195 15.5965 7.71175 15.3005C8.83296 14.1556 10.3652 13.4978 12 13.4978ZM7.16435 6.78125C7.39958 6.48721 7.81102 6.41714 8.1269 6.60123L8.21852 6.66412L10.7185 8.66412C11.042 8.92288 11.0944 9.39485 10.8357 9.71829C10.6876 9.9034 10.4696 9.99974 10.2497 9.9998C10.2497 10.6902 9.69041 11.2495 9.00045 11.2495C8.31048 11.2495 7.75116 10.6902 7.75116 10.0002C7.75116 9.47405 8.07645 9.02385 8.5369 8.83976L7.28148 7.83542C6.95803 7.57666 6.90559 7.1047 7.16435 6.78125ZM13.2825 8.66422L15.7813 6.66422C16.1047 6.40539 16.5767 6.45773 16.8355 6.78112C17.0708 7.07511 17.049 7.4919 16.8001 7.75971L16.7187 7.83532L15.4632 8.83944C15.9241 9.02334 16.2497 9.47375 16.2497 10.0002C16.2497 10.6902 15.6904 11.2495 15.0004 11.2495C14.3536 11.2495 13.8216 10.7579 13.7576 10.128L13.7512 9.99818C13.5317 9.99979 13.3137 9.9035 13.1656 9.71842C12.9303 9.42443 12.9522 9.00764 13.2011 8.73983L13.2825 8.66422L15.7813 6.66422L13.2825 8.66422Z"
+          fill="white"></path>
+      </svg>
       <div class="text-white text-lg font-medium break-words">Não</div>
     </button>
   </div>
-  <div>
-    <span class="text-primary-dark text-sm font-bold break-words">13 usuários</span>
+  <div id='usefull-count-show'>
+    <span id="usefull-count" class="text-primary-dark text-sm font-bold break-words"
+      >{usefullCount} usuários</span
+    >
     <span class="text-primary-dark text-sm font-normal break-words"> acharam esse artigo útil</span>
   </div>
-</div>
+</feedback-component>
 
+<script>
+  class Feedback extends HTMLElement {
+    
+    addUsefullCount = document.getElementById('add-usefull-count');
+    addUselessCount = document.getElementById('add-useless-count');
+    show = document.getElementById('usefull-count-show');
+    count = 0
+    id = ''
+    constructor() {
+      super();
+      const id = this.dataset.id;
+      if (!id) return;
+      this.id = id;
+      const feedback = sessionStorage.getItem(`feedback-${this.id}`);
+      this.count = this.dataset.count && +this.dataset.count || 0;
+      this.check()
+
+      if(feedback === 'usefull') {
+        this.addUsefullCount?.setAttribute('disabled', 'true');
+        this.addUsefullCount?.setAttribute('data-active', 'true')
+      } else if(feedback === 'useless') {
+        this.addUselessCount?.setAttribute('disabled', 'true');
+        this.addUselessCount?.setAttribute('data-active', 'true')
+      }
+
+      this.addUsefullCount?.addEventListener('click', () => {
+        this.addUsefullCount?.setAttribute('disabled', 'true');
+        this.addUselessCount?.setAttribute('disabled', 'true');
+        this.setUsefull(+id);
+        this.setSessionStorage('usefull');
+      });
+
+      this.addUselessCount?.addEventListener('click', () => {
+        this.addUsefullCount?.setAttribute('disabled', 'true');
+        this.addUselessCount?.setAttribute('disabled', 'true');
+        this.setUseless(+id);
+        this.setSessionStorage('useless');
+      });
+    }
+
+    async setUsefull(id:number) {
+      const res = await fetch(`/api/articles/${id}/add-usefull.json`).then(res => res.json()).then(res => res)
+      this.querySelector('#usefull-count')!.textContent = res.usefullCount
+      this.count = res.usefullCount;
+      this.check()
+      this.addUselessCount?.removeAttribute('disabled');
+      this.addUsefullCount?.setAttribute('data-active', 'true')
+      this.addUselessCount?.removeAttribute('data-active')
+    }
+
+    async setUseless(id:number) {
+      const res = await fetch(`/api/articles/${id}/add-useless.json`).then(res => res.json()).then(res => res)
+      this.querySelector('#usefull-count')!.textContent = res.usefullCount
+      this.count = res.usefullCount;
+      this.check()
+      this.addUsefullCount?.removeAttribute('disabled');
+      this.addUselessCount?.setAttribute('data-active', 'true')
+      this.addUsefullCount?.removeAttribute('data-active')
+    }
+
+    check() {
+      if(this.count === 0) {
+        this.show?.classList.add('hidden')
+
+      } else {
+        this.show?.classList.remove('hidden')
+      
+      }
+    }
+
+    setSessionStorage(action: 'usefull' | 'useless') {
+      sessionStorage.setItem(`feedback-${this.id}`, action);
+    }
+  }
+
+  customElements.define('feedback-component', Feedback);
+</script>

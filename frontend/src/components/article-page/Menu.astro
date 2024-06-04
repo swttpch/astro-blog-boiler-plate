@@ -1,50 +1,208 @@
 ---
-import HearthIcon from '../icons/HearthIcon.astro'
-import MenuIcon from '../icons/MenuIcon.astro'
+import ShareIcon from '../icons/ShareIcon.astro';
+import ShareFullIcon from '../icons/ShareFullIcon.astro';
+import HearthFullIcon from '../icons/HearthFullIcon.astro';
+import HearthIcon from '../icons/HearthIcon.astro';
+import MenuIcon from '../icons/MenuIcon.astro';
+import ShareBoxContent from '../ShareBoxContent.astro';
+import MenuBoxContent from '../MenuBoxContent.astro';
+
+type Props = {
+  idArticle: number;
+  likes: number;
+  url: string
+  titles: string[]
+};
+const { idArticle, likes, url , titles} = Astro.props;
 ---
 
+<div id='modal-background' class='absolute top-0 hidden z-40 left-0 w-full h-full data-[active]:block'/>
+
 <div
-  class="top-[200px] mt-[-12px] sticky flex flex-col items-center gap-56 max-w-72 flex-1 text-gray-600 hover:text-black"
+  class="top-[200px] mt-[-12px] sticky flex flex-col items-center gap-56 max-w-72 flex-1 text-gray-600 hover:text-black z-40"
 >
-  <button>
-    <MenuIcon/>
-  </button>
-  <div class="flex flex-col items-center gap-4 self-stretch group text-gray-600 hover:text-black">
+  <menu-button data-id={idArticle} class='text-text-soft hover:text-text-sub data-[active]:text-text-sub'>
+    <button class='transition-colors'>
+      <MenuIcon color='currentColor' />
+    </button>
+    <MenuBoxContent titles={titles}/>
+  </menu-button>
+  <like-button
+    data-id={idArticle}
+    class="flex flex-col items-center gap-4 self-stretch group text-gray-600 hover:text-black"
+  >
     <button class="transition-colors">
-      <HearthIcon/>
+      <HearthIcon id={'hearth-icon'} color="currentColor" />
+      <HearthFullIcon id={'hearth-full-icon'} class={'hidden'} />
+    </button>
+    <span class="text-sm font-medium transition-colors">{likes}</span>
+  </like-button>
+  <!-- <div class="flex flex-col items-center gap-4 self-stretch group text-gray-600 hover:text-black">
+    <button class="transition-colors">
+      <CommentsIcon id={'comment-icon'} color="currentColor" />
+      <CommentsFullIcon id={'comment-full-icon'} />
     </button>
     <span class="text-sm font-medium transition-colors">999999</span>
-  </div>
-  <div class="flex flex-col items-center gap-4 self-stretch group text-gray-600 hover:text-black">
+  </div> -->
+  <share-button data-id={idArticle} class="flex relative flex-col items-center gap-4 self-stretch group text-gray-600 hover:text-black">
     <button class="transition-colors">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-      >
-        <path
-          d="M12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C10.3817 22 8.81782 21.6146 7.41286 20.888L3.58704 21.9553C2.92212 22.141 2.23258 21.7525 2.04691 21.0876C1.98546 20.8676 1.98549 20.6349 2.04695 20.4151L3.11461 16.5922C2.38637 15.186 2 13.6203 2 12C2 6.47715 6.47715 2 12 2ZM12 3.5C7.30558 3.5 3.5 7.30558 3.5 12C3.5 13.4696 3.87277 14.8834 4.57303 16.1375L4.72368 16.4072L3.61096 20.3914L7.59755 19.2792L7.86709 19.4295C9.12006 20.1281 10.5322 20.5 12 20.5C16.6944 20.5 20.5 16.6944 20.5 12C20.5 7.30558 16.6944 3.5 12 3.5ZM8.75 13H13.2483C13.6625 13 13.9983 13.3358 13.9983 13.75C13.9983 14.1297 13.7161 14.4435 13.35 14.4932L13.2483 14.5H8.75C8.33579 14.5 8 14.1642 8 13.75C8 13.3703 8.28215 13.0565 8.64823 13.0068L8.75 13H13.2483H8.75ZM8.75 9.5H15.2545C15.6687 9.5 16.0045 9.83579 16.0045 10.25C16.0045 10.6297 15.7223 10.9435 15.3563 10.9932L15.2545 11H8.75C8.33579 11 8 10.6642 8 10.25C8 9.8703 8.28215 9.55651 8.64823 9.50685L8.75 9.5H15.2545H8.75Z"
-          fill="currentColor"></path>
-      </svg>
+     <ShareIcon id='share-icon' color="currentColor" />
+     <ShareFullIcon id='share-full-icon' class={'hidden'}/>
     </button>
-    <span class="text-sm font-medium transition-colors">999999</span>
-  </div>
-  <div class="flex flex-col items-center gap-4 self-stretch group text-gray-600 hover:text-black">
-    <button class="transition-colors">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-      >
-        <path
-          d="M6.74658 4.00003H10.2108C10.625 4.00003 10.9608 4.33582 10.9608 4.75003C10.9608 5.12972 10.6786 5.44352 10.3126 5.49318L10.2108 5.50003H6.74658C5.55572 5.50003 4.58094 6.42519 4.50177 7.59598L4.49658 7.75003V17.25C4.49658 18.4409 5.42174 19.4157 6.59253 19.4948L6.74658 19.5H16.2473C17.4382 19.5 18.413 18.5749 18.4921 17.4041L18.4973 17.25V16.7522C18.4973 16.338 18.8331 16.0022 19.2473 16.0022C19.627 16.0022 19.9408 16.2844 19.9905 16.6505L19.9973 16.7522V17.25C19.9973 19.2543 18.425 20.8913 16.4465 20.9948L16.2473 21H6.74658C4.74232 21 3.10531 19.4277 3.00178 17.4492L2.99658 17.25V7.75003C2.99658 5.74577 4.56894 4.10876 6.54742 4.00523L6.74658 4.00003H10.2108H6.74658ZM14.5006 6.51988V3.75003C14.5006 3.12606 15.2074 2.78998 15.6876 3.13983L15.7697 3.20877L21.7643 8.95877C22.0441 9.22712 22.0696 9.65814 21.8407 9.9561L21.7644 10.0412L15.7698 15.7931C15.3196 16.2251 14.5877 15.9477 14.5077 15.3589L14.5006 15.2519V12.5266L14.1571 12.5567C11.7574 12.807 9.45735 13.8879 7.24253 15.8174C6.72342 16.2696 5.92029 15.842 6.00567 15.1589C6.67046 9.83933 9.45233 6.90733 14.2012 6.53953L14.5006 6.51988V3.75003V6.51988ZM16.0006 5.50867V7.25003C16.0006 7.66424 15.6648 8.00003 15.2506 8.00003C11.3772 8.00003 8.97655 9.67616 7.93931 13.1572L7.86025 13.4358L8.21244 13.199C10.4489 11.7372 12.7983 11 15.2506 11C15.6303 11 15.9441 11.2822 15.9937 11.6483L16.0006 11.75V13.4928L20.1618 9.50012L16.0006 5.50867Z"
-          fill="currentColor"></path>
-      </svg>
-    </button>
-    <span class="text-sm font-medium transition-colors">999999</span>
-  </div>
+    <!-- <span class="text-sm font-medium transition-colors">{shares}</span> -->
+
+    <ShareBoxContent url={url}/>
+
+  </share-button>
 </div>
+
+<script>
+  const liked = sessionStorage.getItem('liked');
+  class LikeButton extends HTMLElement {
+    liked = liked !== null;
+    hearth = this.querySelector('#hearth-icon');
+    hearthFull = this.querySelector('#hearth-full-icon');
+    constructor() {
+      super();
+      const id = this.dataset.id;
+
+      if(!id) return 
+
+      if(liked) {
+        this.hearth?.classList.add('hidden');
+        this.hearthFull?.classList.add('block');
+      } else {
+        this.hearth?.classList.add('block');
+        this.hearthFull?.classList.add('hidden');
+      }
+
+      this.querySelector('button')?.addEventListener('click', () => {
+        this.querySelector('button')?.setAttribute('disabled', 'true');
+        this.toggleStorage()
+        this.hearth?.classList.toggle('block');
+        this.hearth?.classList.toggle('hidden');
+        this.hearthFull?.classList.toggle('hidden');
+        this.hearthFull?.classList.toggle('block');
+        if(this.liked) {
+          this.addLike(+id);
+        } else {
+          this.removeLike(+id);
+        }
+      });
+    }
+
+    async addLike(id:number) {
+      const res = await fetch(`/api/articles/${id}/likes/add.json`).then(res => res.json()).then(res => res)
+      this.querySelector('span')!.textContent = res.likes
+      this.querySelector('button')?.removeAttribute('disabled');
+    }
+    async removeLike(id:number) {
+      const res = await fetch(`/api/articles/${id}/likes/remove.json`).then(res => res.json()).then(res => res)
+      this.querySelector('span')!.textContent = res.likes
+      this.querySelector('button')?.removeAttribute('disabled');
+    }
+    toggleStorage = () => {
+      this.liked = !this.liked;
+      if(this.liked) {
+        sessionStorage.setItem('liked', 'true');
+      } else {
+        sessionStorage.removeItem('liked');
+      }
+    }
+  }
+
+  class ShareButton extends HTMLElement {
+    shared = false;
+    icon = this.querySelector('#share-icon');
+    iconFull = this.querySelector('#share-full-icon');
+    modal = this.querySelector('#share-modal-content');
+    modalbg = document.querySelector('#modal-background');
+    menu = document.querySelector('#menu');
+    constructor() {
+      super();
+      const id = this.dataset.id;
+
+      if(!id) return 
+      this.icon?.classList.add('block');
+      this.iconFull?.classList.add('hidden');
+      this.shared = false;
+
+      this.querySelector('button')?.addEventListener('click', () => {
+        if(!this.shared) {
+            this.openModal();
+        }  else {
+          this.closeModal();
+        }
+      });
+    }
+
+    closeModal = () => {
+      this.modal?.classList.add('hidden');
+      this.modal?.classList.remove('flex');
+      this.icon?.classList.remove('hidden');
+      this.icon?.classList.add('block');
+      this.iconFull?.classList.remove('block');
+      this.iconFull?.classList.add('hidden');
+      this.modalbg?.classList.remove('block');
+      this.modalbg?.classList.add('hidden');
+      this.modalbg?.removeEventListener('click', this.closeModal, true); 
+      this.menu?.removeEventListener('click', this.closeModal, true);
+      this.shared = false;
+      this.modal?.querySelector('button')?.classList.remove('text-green-500');
+    }
+
+    openModal = () => {
+      this.modal?.classList.remove('hidden');
+      this.modal?.classList.add('flex');
+      this.icon?.classList.remove('block');
+      this.icon?.classList.add('hidden');
+      this.iconFull?.classList.remove('hidden');
+      this.iconFull?.classList.add('block');
+      this.modalbg?.classList.remove('hidden');
+      this.modalbg?.classList.add('block');
+      this.menu?.addEventListener('click', this.closeModal, true);
+      this.modalbg?.addEventListener('click', this.closeModal, true); 
+      this.shared = true;
+
+    }
+
+  }
+
+  class MenuButton extends HTMLElement {
+    modal = this.querySelector('#menu-modal-content');
+    modalbg = document.querySelector('#modal-background');
+    constructor() {
+      super();
+      const id = this.dataset.id;
+
+      if(!id) return 
+      console.log(this.modalbg);
+
+      this.querySelector('button')?.addEventListener('click', () => {
+        const isOpen = this.modal?.getAttribute('data-active');
+        if(!(isOpen === 'true')) {
+            this.openModal();
+        } else {
+          this.closeModal();
+        }
+      });
+    }
+
+    closeModal = () => {
+      this.modal?.removeAttribute('data-active');
+      this.modalbg?.removeAttribute('data-active');
+      this.modalbg?.removeEventListener('click', this.closeModal, true); 
+    }
+
+    openModal = () => {
+      this.modal?.setAttribute('data-active', 'true');
+      this.modalbg?.setAttribute('data-active', 'true');
+      this.modalbg?.addEventListener('click', this.closeModal, true); 
+    }
+
+  }
+
+  customElements.define('menu-button', MenuButton);
+  customElements.define('like-button', LikeButton);
+  customElements.define('share-button', ShareButton);
+</script>

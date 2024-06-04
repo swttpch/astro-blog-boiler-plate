@@ -20,6 +20,8 @@ import { getImage } from 'astro:assets';
 import type { BlogInfo } from '../interfaces/blog-info';
 import { getStyleBackgroundImage } from '../utils/getStyleBackgroundImage';
 import ArticleContent from '../components/article-page/ArticleContent.astro';
+import type Category from '../interfaces/category';
+import type StrapiNavigation from '../interfaces/navigation';
 
 const { slug } = Astro.params;
 
@@ -29,6 +31,14 @@ const blogInfo = await fetchApi<BlogInfo>({
     populate: '*',
   },
 });
+
+  const headerNavigation = await fetchApi<StrapiNavigation<Category>[]>({
+  endpoint: 'navigation/render/1',
+});
+console.log(headerNavigation)
+
+
+
 
 const postData = await fetchApi<Article>({
   endpoint: '/articles',
@@ -114,6 +124,9 @@ const def = postData.attributes.mainImage.data
     })
   : undefined;
 const categories = postData.attributes.categories.data || []
+
+
+const h1List = postData.attributes.content.match(/<h1>(.*?)<\/h1>/g)?.map((h1) => h1.replace(/<\/?h1>/g, '')) ?? [];
 ---
 
 <!doctype html>
@@ -122,7 +135,7 @@ const categories = postData.attributes.categories.data || []
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
   </head>
   <body>
-    <Header brand={blogInfo.data.attributes.brand.data} />
+    <Header brand={blogInfo.data.attributes.brand.data} items={headerNavigation.map(el => ( {href: el.path, label: el.title}))} />
     <Screen
       class="h-[424px] lg:h-[481px] justify-end relative"
       style={getStyleBackgroundImage(def?.src)}
@@ -142,8 +155,8 @@ const categories = postData.attributes.categories.data || []
     <ProgressReading />
     <Screen class="pl-0 relative justify-end">
       <Container class={'gap-24 lg:gap-64'}>
-        <Menu />
-        <div class="flex flex-col gap-32 items-start flex-1">
+        <Menu titles={h1List} idArticle={postData.id} likes={postData.attributes.likes} url={postData.attributes.slug} />
+        <div class="flex flex-col gap-32 items-start flex-1 overflow-hidden">
           <Breadcrumb
             items={[
               categories?.map((category) => ({
@@ -154,7 +167,7 @@ const categories = postData.attributes.categories.data || []
             ]}
           />
           <ArticleContent content={postData.attributes.content} />
-          <ArticleFeedback />
+          <ArticleFeedback id={postData.id} usefullCount={postData.attributes.usefullCount}/>
           <Pagination
             nextArticle={nextArticle ?? safeNextArticle}
             prevArticle={prevArticle ?? safePrevArticle}

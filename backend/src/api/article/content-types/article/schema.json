@@ -105,7 +105,13 @@
       "type": "integer",
       "min": 0
     },
-    "shares": {
+    "usefullCount": {
+      "type": "integer",
+      "required": true,
+      "default": 0,
+      "min": 0
+    },
+    "uselessCount": {
       "type": "integer",
       "default": 0,
       "required": true,

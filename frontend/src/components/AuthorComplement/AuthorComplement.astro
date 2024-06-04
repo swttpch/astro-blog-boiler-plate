@@ -15,7 +15,7 @@ const {author, date, readingTime} = Astro.props
 <div class="self-stretch items-start lg:items-center flex gap-8 lg:flex-row flex-col">
   {
     author ? (<AuthorBox class={'flex-1'}>
-    <AuthorBoxAvatar src={author.attributes.avatar?.data.attributes.url}/>
+    <AuthorBoxAvatar name={author.attributes.name} src={author.attributes.avatar?.data.attributes.url}/>
     <AuthorBoxBody>
       <AuthorBoxName class={'text-white'}> {author.attributes.name}</AuthorBoxName>
       <AuthorBoxArticleInfo>{author.attributes.jobTitle}</AuthorBoxArticleInfo>
