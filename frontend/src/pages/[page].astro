@@ -1,0 +1,25 @@
+---
+import fetchApi from '../lib/strapi';
+import type Meta from '../interfaces/meta';
+import Home from '../layouts/Home.astro';
+
+// export const prerender = true;
+
+// export async function getStaticPaths() {
+//   const postData = await fetchApi<Meta>({
+//   endpoint: '/articles',
+//   wrappedByKey: 'meta',
+//   query: {
+//     fields: ['slug'],
+//     publicationState: 'live',
+//   },
+// });
+//   const arr = Array.from({ length: Math.ceil(postData.pagination.total / 3)}, (_, i) => i + 1);
+
+//   return [arr].map((page) => ({
+//     params: { page },
+//   }));
+// }
+---
+
+<Home/>

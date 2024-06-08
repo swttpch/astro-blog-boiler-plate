@@ -199,3 +199,51 @@ h3 {
     background: linear-gradient(180deg, rgba(0, 0, 0, 0.00) 27.39%, #000 100%);
   }
 }
+
+.ais-Highlight-highlighted, .ais-Highlight-highlighted {
+  color: #4A5568 !important;
+  background-color: #F7FAFC !important;
+}
+
+.ais-SearchBox-input {
+  width: 100% !important;
+  font-size: 16px !important;
+  line-height: 24px !important;
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.ais-Hits-item {
+  width: 100%;
+  border: none !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+  padding: 8px ;
+  margin: 0;
+}
+
+.ais-Hits-item{
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.ais-Hits-item :hover {
+  background-color: #F7FAFC;
+}
+
+.searchbox-404 > .ais-SearchBox > .ais-SearchBox-form > .ais-SearchBox-input {
+  border-radius: 8px !important;
+  background-color: #F7FAFC !important;
+  border: 1px solid #E2E8F0 !important;
+}
+
+.ais-SearchBox-form {
+  width: 100% !important;
+  background-color: red !important;
+}
+
+.ais-SearchBox-submit, .ais-SearchBox-reset {
+  display: none !important;
+}
+

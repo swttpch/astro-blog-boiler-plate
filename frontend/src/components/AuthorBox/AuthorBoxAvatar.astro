@@ -1,16 +1,46 @@
 ---
 import type { HTMLAttributes } from 'astro/types'
 import { twMerge } from 'tailwind-merge'
+import ApiImage from '../ApiImage.astro'
+import type Image from '../../interfaces/image'
+import { getImage } from 'astro:assets'
 
-type Props = {src?: string, name: string} & HTMLAttributes<'img'>
-const {src, class: className,name,  ...rest} = Astro.props
-const fallback = 'https://via.placeholder.com/48x48'
+type Props = {image?: Image, name: string} & HTMLAttributes<'img'>
+const {image: src, class: className,name,  ...rest} = Astro.props
 
+const getFirstLetter = (name: string): string => {
+  return name.charAt(0).toUpperCase();
+};
+
+const firstLetter = getFirstLetter(name);
+const getSecondNameFirstLetter = (name: string): string => {
+  const names = name.split(' ');
+  if (names.length > 1) {
+    return names[1].charAt(0).toUpperCase();
+  }
+  return '';
+};
+
+const secondNameFirstLetter = getSecondNameFirstLetter(name);
 ---
+<div
+class={twMerge(['w-[48px] h-[48px] relative rounded-full bg-primary-base text-primary-lighter flex items-center justify-center', className])}
+{...rest}
+>
 
-<img
-  class={twMerge(['w-[48px] h-[48px] relative rounded-full', className])}
-  src={src ? `${import.meta.env.NODE_ENV === 'development' ? import.meta.env.STRAPI_URL: ''}`+src : fallback}
+{
+  src ? (
+  <ApiImage
+  class={'w-full h-full object-cover rounded-full'}
+  image={src}
   alt={name}
-  {...rest}
-/>
+
+/>) : 
+(<div class='text-2xl'>
+  {
+    secondNameFirstLetter ? `${firstLetter}${secondNameFirstLetter}` : firstLetter
+  }
+</div>)
+}
+
+</div>

@@ -1,0 +1,151 @@
+---
+import type Article from '../interfaces/article';
+import type Category from '../interfaces/category';
+import type Image from '../interfaces/image';
+import type { Socials } from '../interfaces/socials';
+import type { Tag } from '../interfaces/tag';
+import ApiImage from './ApiImage.astro';
+import ArticleComponent from './Article/Article.astro';
+import ArticleContent from './Article/ArticleContent.astro';
+import ArticleDescription from './Article/ArticleDescription.astro';
+import ArticleImage from './Article/ArticleImage.astro';
+import ArticleTitle from './Article/ArticleTitle.astro';
+import AuthorBox from './AuthorBox/AuthorBox.astro';
+import AuthorBoxArticleInfo from './AuthorBox/AuthorBoxArticleInfo.astro';
+import AuthorBoxAvatar from './AuthorBox/AuthorBoxAvatar.astro';
+import AuthorBoxBody from './AuthorBox/AuthorBoxBody.astro';
+import AuthorBoxName from './AuthorBox/AuthorBoxName.astro';
+import CategoryBadge from './CategoryBadge.astro';
+import Container from './Container.astro';
+import Screen from './Screen.astro';
+import TagComponent from './Tag.astro';
+import SocialsComponent from './icons/Socials.astro';
+import FormattedDate from './FormattedDate.astro';
+import Pagination from './Pagination.astro';
+
+type Props = {
+  brand: Image;
+  socials: Socials[];
+  description: string;
+  articles: Article[];
+  categories: Category[];
+  tags: Tag[];
+  curPath: string;
+  curPage: number;
+  totalPages: number;
+};
+const { brand, socials, description, articles, categories, tags, curPage, curPath, totalPages } =
+  Astro.props;
+const next = curPath + (+curPage + 1) + '#articles-list';
+const prev = curPath + (+curPage - 1) +'#articles-list';
+---
+
+<Screen>
+  <Container class=" gap-64 lg:py-64 py-32 lg:flex-row flex-col">
+    <div class="flex flex-col flex-1 gap-24 lg:gap-32">
+      <h2  class="font-medium relative">Publicados recentes <span id="articles-list" class='absolute top-[-120px]'></span></h2>
+      <div class="flex flex-col self-stretch gap-16 lg:gap-32">
+        {
+          articles?.map((el) => {
+            const author = el.attributes.author.data;
+            const publishedAt = new Date(el.attributes.publishedAt);
+            const readingTime = el.attributes.readingTime;
+            const category = el.attributes.categories.data?.[0];
+            return (
+              <ArticleComponent href={'/p/' + el.attributes.slug} class={'lg:flex-row flex-col'}>
+                <ArticleImage class={'lg:w-[320px] lg:h-[266px] w-full h-[125px]'} image={el.attributes.mainImage?.data} />
+                <ArticleContent class={'lg:px-0 px-16 gap-24'}>
+                  <ArticleContent class={'gap-16'}>
+                    <ArticleContent class={'gap-8'}>
+                      {category && <CategoryBadge>{category.attributes.title}</CategoryBadge>}
+                      <ArticleTitle>{el.attributes.title}</ArticleTitle>
+                    </ArticleContent>
+                    <ArticleDescription class={'max-h-[84px] text-ellipsis overflow-hidden'}>{el.attributes.previewText}</ArticleDescription>
+                  </ArticleContent>
+                  {author && (
+                    <AuthorBox>
+                      <AuthorBoxAvatar
+                        name={author.attributes.name || ''}
+                        image={author.attributes.avatar?.data}
+                      />
+                      <AuthorBoxBody>
+                        <AuthorBoxName>{author.attributes.name}</AuthorBoxName>
+                        <AuthorBoxArticleInfo>
+                          <FormattedDate date={publishedAt} /> • {readingTime} min de leitura
+                        </AuthorBoxArticleInfo>
+                      </AuthorBoxBody>
+                    </AuthorBox>
+                  )}
+                </ArticleContent>
+              </ArticleComponent>
+            );
+          })
+        }
+      </div>
+      <Pagination 
+        nextPage={next}
+        previousPage={prev}
+        currentPage={curPage}
+        totalPages={totalPages}
+        disabledNext={curPage === totalPages}
+        disabledPrevious={curPage === 1}
+      />
+    </div>
+    <div class="pt-72 lg:max-w-[384px] flex flex-col gap-64 flex-1 self-stretch">
+      <div class="flex flex-col justify-start items-stretch gap-64">
+        {
+          categories.length > 0 && (
+            <div class="flex flex-col justify-start items-center gap-24">
+              <h3 class="w-full text-text-main text-2xl font-medium">Principais categorias</h3>
+              <div class="flex flex-col justify-start items-center gap-16 w-full">
+                {categories.map((el) => (
+                  <a
+                    href={'/c/' + el.attributes.slug}
+                    class="flex justify-between items-center w-full h-64 px-16 bg-bg-weak rounded-xs overflow-hidden"
+                  >
+                    <p class="text-text-main text-base font-medium">{el.attributes.title}</p>
+                    <div class="flex justify-center items-center gap-2 h-24 px-12 py-4 bg-primary-lighter rounded-xs border border-primary-light">
+                      <div class="text-primary-dark text-sm font-medium">{el.attributes.qtd}</div>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )
+        }
+        {
+          tags.length > 0 && (
+            <div class="flex flex-col justify-start items-center gap-24 ">
+              <h3 class="w-full text-text-main text-2xl font-medium">Principais categorias</h3>
+              <div class="flex justify-start items-center flex-wrap gap-12 w-full p-24 border border-border-soft bg-white rounded-md">
+                {tags.map((el) => (
+                  <TagComponent href={'/t/'+el.attributes.slug}>{el.attributes.name}</TagComponent>
+                ))}
+              </div>
+            </div>
+          )
+        }
+
+        <div
+          class="flex flex-col justify-start items-start gap-16 p-32 bg-bg-weak rounded-md overflow-hidden"
+        >
+          <!-- brand -->
+          <ApiImage image={brand} class={'w-[139px] lg:w-[186px]'} />
+          <p class="text-text-sub text-lg w-full">{description}</p>
+          <div class="flex justify-start items-start gap-16 flex-wrap">
+            {
+              socials.map((social) => (
+                <a
+                  href={social.url}
+                  class="flex justify-center items-center size-40 flex-wrap p-2 bg-primary-base rounded-full overflow-hidden"
+                >
+                  <SocialsComponent social={social.type} class={'text-white size-20'} />
+                </a>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </Container>
+</Screen>

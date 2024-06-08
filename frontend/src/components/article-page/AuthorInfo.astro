@@ -30,12 +30,12 @@ const {
 ---
 
 <div
-  class="p-40 bg-text-gray-100 rounded-2xl overflow-hidden border border-border-soft justify-center lg:justify-start lg:items-start gap-32 lg:gap-48 flex self-stretch flex-col lg:flex-row"
+  class="p-40 bg-gray-100 rounded-2xl overflow-hidden border border-border-soft justify-center lg:justify-start lg:items-start gap-32 lg:gap-48 flex self-stretch flex-col lg:flex-row"
 >
   <div class="flex flex-col justify-start items-center lg:items-start gap-16">
     <AuthorBoxAvatar
       class="w-[128px] h-[128px]"
-      src={author.attributes.avatar?.data.attributes.url}
+      image={author.attributes.avatar?.data}
       name={author.attributes.name}
     />
     <div class="p-8 bg-text-gray-100 rounded-xs justify-start items-start gap-10 flex">
@@ -71,7 +71,7 @@ const {
         <div class="text-text-main text-lg font-bold break-words">Redes sociais</div>
         <div class="self-stretch flex flex-col justify-start items-start gap-8">
           {author.attributes.socials.map((social) => (
-            <a href={social.url} class="justify-start items-center gap-4 flex">
+            <a href={social.url.startsWith('http') ? social.url: '//'+ social.url} target='_blank'  class="justify-start items-center gap-4 flex">
               <Socials social={social.type} class={'size-16'} />
               <div class="text-text-main text-base font-normal break-words">{social.type}</div>
             </a>

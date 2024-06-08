@@ -6,11 +6,46 @@ import Screen from "./Screen.astro";
 <Screen class='relative bg-primary-dark overflow-visible'>
   <Container class="items-center  flex-col lg:flex-row">
     <h2 class='font-semibold self-stretch flex-1 text-white'>Inscreva-se na newsletter</h2>
-    <div class="self-stretch lg:w-[592px] py-8 px-24 pr-8 bg-white rounded-lg border border-primary-300 justify-between items-center flex gap-8">
-      <input type='email' class="text-icon-soft text-lg font-normal break-words self-stretch w-full focus:outline-none" placeholder='Insira seu e-mail'/>
-      <button class="flex-1 px-24 py-10 bg-primary-base rounded-sm border border-primary-base justify-center items-center gap-8 flex">
-        <div class="text-white text-base font-medium text-nowrap">vamos conversar</div>
+    <form id='newsletter-form'  class="self-stretch lg:w-[592px] py-8 px-24 pr-8 bg-white rounded-lg border border-primary-300 justify-between items-center flex gap-8">
+      <input type='email' name='email' class="text-icon-soft text-lg font-normal break-words self-stretch w-full focus:outline-none" placeholder='Insira seu e-mail'/>
+      <button type='submit' class="flex-1 px-24 py-10 bg-primary-base rounded-sm border border-primary-base justify-center items-center gap-8 flex">
+        <div id='newsletter-submit-button' class="text-white text-base font-medium text-nowrap">vamos conversar</div>
       </button>
-    </div>    
+    </form>    
   </Container>
 </Screen>
+
+<script>
+	document
+		?.getElementById("newsletter-form")
+		?.addEventListener("submit", function (event: any) {
+			event.preventDefault();
+
+			const formData = new FormData(event.target);
+      
+
+			const jsonData = Object.fromEntries(formData);
+      
+
+			fetch(import.meta.env.PUBLIC_BASE_API_URL+'/api/ezforms/submit', {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Accept: "application/json",
+				},
+				body: JSON.stringify({
+          formData: jsonData,
+        })
+			})
+				.then(function (response) {
+					event.target.reset();
+					const btn = document
+						.querySelector(".newsletter-submit-button");
+					btn?.setAttribute("disabled", "true");
+          
+				})
+				.catch(function (error) {
+					console.error(error);
+				});
+		});
+</script>

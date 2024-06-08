@@ -16,15 +16,15 @@ const today = new Date();
 ---
 
 <footer>
-  <Screen>
+  <Screen class={'pb-0'} >
     <Container class={'flex-col gap-40 py-64'}>
       <div class="flex items-start gap-12">
-        <div class="w-[295px] flex flex-col justify-start items-start gap-32">
+        <div class="lg:w-[295px] flex flex-col justify-start items-start gap-32">
           <ApiImage image={brand} class={'w-[139px] lg:w-[186px]'} />
           <div class="text-text-sub text-sm font-normal break-words">
             {description}
           </div>
-          <div class="flex justify-start items-start gap-24">
+          <div class="flex justify-start items-start gap-24 flex-wrap">
             {
               socials.map((social) => (
                 <a href={social.url} target='_blank'>
@@ -41,7 +41,7 @@ const today = new Date();
           © {today.getFullYear()}
           {name}
         </div>
-        <div class="flex gap-32">
+        <div class="flex gap-16 lg:gap-32 lg:flex-row flex-col items-center lg:items-start">
           <div class="text-text-main text-sm font-normal break-words">Política de Privacidade</div>
           <div class="text-text-main text-sm font-normal break-words">Política de Cookies</div>
         </div>

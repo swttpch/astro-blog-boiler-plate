@@ -1,0 +1,113 @@
+---
+import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
+import type Article from "../interfaces/article";
+import type Category from "../interfaces/category";
+import type Meta from "../interfaces/meta";
+import fetchApi from "../lib/strapi";
+import {PAGE_SIZE} from "../constants/common";
+import type { Tag } from "../interfaces/tag";
+import type { BlogInfo } from "../interfaces/blog-info";
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/home/Hero.astro";
+import ArticleList from "../components/ArticleList.astro";
+import NewsLetter from "../components/NewsLetter.astro";
+import Footer from "../components/Footer.astro";
+import type StrapiNavigation from "../interfaces/navigation";
+
+const params = Astro.params
+
+let cp = params.page || 1
+
+
+const articlesResponse = await fetchApi<{data: Article[], meta: Meta}>({
+  endpoint: '/articles',
+  query: {
+    publicationState: 'live',
+    sort: ['publishedAt:desc'],
+    populate: {
+      author: {
+        fields: '*',
+        populate: '*',
+      },
+      mainImage: '*',
+      categories: '*',
+    },
+    pagination: {
+      page: cp,
+      pageSize: PAGE_SIZE
+    }
+  },
+});
+
+const categories = await fetchApi<Category[]>({
+  endpoint: 'categories',
+  wrappedByKey: 'data',
+  query: {
+    sort: ['title:asc'],
+    pagination: {
+      page: 1,
+      pageSize: 5
+    }
+  }
+});
+
+await Promise.all(categories.map(cat => {
+  fetchApi<Meta>({
+  endpoint: '/articles',
+  wrappedByKey: 'meta',
+  query: {
+    publicationState: 'live',
+    filters: {
+      categories: {
+        id: {
+          $eq: cat.id
+        }
+      }
+    },
+    pagination: {
+      page: 1,
+      pageSize: 1
+    }
+  },
+}).then(res => {
+  cat.attributes.qtd = res.pagination.total;
+})
+}))
+
+const tags = await fetchApi<Tag[]>(
+  {
+    endpoint: 'tags',
+    wrappedByKey: 'data',
+    query: {
+      sort: ['name:asc'],
+    }
+  }
+);
+
+
+const blogInfo = await fetchApi<BlogInfo
+>({
+  endpoint: 'blog-info',
+  query: {
+    populate: '*',
+  }
+});
+
+const headerNavigation = await fetchApi<StrapiNavigation<Category>[]>({
+  endpoint: 'navigation/render/1',
+});
+---
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+  <body>
+    <Header items={headerNavigation.map(el => ( {href: el.path, label: el.title}))} brand={blogInfo.data.attributes.brand.data} />
+    <Hero />
+    <ArticleList curPath='/' curPage={articlesResponse.meta.pagination.page} totalPages={articlesResponse.meta.pagination.pageCount} categories={categories} tags={tags} articles={articlesResponse?.data} brand={blogInfo.data.attributes.brand.data} socials={blogInfo.data.attributes.socials} description={blogInfo.data.attributes.summary}/>
+    <NewsLetter/>
+    <Footer brand={blogInfo.data.attributes.brand.data} description={blogInfo.data.attributes.summary} name={blogInfo.data.attributes.name} socials={blogInfo.data.attributes.socials}/>
+  </body>
+</html>

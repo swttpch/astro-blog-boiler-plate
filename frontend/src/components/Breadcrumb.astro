@@ -15,8 +15,8 @@ type Props = {
 const { items = [] } = Astro.props;
 ---
 
-<div class="justify-start items-center gap-16 flex overflow-scroll w-full">
-  <HomeIcon />
+<div class="justify-start items-center gap-16 flex overflow-scroll w-full py-4">
+  <HomeIcon class={'flex-[1_0_24px]'} />
   <div class="flex items-center gap-[8px]">
     <div class="p-2 rounded-sm justify-center items-center gap-10 flex">
       <a href='/' class="text-text-soft text-small font-normal break-words hover:text-text-sub ">Início</a>
@@ -24,6 +24,7 @@ const { items = [] } = Astro.props;
     {
       items.map((item, index) => {
         const classTemp = index === items.length - 1 ? 'text-primary-base font-normal whitespace-nowrap hover:text-primary-dark' :  'text-text-soft font-normal whitespace-nowrap hover:text-text-sub';
+        const LinkOrText = index !== items.length - 1 ? 'a' : 'p';
         return (
           <>
             <ChevronRightIcon />
@@ -47,13 +48,13 @@ const { items = [] } = Astro.props;
                   );
                 })
               ) : item.url ? (
-                <a
+                <LinkOrText
                   href={item.url}
                   class={twMerge([classTemp])}
 
                 >
                   {item.title}
-                </a>
+                </LinkOrText>
               ) : (
                 <p
                 class={twMerge([classTemp])}

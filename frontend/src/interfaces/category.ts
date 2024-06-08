@@ -1,3 +1,5 @@
+import type Article from './article';
+
 export default interface Category {
   id: number;
   attributes: {
@@ -8,5 +10,9 @@ export default interface Category {
     createdAt: string;
     updatedAt: string;
     seo?: object;
+    qtd?: number;
+    highlights: {
+      data?: Array<Article>;
+    };
   };
 }

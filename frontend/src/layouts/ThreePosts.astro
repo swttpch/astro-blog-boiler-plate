@@ -1,0 +1,76 @@
+---
+import ArticleComponent from '../components/Article/Article.astro';
+import ArticleContent from '../components/Article/ArticleContent.astro';
+import ArticleDescription from '../components/Article/ArticleDescription.astro';
+import ArticleImage from '../components/Article/ArticleImage.astro';
+import ArticleTitle from '../components/Article/ArticleTitle.astro';
+import AuthorBox from '../components/AuthorBox/AuthorBox.astro';
+import AuthorBoxArticleInfo from '../components/AuthorBox/AuthorBoxArticleInfo.astro';
+import AuthorBoxAvatar from '../components/AuthorBox/AuthorBoxAvatar.astro';
+import AuthorBoxBody from '../components/AuthorBox/AuthorBoxBody.astro';
+import AuthorBoxName from '../components/AuthorBox/AuthorBoxName.astro';
+import CategoryBadge from '../components/CategoryBadge.astro';
+import Container from '../components/Container.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import Screen from '../components/Screen.astro';
+import type Article from '../interfaces/article';
+
+type Props = {
+  articles: Article[]
+}
+const {articles} = Astro.props
+
+const length = articles.length
+---
+{
+  length >= 3 && 
+  <Screen class={'lg:p-32'}>
+  <Container class={'lg:py-0 gap-16 lg:gap-32 lg:flex-row flex-col'}>
+    {
+
+      articles.slice(0,3).map((el) => {
+        const category = el.attributes.categories.data?.[0]
+        const author = el.attributes.author.data
+        const date = new Date(el.attributes.createdAt)
+        const image = el.attributes.mainImage?.data
+        return (
+        <ArticleComponent href={'/p/'} class={'flex-col self-stretch gap-8 flex-1'}>
+          <ArticleImage class={'lg:w-full flex-[0_0_244px] lg:flex-[0_0_396px]'} image={image} />
+          <ArticleContent class={'lg:p-16 p-16 gap-24 justify-between self-stretch flex-1'}>
+            <ArticleContent class={'gap-16'}>
+              <ArticleContent class={'gap-24'}>
+                <div class="self-stretch flex items-center justify-between">
+                  {category && <CategoryBadge>{category.attributes.title}</CategoryBadge>}
+                  <AuthorBoxArticleInfo class='flex items-center'>
+                    <FormattedDate date={date} /> • {el.attributes.readingTime} min de leitura
+                  </AuthorBoxArticleInfo>
+                </div>
+                <ArticleTitle>
+                  {el.attributes.title}
+                </ArticleTitle>
+              </ArticleContent>
+              <ArticleDescription class={'max-h-[84px] text-ellipsis overflow-hidden'}>
+                {el.attributes.previewText}
+              </ArticleDescription>
+            </ArticleContent>
+            {
+              author && (
+                <AuthorBox>
+                  <AuthorBoxAvatar image={author.attributes.avatar?.data} name={author.attributes.name} />
+                  <AuthorBoxBody>
+                    <AuthorBoxName>{author.attributes.name}</AuthorBoxName>
+                    <AuthorBoxArticleInfo>
+                      {author.attributes.jobTitle}
+                    </AuthorBoxArticleInfo>
+                  </AuthorBoxBody>
+                </AuthorBox>
+              )
+            }
+          </ArticleContent>
+        </ArticleComponent>
+      )})
+    }
+  </Container>
+</Screen>
+}
+

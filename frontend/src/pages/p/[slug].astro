@@ -1,27 +1,43 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
-import AuthorComplement from '../components/AuthorComplement/AuthorComplement.astro';
-import Screen from '../components/Screen.astro';
-import Container from '../components/Container.astro';
-import ProgressReading from '../components/ProgressReading.astro';
-import Menu from '../components/article-page/Menu.astro';
-import ArticleFeedback from '../components/article-page/ArticleFeedback.astro';
-import AuthorInfo from '../components/article-page/AuthorInfo.astro';
-import TagsAndShare from '../components/article-page/TagsAndShare.astro';
-import Pagination from '../components/article-page/Pagination.astro';
-import Breadcrumb from '../components/Breadcrumb.astro';
-import Footer from '../components/Footer.astro';
-import NewsLetter from '../components/NewsLetter.astro';
-import fetchApi from '../lib/strapi';
-import type Article from '../interfaces/article';
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
+import AuthorComplement from '../../components/AuthorComplement/AuthorComplement.astro';
+import Screen from '../../components/Screen.astro';
+import Container from '../../components/Container.astro';
+import ProgressReading from '../../components/ProgressReading.astro';
+import Menu from '../../components/article-page/Menu.astro';
+import ArticleFeedback from '../../components/article-page/ArticleFeedback.astro';
+import AuthorInfo from '../../components/article-page/AuthorInfo.astro';
+import TagsAndShare from '../../components/article-page/TagsAndShare.astro';
+import Pagination from '../../components/article-page/Pagination.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import Footer from '../../components/Footer.astro';
+import NewsLetter from '../../components/NewsLetter.astro';
+import fetchApi from '../../lib/strapi';
+import type Article from '../../interfaces/article';
+import type { BlogInfo } from '../../interfaces/blog-info';
+import { getStyleBackgroundImage } from '../../utils/getStyleBackgroundImage';
+import ArticleContent from '../../components/article-page/ArticleContent.astro';
+import type Category from '../../interfaces/category';
+import type StrapiNavigation from '../../interfaces/navigation';
 import { getImage } from 'astro:assets';
-import type { BlogInfo } from '../interfaces/blog-info';
-import { getStyleBackgroundImage } from '../utils/getStyleBackgroundImage';
-import ArticleContent from '../components/article-page/ArticleContent.astro';
-import type Category from '../interfaces/category';
-import type StrapiNavigation from '../interfaces/navigation';
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const postData = await fetchApi<Article[]>({
+  endpoint: '/articles',
+  wrappedByKey: 'data',
+  query: {
+    fields: ['slug'],
+    publicationState: 'live',
+  },
+});
+  return postData.map((post) => ({
+    params: { slug: post.attributes.slug },
+  }));
+}
 
 const { slug } = Astro.params;
 
@@ -35,9 +51,6 @@ const blogInfo = await fetchApi<BlogInfo>({
   const headerNavigation = await fetchApi<StrapiNavigation<Category>[]>({
   endpoint: 'navigation/render/1',
 });
-console.log(headerNavigation)
-
-
 
 
 const postData = await fetchApi<Article>({
@@ -63,7 +76,7 @@ const postData = await fetchApi<Article>({
     publicationState: 'live',
   },
 });
-if (!postData || postData === undefined) {
+if (!postData || postData === undefined || !postData.id) {
   Astro.redirect('/404');
 }
 
@@ -120,11 +133,10 @@ const def = postData.attributes.mainImage.data
       width: postData.attributes.mainImage.data.attributes.width,
       height: postData.attributes.mainImage.data.attributes.height,
       format: 'webp',
-      inferSize: true,
     })
   : undefined;
-const categories = postData.attributes.categories.data || []
 
+const categories = postData.attributes.categories.data || [];
 
 const h1List = postData.attributes.content.match(/<h1>(.*?)<\/h1>/g)?.map((h1) => h1.replace(/<\/?h1>/g, '')) ?? [];
 ---
@@ -152,21 +164,33 @@ const h1List = postData.attributes.content.match(/<h1>(.*?)<\/h1>/g)?.map((h1) =
         />
       </Container>
     </Screen>
-    <ProgressReading />
+    
+    <div class='relative w-full'>
+      <ProgressReading />
+      <Screen class="pl-0 relative justify-end pb-0">
+        <Container class={'gap-24 lg:gap-64'}>
+          <Menu titles={h1List} idArticle={postData.id} likes={postData.attributes.likes} url={postData.attributes.slug} />
+          <div class="flex flex-col gap-32 items-start flex-1 overflow-hidden">
+            <Breadcrumb
+              items={[
+                categories?.map((category) => ({
+                    title: category.attributes.title,
+                    url: `/categoria/${category.attributes.slug}`,
+                  })),
+                { title: postData.attributes.title, url: postData.attributes.slug },
+              ]}
+            />
+            <ArticleContent content={postData.attributes.content} />
+          </div>
+        </Container>
+      </Screen>
+    </div>
     <Screen class="pl-0 relative justify-end">
-      <Container class={'gap-24 lg:gap-64'}>
-        <Menu titles={h1List} idArticle={postData.id} likes={postData.attributes.likes} url={postData.attributes.slug} />
+      <Container class={'gap-24 lg:gap-64 pt-0 lg:pt-0'}>
+        <div class='w-[72px] h-10'>
+
+        </div>
         <div class="flex flex-col gap-32 items-start flex-1 overflow-hidden">
-          <Breadcrumb
-            items={[
-              categories?.map((category) => ({
-                  title: category.attributes.title,
-                  url: `/categoria/${category.attributes.slug}`,
-                })),
-              { title: postData.attributes.title, url: postData.attributes.slug },
-            ]}
-          />
-          <ArticleContent content={postData.attributes.content} />
           <ArticleFeedback id={postData.id} usefullCount={postData.attributes.usefullCount}/>
           <Pagination
             nextArticle={nextArticle ?? safeNextArticle}
@@ -177,7 +201,7 @@ const h1List = postData.attributes.content.match(/<h1>(.*?)<\/h1>/g)?.map((h1) =
               <AuthorInfo author={postData.attributes.author.data} />
             )
           }
-          <TagsAndShare tags={postData.attributes.tags.data} />
+          <TagsAndShare tags={postData.attributes.tags.data} slug={postData.attributes.slug} />
         </div>
       </Container>
     </Screen>

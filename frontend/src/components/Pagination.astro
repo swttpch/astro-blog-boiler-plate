@@ -1,0 +1,84 @@
+---
+
+type Props = {
+  currentPage: number;
+  totalPages: number;
+  nextPage: string;
+  previousPage: string;
+  disabledNext: boolean;
+  disabledPrevious: boolean;
+}
+const {currentPage,disabledNext,disabledPrevious,nextPage,previousPage,totalPages} = Astro.props
+---
+<div class="flex gap-32 rounded-md p-12 bg-white lg:items-center lg:flex-row flex-col">
+  {
+    currentPage == 1 ? (
+    <button
+    disabled
+    data-disabled
+    class="px-24 py-10 gap-8 rounded-xs border flex items-center justify-center data-[disabled]:border-gray-300 border-gray-200  data-[disabled]:hover:bg-white flex-1 text-lg font-semibold text-gray-700 hover:bg-gray-100"
+  >
+    <svg width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g id="Icon / Regular">
+        <path
+          id="Vector"
+          d="M8.371 8.99956L12.0835 12.7121L11.023 13.7726L6.25 8.99956L11.023 4.22656L12.0835 5.28706L8.371 8.99956Z"
+          fill="currentColor"></path>
+      </g>
+    </svg>
+    <span>Anterior</span>
+  </button>
+    ) : (
+    <a
+    href={previousPage}
+    class="px-24 py-10 gap-8 rounded-xs border flex items-center justify-center data-[disabled]:border-gray-300 border-gray-200 data-[disabled]:opacity-20 data-[disabled]:text-gray-100  data-[disabled]:hover:bg-white flex-1 text-lg font-semibold text-gray-700 hover:bg-gray-100"
+  >
+    <svg width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g id="Icon / Regular">
+        <path
+          id="Vector"
+          d="M8.371 8.99956L12.0835 12.7121L11.023 13.7726L6.25 8.99956L11.023 4.22656L12.0835 5.28706L8.371 8.99956Z"
+          fill="currentColor"></path>
+      </g>
+    </svg>
+    <span>Anterior</span>
+  </a>
+    )
+  }
+  <p class="text-md text-gray-400 lg:self-auto self-stretch text-center">Página {currentPage} de {totalPages}</p>
+  {
+    currentPage == totalPages ? (
+    <button
+    disabled
+    data-disabled
+    class="px-24 py-10 gap-8 rounded-xs flex items-center justify-center data-[disabled]:bg-primary-400  data-[disabled]:hover:bg-primary-400 flex-1 text-lg font-semibold text-white hover:bg-primary-800 bg-primary-700"
+  >
+    <span>Próxima</span>
+    <svg width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g id="Icon / Regular">
+        <path
+          id="Vector"
+          d="M10.129 8.99956L6.4165 5.28706L7.477 4.22656L12.25 8.99956L7.477 13.7726L6.4165 12.7121L10.129 8.99956Z"
+          fill="currentColor"></path>
+      </g>
+    </svg>
+  </button>
+    ) : (
+    <a
+    href={nextPage}
+    class="px-24 py-10 gap-8 rounded-xs flex items-center justify-center data-[disabled]:bg-primary-400  data-[disabled]:hover:bg-primary-400 flex-1 text-lg font-semibold text-white hover:bg-primary-800 bg-primary-700"
+  >
+    <span>Próxima</span>
+    <svg width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g id="Icon / Regular">
+        <path
+          id="Vector"
+          d="M10.129 8.99956L6.4165 5.28706L7.477 4.22656L12.25 8.99956L7.477 13.7726L6.4165 12.7121L10.129 8.99956Z"
+          fill="currentColor"></path>
+      </g>
+    </svg>
+  </a>
+    )
+  }
+
+</div>

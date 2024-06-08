@@ -2,6 +2,8 @@
 import type { HTMLAttributes } from "astro/types";
 import CopyIcon from "./icons/CopyIcon.astro";
 import { twMerge } from "tailwind-merge";
+import LinkedinIcon from "./icons/LinkedinIcon.astro";
+import ShareReactComponent from "./react/Share2";
 
 type Props = {url:string} & HTMLAttributes<'div'>
 const {url, class:className, ...props} = Astro.props; 
@@ -17,52 +19,7 @@ const refinedUrl = import.meta.env.PUBLIC_BASE_URL +"/"+ url;
       <CopyIcon color='currentColor'/>
     </button>
   </div>
-  <!-- <div class="self-stretch border border-gray.100 flex justify-start items-start">
-    <div class="flex-1 h-[64px] px-[12px] py-[24px] border-r border-gray.100 flex justify-center items-center gap-10">
-      <div class="w-[24px] h-[24px] relative">
-        <div class="w-[24px] h-[24px] absolute">
-          <div class="w-[18px] h-[18px] absolute left-[3px] top-[3px] rounded-[2px] border-[2px] border-gray.500"></div>
-          <div class="w-[1px] h-[5.40px] absolute left-[7.62px] top-[11.10px] border-[2px] border-gray.500"></div>
-          <div class="w-[8.60px] h-[8.94px] absolute left-[7.62px] top-[7.56px]">
-            <div class="w-[4.50px] h-[5.40px] absolute left-[4.10px] top-[3.54px] border-[2px] border-gray.500"></div>
-            <div class="w-[1px] h-[1px] absolute left-0 top-0 border-[2px] border-gray.500"></div>
-          </div>
-          <div class="w-[24px] h-[24px] absolute transform -rotate-90 origin-top-left"></div>
-        </div>
-      </div>
-    </div>
-    <div class="flex-1 h-[64px] px-[12px] py-[24px] bg-gray.50 border-r border-gray.100 flex justify-center items-center gap-10">
-      <div class="w-[24px] h-[24px] relative">
-        <div class="w-[24px] h-[24px] absolute">
-          <div class="w-[4.50px] h-[1px] absolute left-[9.75px] top-[11px] border-[2px] border-gray.700"></div>
-          <div class="w-[3px] h-[9px] absolute left-[11.25px] top-[7.50px] border-[2px] border-gray.700"></div>
-          <div class="w-[18px] h-[18px] absolute left-[3px] top-[3px] rounded-[5px] border-[2px] border-gray.700"></div>
-        </div>
-      </div>
-    </div>
-    <div class="flex-1 h-[64px] px-[12px] py-[24px] border-r border-gray.100 flex justify-center items-center gap-10">
-      <div class="w-[24px] h-[24px] relative">
-        <div class="w-[24px] h-[24px] absolute">
-          <div class="w-[17.51px] h-[17.59px] absolute left-[3.24px] top-[3.21px] border-[2px] border-gray.500"></div>
-          <div class="w-[9px] h-[9px] absolute left-[7.50px] top-[7.50px]">
-            <div class="w-[3.41px] h-[3.01px] absolute left-[5.60px] top-[5.34px] border-[2px] border-gray.500"></div>
-            <div class="w-[3.01px] h-[3.40px] absolute left-[0.65px] top-0 border-[2px] border-gray.500"></div>
-            <div class="w-[5.93px] h-[2.39px] absolute left-[2.39px] top-[6.61px] border-[2px] border-gray.500"></div>
-            <div class="w-[2.39px] h-[5.93px] absolute left-0 top-[0.68px] border-[2px] border-gray.500"></div>
-            <div class="w-[2.65px] h-[2.65px] absolute left-[2.94px] top-[3.40px] border-[2px] border-gray.500"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="flex-1 h-[64px] px-[12px] py-[24px] border-r border-gray.100 flex justify-center items-center gap-10">
-      <div class="w-[24px] h-[24px] relative">
-        <div class="w-[24px] h-[24px] absolute">
-          <img class="w-[18px] h-[15.30px] absolute left-[3px] top-[4.85px] border-[2px] border-gray.500" src="https://via.placeholder.com/18x15" />
-          <div class="w-[24px] h-[24px] absolute transform -rotate-90 origin-top-left"></div>
-        </div>
-      </div>
-    </div>
-  </div> -->
+  <ShareReactComponent url="url" client:load/>
 </modal-component>
 <script>
   class Modal extends HTMLElement {
