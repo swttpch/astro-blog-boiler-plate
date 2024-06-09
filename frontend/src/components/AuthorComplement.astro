@@ -1,11 +1,11 @@
 ---
-import type Author from '../../interfaces/author';
-import AuthorBox from '../AuthorBox/AuthorBox.astro';
-import AuthorBoxArticleInfo from '../AuthorBox/AuthorBoxArticleInfo.astro';
-import AuthorBoxAvatar from '../AuthorBox/AuthorBoxAvatar.astro';
-import AuthorBoxBody from '../AuthorBox/AuthorBoxBody.astro';
-import AuthorBoxName from '../AuthorBox/AuthorBoxName.astro';
-import FormattedDate from '../FormattedDate.astro';
+import type Author from '../interfaces/author';
+import AuthorBox from './AuthorBox/AuthorBox.astro';
+import AuthorBoxArticleInfo from './AuthorBox/AuthorBoxArticleInfo.astro';
+import AuthorBoxAvatar from './AuthorBox/AuthorBoxAvatar.astro';
+import AuthorBoxBody from './AuthorBox/AuthorBoxBody.astro';
+import AuthorBoxName from './AuthorBox/AuthorBoxName.astro';
+import FormattedDate from './FormattedDate.astro';
 
 type Props = {author?: Author, date: string, readingTime: string};
 const {author, date, readingTime} = Astro.props

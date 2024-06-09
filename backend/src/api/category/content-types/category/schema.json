@@ -37,6 +37,11 @@
       "regex": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
       "customField": "plugin::color-picker.color",
       "required": true
+    },
+    "highlights": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::article.article"
     }
   }
 }

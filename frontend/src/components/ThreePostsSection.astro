@@ -1,18 +1,18 @@
 ---
-import ArticleComponent from '../components/Article/Article.astro';
-import ArticleContent from '../components/Article/ArticleContent.astro';
-import ArticleDescription from '../components/Article/ArticleDescription.astro';
-import ArticleImage from '../components/Article/ArticleImage.astro';
-import ArticleTitle from '../components/Article/ArticleTitle.astro';
-import AuthorBox from '../components/AuthorBox/AuthorBox.astro';
-import AuthorBoxArticleInfo from '../components/AuthorBox/AuthorBoxArticleInfo.astro';
-import AuthorBoxAvatar from '../components/AuthorBox/AuthorBoxAvatar.astro';
-import AuthorBoxBody from '../components/AuthorBox/AuthorBoxBody.astro';
-import AuthorBoxName from '../components/AuthorBox/AuthorBoxName.astro';
-import CategoryBadge from '../components/CategoryBadge.astro';
-import Container from '../components/Container.astro';
-import FormattedDate from '../components/FormattedDate.astro';
-import Screen from '../components/Screen.astro';
+import ArticleComponent from './Article/Article.astro';
+import ArticleContent from './Article/ArticleContent.astro';
+import ArticleDescription from './Article/ArticleDescription.astro';
+import ArticleImage from './Article/ArticleImage.astro';
+import ArticleTitle from './Article/ArticleTitle.astro';
+import AuthorBox from './AuthorBox/AuthorBox.astro';
+import AuthorBoxArticleInfo from './AuthorBox/AuthorBoxArticleInfo.astro';
+import AuthorBoxAvatar from './AuthorBox/AuthorBoxAvatar.astro';
+import AuthorBoxBody from './AuthorBox/AuthorBoxBody.astro';
+import AuthorBoxName from './AuthorBox/AuthorBoxName.astro';
+import CategoryBadge from './CategoryBadge.astro';
+import Container from './Container.astro';
+import FormattedDate from './FormattedDate.astro';
+import Screen from './Screen.astro';
 import type Article from '../interfaces/article';
 
 type Props = {
@@ -34,7 +34,7 @@ const length = articles.length
         const date = new Date(el.attributes.createdAt)
         const image = el.attributes.mainImage?.data
         return (
-        <ArticleComponent href={'/p/'} class={'flex-col self-stretch gap-8 flex-1'}>
+        <ArticleComponent href={'/p/'+ el.attributes.slug} class={'flex-col self-stretch gap-8 flex-1'}>
           <ArticleImage class={'lg:w-full flex-[0_0_244px] lg:flex-[0_0_396px]'} image={image} />
           <ArticleContent class={'lg:p-16 p-16 gap-24 justify-between self-stretch flex-1'}>
             <ArticleContent class={'gap-16'}>

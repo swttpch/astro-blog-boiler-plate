@@ -5,6 +5,7 @@ import fetchApi from '../../lib/strapi';
 import AuthorBoxAvatar from '../AuthorBox/AuthorBoxAvatar.astro';
 import ArrowLeftIcon from '../icons/ArrowLeftIcon.astro';
 import Socials from '../icons/Socials.astro';
+import LinkWithArrow from '../LinkWithArrow.astro';
 
 type Props = {
   author: Author;
@@ -55,14 +56,7 @@ const {
       <div class="self-stretch text-text-sub text-base font-normal break-words">
         {author.attributes.description}
       </div>
-      <a href={"/a/"+author.attributes.slug} class="justify-start items-center gap-[12px] flex">
-        <div class="text-primary-base text-base font-normal break-words">Ver mais</div>
-        <button
-          class="w-[20px] h-[20px] rounded-full border border-primary-base justify-center items-center gap-8 flex"
-        >
-          <ArrowLeftIcon />
-        </button>
-      </a>
+      <LinkWithArrow to="/">Ver mais</LinkWithArrow>
     </div>
   </div>
   {

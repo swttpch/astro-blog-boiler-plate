@@ -1,0 +1,95 @@
+---
+import ArticleList from "../components/ArticleList.astro";
+import PageHeader from "../components/PageHeader.astro";
+import type Article from "../interfaces/article";
+import type { BreadcrumbBullet } from "../interfaces/breadcrumb-bullet";
+import type Category from "../interfaces/category";
+import type Meta from "../interfaces/meta";
+import type { Tag } from "../interfaces/tag";
+import fetchApi from "../lib/strapi";
+import DefaultLayout from "./DefaultLayout.astro";
+import ThreePosts from "../components/ThreePostsSection.astro";
+import { defaultBlogRequests } from "../lib/blog";
+
+type Props = {
+  data: {
+    title: string
+    description: string
+    items: Array<BreadcrumbBullet | BreadcrumbBullet>
+  };
+  curPath: string;
+  curPage: number;
+  totalPages: number;
+  articles: Article[];
+  highlights?: Article[];
+};
+
+const {articles,curPage,curPath,totalPages, highlights, data} = Astro.props;
+
+const categories = await fetchApi<Category[]>({
+  endpoint: 'categories',
+  wrappedByKey: 'data',
+  query: {
+    sort: ['title:asc'],
+    pagination: {
+      page: 1,
+      pageSize: 5,
+    },
+  },
+});
+
+await Promise.all(
+  categories.map((cat) => {
+    fetchApi<Meta>({
+      endpoint: '/articles',
+      wrappedByKey: 'meta',
+      query: {
+        publicationState: 'live',
+        filters: {
+          categories: {
+            id: {
+              $eq: cat.id,
+            },
+          },
+        },
+        pagination: {
+          page: 1,
+          pageSize: 1,
+        },
+      },
+    }).then((res) => {
+      cat.attributes.qtd = res.pagination.total;
+    });
+  }),
+);
+
+const tags = await fetchApi<Tag[]>({
+  endpoint: 'tags',
+  wrappedByKey: 'data',
+  query: {
+    sort: ['name:asc'],
+  },
+});
+
+const {blogInfo, headerNavigation} = await defaultBlogRequests()
+---
+<DefaultLayout blogInfo={blogInfo} headerNavigation={headerNavigation}>
+  <PageHeader {...data}/> 
+  {
+    highlights && (
+      <ThreePosts articles={highlights}/>
+    )
+  }
+  
+  <ArticleList
+    curPath={curPath}
+    curPage={curPage}
+    totalPages={totalPages}
+    categories={categories}
+    tags={tags}
+    articles={articles}
+    brand={blogInfo.data.attributes.brand.data}
+    socials={blogInfo.data.attributes.socials}
+    description={blogInfo.data.attributes.summary}
+  />
+</DefaultLayout>

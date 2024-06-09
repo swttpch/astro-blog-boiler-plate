@@ -2,24 +2,23 @@
 import { twMerge } from 'tailwind-merge';
 import ChevronRightIcon from './icons/ChevronRightIcon.astro';
 import HomeIcon from './icons/HomeIcon.astro';
+import type { HTMLAttributes } from 'astro/types';
+import type { BreadcrumbBullet } from '../interfaces/breadcrumb-bullet';
 
-type BreadcrumbBullet = {
-  title: string;
-  url?: string;
-};
+
 type Props = {
   items: Array<
     BreadcrumbBullet | BreadcrumbBullet[]
   >;
-};
-const { items = [] } = Astro.props;
+} & HTMLAttributes<'div'>;
+const { items = [], class: className , ...rest  } = Astro.props;
 ---
 
-<div class="justify-start items-center gap-16 flex overflow-scroll w-full py-4">
-  <HomeIcon class={'flex-[1_0_24px]'} />
-  <div class="flex items-center gap-[8px]">
+<div id='breadcrumb' class={twMerge(["justify-items-start items-center gap-16 flex overflow-auto py-4 self-stretch", className])} {...rest}>
+  <HomeIcon class={'flex-[0_0_24px]'} />
+  <div class="flex items-center gap-[8px] flex-1">
     <div class="p-2 rounded-sm justify-center items-center gap-10 flex">
-      <a href='/' class="text-text-soft text-small font-normal break-words hover:text-text-sub ">Início</a>
+      <a href='/' class="text-text-soft text-small font-normal break-words hover:text-text-sub">Início</a>
     </div>
     {
       items.map((item, index) => {
@@ -70,3 +69,10 @@ const { items = [] } = Astro.props;
     }
   </div>
 </div>
+
+<script>
+  const container = document.getElementById('breadcrumb');
+  console.log(container?.scrollWidth)
+  if(container) 
+  container.scrollLeft = container.scrollWidth - container.clientWidth;
+</script>

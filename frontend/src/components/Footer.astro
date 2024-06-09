@@ -5,6 +5,7 @@ import type Image from '../interfaces/image';
 import ApiImage from './ApiImage.astro';
 import type { Socials } from '../interfaces/socials';
 import SocialsComponent from './icons/Socials.astro';
+import SeeMoreLink from './LinkWithArrow.astro';
 type Props = {
   brand: Image;
   description: string;
@@ -16,9 +17,9 @@ const today = new Date();
 ---
 
 <footer>
-  <Screen class={'pb-0'} >
+  <Screen class={'pb-0'}>
     <Container class={'flex-col gap-40 py-64'}>
-      <div class="flex items-start gap-12">
+      <div class="flex items-start gap-12 justify-between self-stretch">
         <div class="lg:w-[295px] flex flex-col justify-start items-start gap-32">
           <ApiImage image={brand} class={'w-[139px] lg:w-[186px]'} />
           <div class="text-text-sub text-sm font-normal break-words">
@@ -27,11 +28,31 @@ const today = new Date();
           <div class="flex justify-start items-start gap-24 flex-wrap">
             {
               socials.map((social) => (
-                <a href={social.url} target='_blank'>
-                  <SocialsComponent social={social.type} class={'size-24 text-icon-strong'}/>
+                <a href={social.url} target="_blank">
+                  <SocialsComponent social={social.type} class={'size-24 text-icon-strong'} />
                 </a>
               ))
             }
+          </div>
+        </div>
+        <div class="flex gap-32">
+          <div class="flex flex-col self-stretch items-start gap-24">
+            <p class="text-sm font-medium text-text-main self-stretch">Maquiagem</p>
+            <div class="flex flex-col self-stretch gap-20">
+              <a href="" class="text-base font-medium text-text-sub">Máquiagem de cílios</a>
+              <SeeMoreLink to="/">
+                Ver mais
+              </SeeMoreLink>
+            </div>
+          </div>
+          <div class="flex flex-col self-stretch items-start gap-24">
+            <p class="text-sm font-medium text-text-main self-stretch">Maquiagem</p>
+            <div class="flex flex-col self-stretch gap-20">
+              <a href="" class="text-base font-medium text-text-sub">Máquiagem de cílios</a>
+              <SeeMoreLink to="/">
+                Ver mais
+              </SeeMoreLink>
+            </div>
           </div>
         </div>
       </div>
@@ -42,8 +63,8 @@ const today = new Date();
           {name}
         </div>
         <div class="flex gap-16 lg:gap-32 lg:flex-row flex-col items-center lg:items-start">
-          <div class="text-text-main text-sm font-normal break-words">Política de Privacidade</div>
-          <div class="text-text-main text-sm font-normal break-words">Política de Cookies</div>
+          <a href='' class="text-text-main text-sm font-normal break-words">Política de Privacidade</a>
+          <a href='' class="text-text-main text-sm font-normal break-words">Política de Cookies</a>
         </div>
       </div>
     </Container>

@@ -1,3 +1,5 @@
+import type Article from './article';
+
 export interface Tag {
   id: number;
   attributes: {
@@ -7,5 +9,8 @@ export interface Tag {
     updatedAt: string;
     slug: string;
     seo?: object;
+    highlights: {
+      data?: Array<Article>;
+    };
   };
 }

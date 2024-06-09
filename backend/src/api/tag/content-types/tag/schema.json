@@ -32,6 +32,11 @@
       "pluginOptions": {},
       "type": "uid",
       "targetField": "name"
+    },
+    "highlights": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::article.article"
     }
   }
 }

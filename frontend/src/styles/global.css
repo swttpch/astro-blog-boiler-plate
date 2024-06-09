@@ -193,6 +193,11 @@ h3 {
   outline: 1px dashed red;
 }
 
+a:hover {
+  color: var(--primary-500);
+  transition: 0.3s ease;
+}
+
 @layer utilities {
   .bg-custom-gradient {
     @apply bg-cover bg-no-repeat;

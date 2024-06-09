@@ -1,0 +1,22 @@
+---
+import type { BreadcrumbBullet } from "../interfaces/breadcrumb-bullet";
+import Breadcrumb from "./Breadcrumb.astro";
+import Container from "./Container.astro";
+import Screen from "./Screen.astro";
+
+type Props = {
+  title: string;
+  description: string;
+  items: Array<BreadcrumbBullet | BreadcrumbBullet[]>;
+}
+const {title, description, items} = Astro.props
+---
+<Screen class={'py-32'}>
+  <Container class={'flex-col'}>
+    <Breadcrumb items={items}/>
+    <div class='flex flex-col gap-16 self-stretch'>
+      <h1 class='text-text-main font-medium'>{title}</h1>
+      <p class='text-lg text-text-sub'>{description}</p>
+    </div>
+  </Container>
+</Screen>

@@ -1,0 +1,64 @@
+---
+import Container from '../../components/Container.astro';
+import LinkWithArrow from '../../components/LinkWithArrow.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Screen from '../../components/Screen.astro';
+import type { BlogInfo } from '../../interfaces/blog-info';
+import type Category from '../../interfaces/category';
+import type StrapiNavigation from '../../interfaces/navigation';
+import DefaultLayout from '../../layouts/DefaultLayout.astro';
+import fetchApi from '../../lib/strapi';
+import { defaultBlogRequests } from '../../lib/blog';
+
+const categories = await fetchApi<Category[]>({
+  endpoint: 'categories',
+  wrappedByKey: 'data',
+  query: {
+    populate: '*',
+  },
+});
+
+const {blogInfo, headerNavigation} = await defaultBlogRequests()
+---
+
+<DefaultLayout blogInfo={blogInfo} headerNavigation={headerNavigation}>
+  <PageHeader
+    description="Cuidados com a pele envolvem limpeza, hidratação e proteção solar. É importante escolher produtos adequados ao seu tipo de pele e evitar exposição ao sol sem proteção, além de manter uma rotina de cuidados diários para manter a saúde e aparência da pele."
+    items={[{ title: 'Categorias', url: '/c/' }]}
+    title="Todas as categorias"
+  />
+  <Screen class={'py-32 lg:pb-80'}>
+    <Container>
+      <div class="w-full test grid grid-cols-1 lg:grid-cols-3 lg:grid-flow-row gap-32">
+        {
+          categories.map((category) => {
+            if(!category.attributes.highlights.data || category.attributes.highlights.data.length === 0) return (
+              <div class="flex flex-col self-stretch items-start gap-24">
+                <a href={'/c/'+category.attributes.slug}>
+                  <h2 class="font-medium text-text-main self-stretch">{category.attributes.title}</h2>
+                </a>
+              </div>
+            );
+            return (
+              <div class="flex flex-col self-stretch items-start gap-24 ">
+                <h2 class="font-medium text-text-main self-stretch">{category.attributes.title}</h2>
+                <div class="flex flex-col gap-20">
+                  {
+                    category.attributes.highlights.data.map((highlight) => {
+                      return (
+                        <a href={'/p/'+highlight.attributes.slug} class="text-base font-medium text-text-sub break-words">
+                          {highlight.attributes.title}
+                        </a>
+                      );
+                    })
+                  }
+                  <LinkWithArrow to={'/c/' + category.attributes.slug}>Ver mais</LinkWithArrow>
+                </div>
+              </div>
+            );
+          })
+        }
+      </div>
+    </Container>
+  </Screen>
+</DefaultLayout>

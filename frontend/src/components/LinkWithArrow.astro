@@ -1,0 +1,36 @@
+---
+import { twMerge } from 'tailwind-merge';
+import ArrowLeftIcon from './icons/ArrowLeftIcon.astro';
+
+type Props = {
+  to: string;
+  size?: 'sm' | 'md' | 'lg';
+};
+const { to, size = 'md' } = Astro.props;
+
+const fontsizeCl = {
+  sm: 'text-sm',
+  md: 'text-base',
+  lg: 'text-lg',
+};
+
+const boxSize = {
+  sm: 'size-16',
+  md: 'size-20',
+  lg: 'size-24',
+};
+---
+
+<a href={to} class="justify-start items-center gap-12 flex group">
+  <span class={twMerge(['text-primary-base text-base font-normal break-words', fontsizeCl[size]])}>
+    <slot />
+  </span>
+  <button
+    class={twMerge([
+      'size-20 rounded-full border border-primary-base justify-center items-center gap-8 flex group-hover:translate-x-4 transition-all duration-300 ease-in-out',
+      boxSize[size],
+    ])}
+  >
+    <ArrowLeftIcon />
+  </button>
+</a>

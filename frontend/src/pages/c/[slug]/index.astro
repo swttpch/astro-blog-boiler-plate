@@ -1,11 +1,10 @@
 ---
-
 import { PAGE_SIZE } from '../../../constants/common';
 import type Article from '../../../interfaces/article';
 import type { BlogInfo } from '../../../interfaces/blog-info';
 import type Category from '../../../interfaces/category';
 import type Meta from '../../../interfaces/meta';
-import CategoriesAndTags from '../../../layouts/CategoriesAndTags.astro';
+import CategoriesAndTags from '../../../layouts/CategoriesAndTagsLayout.astro';
 import fetchApi from '../../../lib/strapi';
 
 const { page, slug } = Astro.params;
@@ -62,11 +61,16 @@ const articlesResponse = await fetchApi<{ data: Article[]; meta: Meta }>({
   },
 });
 ---
-<CategoriesAndTags 
-articles={articlesResponse.data} 
-curPage={articlesResponse.meta.pagination.page}
-data={categoryData}
-curPath={`/c/${slug}/`}
-totalPages={articlesResponse.meta.pagination.pageCount}
-highlights={categoryData.attributes.highlights.data}
+
+<CategoriesAndTags
+  articles={articlesResponse.data}
+  curPage={articlesResponse.meta.pagination.page}
+  data={{
+    description: categoryData.attributes.description,
+    title: categoryData.attributes.title,
+    items: [{ title: 'Categorias' }, { title: categoryData.attributes.title, url: `/c/${slug}/` }],
+  }}
+  curPath={`/c/${slug}/`}
+  totalPages={articlesResponse.meta.pagination.pageCount}
+  highlights={categoryData.attributes.highlights.data}
 />

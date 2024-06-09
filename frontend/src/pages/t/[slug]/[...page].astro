@@ -1,8 +1,8 @@
 ---
 import { PAGE_SIZE } from '../../../constants/common';
 import type Article from '../../../interfaces/article';
-import type Category from '../../../interfaces/category';
 import type Meta from '../../../interfaces/meta';
+import type { Tag } from '../../../interfaces/tag';
 import CategoriesAndTags from '../../../layouts/CategoriesAndTagsLayout.astro';
 import fetchApi from '../../../lib/strapi';
 
@@ -10,8 +10,8 @@ const { page, slug } = Astro.params;
 
 let cp = page || 1;
 
-const categoryData = await fetchApi<Category>({
-  endpoint: `/categories`,
+const tagsData = await fetchApi<Tag>({
+  endpoint: `/tags`,
   wrappedByKey: 'data',
   wrappedByList: true,
   query: {
@@ -28,7 +28,7 @@ const categoryData = await fetchApi<Category>({
   },
 });
 
-if (!categoryData) {
+if (!tagsData) {
   Astro.response.status = 404;
   Astro.response.statusText = 'Not found';
 }
@@ -39,9 +39,9 @@ const articlesResponse = await fetchApi<{ data: Article[]; meta: Meta }>({
     publicationState: 'live',
     sort: ['publishedAt:desc'],
     filters: {
-      categories: {
+      tags: {
         id: {
-          $eq: categoryData.id,
+          $eq: tagsData.id,
         },
       },
     },
@@ -65,11 +65,11 @@ const articlesResponse = await fetchApi<{ data: Article[]; meta: Meta }>({
   articles={articlesResponse.data}
   curPage={articlesResponse.meta.pagination.page}
   data={{
-    description: categoryData.attributes.description,
-    title: categoryData.attributes.title,
-    items: [{ title: 'Categorias' }, { title: categoryData.attributes.title, url: `/c/${slug}/` }],
+    description: tagsData.attributes.description,
+    title: '#'+tagsData.attributes.name,
+    items: [{ title: 'Tags' }, { title: tagsData.attributes.name, url: `/t/${slug}/` }],
   }}
-  curPath={`/c/${slug}/`}
+  curPath={`/t/${slug}/`}
   totalPages={articlesResponse.meta.pagination.pageCount}
-  highlights={categoryData.attributes.highlights.data}
+  highlights={tagsData.attributes.highlights.data}
 />

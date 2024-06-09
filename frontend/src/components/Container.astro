@@ -6,6 +6,6 @@ type Props = HTMLAttributes<'section'>;
 const { class: className, ...props } = Astro.props;
 ---
 
-<section class={twMerge(['container flex gap-24 lg:gap-32 items-start lg:py-80', className])} {...props}>
+<section class={twMerge(['container flex gap-24 lg:gap-32 items-start', className])} {...props}>
   <slot />
 </section>

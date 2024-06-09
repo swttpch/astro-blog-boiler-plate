@@ -2,7 +2,7 @@
 import BaseHead from '../../components/BaseHead.astro';
 import Header from '../../components/Header.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
-import AuthorComplement from '../../components/AuthorComplement/AuthorComplement.astro';
+import AuthorComplement from '../../components/AuthorComplement.astro';
 import Screen from '../../components/Screen.astro';
 import Container from '../../components/Container.astro';
 import ProgressReading from '../../components/ProgressReading.astro';
@@ -165,17 +165,28 @@ const h1List = postData.attributes.content.match(/<h1>(.*?)<\/h1>/g)?.map((h1) =
       </Container>
     </Screen>
     
-    <div class='relative w-full'>
+    <div class='relative w-full lg:py-80'>
       <ProgressReading />
-      <Screen class="pl-0 relative justify-end pb-0">
-        <Container class={'gap-24 lg:gap-64'}>
-          <Menu titles={h1List} idArticle={postData.id} likes={postData.attributes.likes} url={postData.attributes.slug} />
-          <div class="flex flex-col gap-32 items-start flex-1 overflow-hidden">
-            <Breadcrumb
+      <Breadcrumb
+              class={'flex lg:hidden py-16 px-[36px]'}
               items={[
                 categories?.map((category) => ({
                     title: category.attributes.title,
-                    url: `/categoria/${category.attributes.slug}`,
+                    url: `/c/${category.attributes.slug}`,
+                  })),
+                { title: postData.attributes.title, url: postData.attributes.slug },
+              ]}
+            />
+      <Screen class="pl-0 relative pr-24 py-32 lg:py-0 justify-end pb-0">
+        <Container class={'gap-24 lg:gap-64 '}>
+          <Menu titles={h1List} idArticle={postData.id} likes={postData.attributes.likes} url={postData.attributes.slug} />
+          <div class="flex flex-col gap-32 items-start flex-1 overflow-hidden">
+            <Breadcrumb
+              class={'hidden lg:flex'}
+              items={[
+                categories?.map((category) => ({
+                    title: category.attributes.title,
+                    url: `/c/${category.attributes.slug}`,
                   })),
                 { title: postData.attributes.title, url: postData.attributes.slug },
               ]}
