@@ -1,91 +1,41 @@
 ---
-import type Article from "../interfaces/article";
-import type Category from "../interfaces/category";
-import type Meta from "../interfaces/meta";
-import fetchApi from "../lib/strapi";
-import {PAGE_SIZE} from "../constants/common";
-import type { Tag } from "../interfaces/tag";
-import Hero from "../components/home/Hero.astro";
-import ArticleList from "../components/ArticleList.astro";
-import NewsLetter from "../components/NewsLetter.astro";
-import DefaultLayout from "./DefaultLayout.astro";
-import { defaultBlogRequests } from "../lib/blog";
+import Hero from '../components/home/Hero.astro';
+import ArticleList from '../components/ArticleList.astro';
+import NewsLetter from '../components/NewsLetter.astro';
+import DefaultLayout from './DefaultLayout.astro';
+import type { BlogInfo } from '../interfaces/blog-info';
+import type Category from '../interfaces/category';
+import type StrapiNavigation from '../interfaces/navigation';
+import type Article from '../interfaces/article';
+import type Meta from '../interfaces/meta';
+import type { Tag } from '../interfaces/tag';
 
-const params = Astro.params
+type Props = {
+  blogInfo: BlogInfo;
+  headerNavigation: StrapiNavigation<Category>[];
+  articleResponse: {
+    data: Article[];
+    meta: Meta;
+  };
+  categories: Category[];
+  tags: Tag[];
+};
 
-let cp = params.page || 1
-
-
-const articlesResponse = await fetchApi<{data: Article[], meta: Meta}>({
-  endpoint: '/articles',
-  query: {
-    publicationState: 'live',
-    sort: ['publishedAt:desc'],
-    populate: {
-      author: {
-        fields: '*',
-        populate: '*',
-      },
-      mainImage: '*',
-      categories: '*',
-    },
-    pagination: {
-      page: cp,
-      pageSize: PAGE_SIZE
-    }
-  },
-});
-
-const categories = await fetchApi<Category[]>({
-  endpoint: 'categories',
-  wrappedByKey: 'data',
-  query: {
-    sort: ['title:asc'],
-    pagination: {
-      page: 1,
-      pageSize: 5
-    }
-  }
-});
-
-await Promise.all(categories.map(cat => {
-  fetchApi<Meta>({
-  endpoint: '/articles',
-  wrappedByKey: 'meta',
-  query: {
-    publicationState: 'live',
-    filters: {
-      categories: {
-        id: {
-          $eq: cat.id
-        }
-      }
-    },
-    pagination: {
-      page: 1,
-      pageSize: 1
-    }
-  },
-}).then(res => {
-  cat.attributes.qtd = res.pagination.total;
-})
-}))
-
-const tags = await fetchApi<Tag[]>(
-  {
-    endpoint: 'tags',
-    wrappedByKey: 'data',
-    query: {
-      sort: ['name:asc'],
-    }
-  }
-);
-
-const {blogInfo, headerNavigation} = await defaultBlogRequests()
-
+const { blogInfo, headerNavigation, articleResponse, categories, tags } = Astro.props;
 ---
+
 <DefaultLayout blogInfo={blogInfo} headerNavigation={headerNavigation}>
   <Hero />
-  <ArticleList curPath='/' curPage={articlesResponse.meta.pagination.page} totalPages={articlesResponse.meta.pagination.pageCount} categories={categories} tags={tags} articles={articlesResponse?.data} brand={blogInfo.data.attributes.brand.data} socials={blogInfo.data.attributes.socials} description={blogInfo.data.attributes.summary}/>
-  <NewsLetter/>
+  <ArticleList
+    curPath="/"
+    curPage={articleResponse.meta.pagination.page}
+    totalPages={articleResponse.meta.pagination.pageCount}
+    categories={categories}
+    tags={tags}
+    articles={articleResponse?.data}
+    brand={blogInfo.data.attributes.brand.data}
+    socials={blogInfo.data.attributes.socials}
+    description={blogInfo.data.attributes.summary}
+  />
+  <NewsLetter />
 </DefaultLayout>

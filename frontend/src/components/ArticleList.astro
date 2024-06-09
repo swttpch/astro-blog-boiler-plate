@@ -53,7 +53,7 @@ const prev = curPath + (+curPage - 1) +'#articles-list';
             const category = el.attributes.categories.data?.[0];
             return (
               <ArticleComponent href={'/p/' + el.attributes.slug} class={'lg:flex-row flex-col'}>
-                <ArticleImage class={'lg:flex-[0_0_320px] lg:h-[266px] flex-1 h-[125px]'} image={el.attributes.mainImage?.data} />
+                <ArticleImage class={'lg:flex-[0_0_320px] lg:h-[266px]  flex-[0_0_125px]'} image={el.attributes.mainImage?.data} />
                 <ArticleContent class={'lg:px-0 px-16 gap-24'}>
                   <ArticleContent class={'gap-16'}>
                     <ArticleContent class={'gap-8'}>
