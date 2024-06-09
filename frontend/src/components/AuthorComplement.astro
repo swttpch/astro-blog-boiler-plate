@@ -1,29 +1,34 @@
 ---
 import type Author from '../interfaces/author';
-import AuthorBox from './AuthorBox/AuthorBox.astro';
-import AuthorBoxArticleInfo from './AuthorBox/AuthorBoxArticleInfo.astro';
-import AuthorBoxAvatar from './AuthorBox/AuthorBoxAvatar.astro';
-import AuthorBoxBody from './AuthorBox/AuthorBoxBody.astro';
-import AuthorBoxName from './AuthorBox/AuthorBoxName.astro';
+import AuthorBox from './author-box/AuthorBox.astro';
+import AuthorBoxArticleInfo from './author-box/AuthorBoxArticleInfo.astro';
+import AuthorBoxAvatar from './author-box/AuthorBoxAvatar.astro';
+import AuthorBoxBody from './author-box/AuthorBoxBody.astro';
+import AuthorBoxName from './author-box/AuthorBoxName.astro';
 import FormattedDate from './FormattedDate.astro';
 
-type Props = {author?: Author, date: string, readingTime: string};
-const {author, date, readingTime} = Astro.props
-
+type Props = { author?: Author; date: string; readingTime: string };
+const { author, date, readingTime } = Astro.props;
 ---
 
 <div class="self-stretch items-start lg:items-center flex gap-8 lg:flex-row flex-col">
   {
-    author ? (<AuthorBox class={'flex-1'}>
-    <AuthorBoxAvatar name={author.attributes.name} image={author.attributes.avatar?.data}/>
-    <AuthorBoxBody>
-      <AuthorBoxName class={'text-white'}> {author.attributes.name}</AuthorBoxName>
-      <AuthorBoxArticleInfo>{author.attributes.jobTitle}</AuthorBoxArticleInfo>
-    </AuthorBoxBody>
-  </AuthorBox>) : (<div/>)
+    author ? (
+      <AuthorBox class={'flex-1'}>
+        <AuthorBoxAvatar name={author.attributes.name} image={author.attributes.avatar?.data} />
+        <AuthorBoxBody>
+          <AuthorBoxName class={'text-white'}> {author.attributes.name}</AuthorBoxName>
+          <AuthorBoxArticleInfo>{author.attributes.jobTitle}</AuthorBoxArticleInfo>
+        </AuthorBoxBody>
+      </AuthorBox>
+    ) : (
+      <div />
+    )
   }
-  <div class='flex gap-8 items-center'>
-    <p class="font-normal text-base text-primary-lighter"><FormattedDate date={new Date(date)}/></p>
+  <div class="flex gap-8 items-center">
+    <p class="font-normal text-base text-primary-lighter">
+      <FormattedDate date={new Date(date)} />
+    </p>
     <div class="size-4 shrink-0 rounded-full bg-primary-light"></div>
     <p class="font-semibold text-base text-primary-lighter">{readingTime} min de leitura</p>
   </div>

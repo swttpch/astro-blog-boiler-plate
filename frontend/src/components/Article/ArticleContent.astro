@@ -11,6 +11,7 @@ const { class: className, ...props } = Astro.props;
     'items-start flex flex-col justify-between self-stretch',
     className,
   ])}
+  {...props}
 >
   <slot />
 </div>

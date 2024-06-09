@@ -5,16 +5,6 @@ import type Image from '../interfaces/image';
 import type { Socials } from '../interfaces/socials';
 import type { Tag } from '../interfaces/tag';
 import ApiImage from './ApiImage.astro';
-import ArticleComponent from './Article/Article.astro';
-import ArticleContent from './Article/ArticleContent.astro';
-import ArticleDescription from './Article/ArticleDescription.astro';
-import ArticleImage from './Article/ArticleImage.astro';
-import ArticleTitle from './Article/ArticleTitle.astro';
-import AuthorBox from './AuthorBox/AuthorBox.astro';
-import AuthorBoxArticleInfo from './AuthorBox/AuthorBoxArticleInfo.astro';
-import AuthorBoxAvatar from './AuthorBox/AuthorBoxAvatar.astro';
-import AuthorBoxBody from './AuthorBox/AuthorBoxBody.astro';
-import AuthorBoxName from './AuthorBox/AuthorBoxName.astro';
 import CategoryBadge from './CategoryBadge.astro';
 import Container from './Container.astro';
 import Screen from './Screen.astro';
@@ -22,6 +12,16 @@ import TagComponent from './Tag.astro';
 import SocialsComponent from './icons/Socials.astro';
 import FormattedDate from './FormattedDate.astro';
 import Pagination from './Pagination.astro';
+import ArticleImage from './article/ArticleImage.astro';
+import ArticleContent from './article/ArticleContent.astro';
+import ArticleTitle from './article/ArticleTitle.astro';
+import ArticleDescription from './article/ArticleDescription.astro';
+import ArticleComponent from './article/Article.astro';
+import AuthorBoxAvatar from './author-box/AuthorBoxAvatar.astro';
+import AuthorBox from './author-box/AuthorBox.astro';
+import AuthorBoxBody from './author-box/AuthorBoxBody.astro';
+import AuthorBoxName from './author-box/AuthorBoxName.astro';
+import AuthorBoxArticleInfo from './author-box/AuthorBoxArticleInfo.astro';
 
 type Props = {
   brand: Image;
@@ -87,8 +87,6 @@ const prev = curPath + (+curPage - 1) +'#articles-list';
         previousPage={prev}
         currentPage={curPage}
         totalPages={totalPages}
-        disabledNext={curPage === totalPages}
-        disabledPrevious={curPage === 1}
       />
     </div>
     <div class="pt-72 lg:max-w-[384px] flex flex-col gap-64 flex-1 self-stretch">

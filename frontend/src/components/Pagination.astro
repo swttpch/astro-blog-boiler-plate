@@ -5,10 +5,8 @@ type Props = {
   totalPages: number;
   nextPage: string;
   previousPage: string;
-  disabledNext: boolean;
-  disabledPrevious: boolean;
 }
-const {currentPage,disabledNext,disabledPrevious,nextPage,previousPage,totalPages} = Astro.props
+const {currentPage, nextPage,previousPage,totalPages} = Astro.props
 ---
 <div class="flex gap-32 rounded-md p-12 bg-white lg:items-center lg:flex-row flex-col">
   {

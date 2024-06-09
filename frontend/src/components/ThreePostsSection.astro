@@ -1,19 +1,19 @@
 ---
-import ArticleComponent from './Article/Article.astro';
-import ArticleContent from './Article/ArticleContent.astro';
-import ArticleDescription from './Article/ArticleDescription.astro';
-import ArticleImage from './Article/ArticleImage.astro';
-import ArticleTitle from './Article/ArticleTitle.astro';
-import AuthorBox from './AuthorBox/AuthorBox.astro';
-import AuthorBoxArticleInfo from './AuthorBox/AuthorBoxArticleInfo.astro';
-import AuthorBoxAvatar from './AuthorBox/AuthorBoxAvatar.astro';
-import AuthorBoxBody from './AuthorBox/AuthorBoxBody.astro';
-import AuthorBoxName from './AuthorBox/AuthorBoxName.astro';
+import AuthorBox from './author-box/AuthorBox.astro';
+import AuthorBoxArticleInfo from './author-box/AuthorBoxArticleInfo.astro';
+import AuthorBoxAvatar from './author-box/AuthorBoxAvatar.astro';
+import AuthorBoxBody from './author-box/AuthorBoxBody.astro';
+import AuthorBoxName from './author-box/AuthorBoxName.astro';
 import CategoryBadge from './CategoryBadge.astro';
 import Container from './Container.astro';
 import FormattedDate from './FormattedDate.astro';
 import Screen from './Screen.astro';
 import type Article from '../interfaces/article';
+import ArticleComponent from './article/Article.astro';
+import ArticleImage from './article/ArticleImage.astro';
+import ArticleContent from './article/ArticleContent.astro';
+import ArticleTitle from './article/ArticleTitle.astro';
+import ArticleDescription from './article/ArticleDescription.astro';
 
 type Props = {
   articles: Article[]

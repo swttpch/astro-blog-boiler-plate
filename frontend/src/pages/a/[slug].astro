@@ -1,0 +1,18 @@
+---
+import { defaultBlogRequests } from "../../lib/blog"
+import DefaultLayout from "../../layouts/DefaultLayout.astro"
+import Breadcrumb from "../../components/Breadcrumb.astro"
+
+const {blogInfo,headerNavigation} = await defaultBlogRequests()
+---
+<DefaultLayout blogInfo={blogInfo} headerNavigation={headerNavigation}>
+  <Breadcrumb items={[
+    {
+      title: "Autores",
+    },
+    {
+      title: "Nome do autor",
+      url: "/a/"+ "nome do autor"
+    }
+  ]}/>
+</DefaultLayout>  

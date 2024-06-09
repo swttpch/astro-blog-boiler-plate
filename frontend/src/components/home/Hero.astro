@@ -73,7 +73,7 @@ const bgs = betterImages.map((el) => {
 
       <div class="Frame1261153263 flex justify-start items-start gap-[12px]">
         {
-          articles?.map((el, index) => (
+          articles?.map((_, index) => (
             <button
               data-index={index}
               data-active={index === 0}
@@ -176,8 +176,8 @@ const bgs = betterImages.map((el) => {
       buttons.forEach((el) => {
         const index = el.attributes.getNamedItem('data-index')?.value;
         if (!index) return;
-        el.addEventListener('click', (e) => {
-          this.indexes.forEach((el, i) => {
+        el.addEventListener('click', () => {
+          this.indexes.forEach((_, i) => {
             const article = document.querySelector(`.hero-article-${i}`);
             const tab = document.querySelector(`.article-tab-${i}`);
             const articleContent = document.querySelector(`.article-content-${i}`);
@@ -204,7 +204,7 @@ const bgs = betterImages.map((el) => {
               } else {
                 this.index++;
               }
-              this.indexes.forEach((el, i) => {
+              this.indexes.forEach((_, i) => {
                 const article = this.querySelector(`.hero-article-${i}`);
                 const tab = this.querySelector(`.article-tab-${i}`);
                 const articleContent = this.querySelector(`.article-content-${i}`);

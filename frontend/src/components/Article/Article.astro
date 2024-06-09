@@ -1,8 +1,6 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
-import { Image } from 'astro:assets';
 import { twMerge } from 'tailwind-merge';
-import type Img from '../../interfaces/image';
 
 type Props = HTMLAttributes<'a'>;
 const { class: className, ...props } = Astro.props;

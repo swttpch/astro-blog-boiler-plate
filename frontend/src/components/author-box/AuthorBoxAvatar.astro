@@ -3,7 +3,6 @@ import type { HTMLAttributes } from 'astro/types'
 import { twMerge } from 'tailwind-merge'
 import ApiImage from '../ApiImage.astro'
 import type Image from '../../interfaces/image'
-import { getImage } from 'astro:assets'
 
 type Props = {image?: Image, name: string} & HTMLAttributes<'img'>
 const {image: src, class: className,name,  ...rest} = Astro.props
