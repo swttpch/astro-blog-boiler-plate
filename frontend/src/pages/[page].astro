@@ -5,27 +5,25 @@ import fetchApi from '../lib/strapi';
 import type Meta from '../interfaces/meta';
 import { PAGE_SIZE } from '../constants/common';
 import { defaultBlogRequests, defaultBlogRequestsWithCategoriesAndTags, homePageBlogRequests } from '../lib/blog';
-import type { Tag } from '../interfaces/tag';
-import type Category from '../interfaces/category';
-
+import type Article from '../interfaces/article';
 export const prerender = true
 
 export const getStaticPaths = (async () => {
   const countArticles = await fetchApi<Meta>({ endpoint: 'articles', wrappedByKey: 'meta' });
   const pages = Array.from({length: Math.ceil(countArticles.pagination.total / PAGE_SIZE)}, (_, i) => i+ 1)
   const {blogInfo,headerNavigation} = await defaultBlogRequests()
-  
+  const articles = await fetchApi<Article[]>({ endpoint: 'articles', wrappedByKey: 'data', query: {populate: '*'}  });
 
 
   return pages.map((page, index) => ({
     params: {
       page: page.toString()
     },
-    props: {blogInfo, headerNavigation}
+    props: {blogInfo, headerNavigation, articles}
   }));
 }) satisfies GetStaticPaths;
 
-const {blogInfo,headerNavigation} = Astro.props
+const {blogInfo,headerNavigation, articles} = Astro.props
 const {page} = Astro.params
 
 const {articleResponse} = await homePageBlogRequests({currentPage: +page})
@@ -39,4 +37,5 @@ const {categories,tags} = await defaultBlogRequestsWithCategoriesAndTags()
   categories={categories} 
   tags={tags} 
   articleResponse={articleResponse}
+  articles={articles}
 />

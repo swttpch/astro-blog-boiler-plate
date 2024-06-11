@@ -27,10 +27,10 @@ const {blogInfo, headerNavigation} = await defaultBlogRequests()
   />
   <Screen class={'py-32 lg:pb-80'}>
     <Container>
-      <div class="w-full test grid grid-cols-1 lg:grid-cols-3 lg:grid-flow-row gap-32">
+      <div class="w-full grid grid-cols-1 lg:grid-cols-3 lg:grid-flow-row gap-32">
         {
           categories.map((category) => {
-            if(!category.attributes.highlights.data || category.attributes.highlights.data.length === 0) return (
+            if(!category.attributes.subCategories.data || category.attributes.subCategories.data.length === 0) return (
               <div class="flex flex-col self-stretch items-start gap-24">
                 <a href={'/c/'+category.attributes.slug}>
                   <h2 class="font-medium text-text-main self-stretch">{category.attributes.title}</h2>
@@ -39,18 +39,18 @@ const {blogInfo, headerNavigation} = await defaultBlogRequests()
             );
             return (
               <div class="flex flex-col self-stretch items-start gap-24 ">
-                <h2 class="font-medium text-text-main self-stretch">{category.attributes.title}</h2>
+                <a href={'/c/'+category.attributes.slug}>
+                <h2 class="font-medium text-text-main self-stretch hover:text-primary-base">{category.attributes.title}</h2>
+                </a>
                 <div class="flex flex-col gap-20">
                   {
-                    category.attributes.highlights.data.map((highlight) => {
+                    category.attributes.subCategories.data.map((subCategory) => {
                       return (
-                        <a href={'/p/'+highlight.attributes.slug} class="text-base font-medium text-text-sub break-words">
-                          {highlight.attributes.title}
-                        </a>
+                        <LinkWithArrow to={'/c/' + subCategory.attributes.slug}>{subCategory.attributes.title}</LinkWithArrow> 
+
                       );
                     })
                   }
-                  <LinkWithArrow to={'/c/' + category.attributes.slug}>Ver mais</LinkWithArrow>
                 </div>
               </div>
             );

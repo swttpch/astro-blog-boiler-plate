@@ -1,0 +1,123 @@
+---
+import type Article from '../interfaces/article';
+import { getStyleBackgroundImage } from '../utils/getStyleBackgroundImage';
+import ArticleComponent from './article/Article.astro';
+import ArticleContent from './article/ArticleContent.astro';
+import ArticleImage from './article/ArticleImage.astro';
+import ArticleTitle from './article/ArticleTitle.astro';
+import AuthorBox from './author-box/AuthorBox.astro';
+import AuthorBoxArticleInfo from './author-box/AuthorBoxArticleInfo.astro';
+import AuthorBoxAvatar from './author-box/AuthorBoxAvatar.astro';
+import AuthorBoxBody from './author-box/AuthorBoxBody.astro';
+import AuthorBoxName from './author-box/AuthorBoxName.astro';
+import CategoryBadge from './CategoryBadge.astro';
+import Container from './Container.astro';
+import FormattedDate from './FormattedDate.astro';
+import LinkWithArrow from './LinkWithArrow.astro';
+import Screen from './Screen.astro';
+import SectionHeader from './SectionHeader.astro';
+
+type Props = {
+  articles: Article[];
+};
+const { articles } = Astro.props;
+---
+
+{
+  articles.length >= 5 && (
+    <Screen class={'py-64'}>
+      <Container class={'flex-col gap-32'}>
+        <SectionHeader title="Destaques"></SectionHeader>
+        <div class="flex flex-col gap-32 self-stretch">
+          <div class="flex gap-32 self-stretch flex-col lg:flex-row">
+            {articles.slice(0, 3).map((article) => {
+              const mainImage = article.attributes.mainImage?.data
+                ? `${import.meta.env.NODE_ENV === 'development' ? import.meta.env.STRAPI_URL : ''}` +
+                  article.attributes.mainImage?.data.attributes.url
+                : undefined;
+              const bg = getStyleBackgroundImage(mainImage);
+              const category = article.attributes.categories.data?.[0];
+              const author = article.attributes.author.data;
+              const date = article.attributes.publishedAt;
+              return (
+                <ArticleComponent
+                href={'/p/' + article.attributes.slug}
+                  class={'lg:flex-1 h-[322px] flex-col transition-all overflow-hidden relative p-0'}
+                >
+                  <div
+                    class="w-full h-full absolute top-0 left-0 group-hover:scale-125 transition-all"
+                    style={bg}
+                  />
+                  <ArticleContent class={'h-full w-full z-10 p-24 justify-between'}>
+                    {category && <CategoryBadge>{category.attributes.title}</CategoryBadge>}
+                    <ArticleContent class={'gap-24'}>
+                      <ArticleTitle class={'text-white group-hover:text-primary-300'}>{article.attributes.title}</ArticleTitle>
+                      {
+                        author && (
+                        <AuthorBox>
+                        <AuthorBoxAvatar image={author.attributes.avatar?.data} name={author.attributes.name}/>
+                        <AuthorBoxBody >
+                          <AuthorBoxName class='text-white'>{author.attributes.name}</AuthorBoxName>
+                          <AuthorBoxArticleInfo class='text-white'>
+                            <FormattedDate date={new Date(date)} /> • {article.attributes.readingTime} min de leitura
+                          </AuthorBoxArticleInfo>
+                        </AuthorBoxBody>
+                      </AuthorBox>
+                        )
+                      }
+                     
+                    </ArticleContent>
+                  </ArticleContent>
+                </ArticleComponent>
+              );
+            })}
+          </div>
+          <div class="flex gap-32 self-stretch flex-col lg:flex-row">
+            {articles.slice(3, 5).map((article, index) => {
+              const mainImage = article.attributes.mainImage?.data
+                ? `${import.meta.env.NODE_ENV === 'development' ? import.meta.env.STRAPI_URL : ''}` +
+                  article.attributes.mainImage?.data.attributes.url
+                : undefined;
+              const bg = getStyleBackgroundImage(mainImage);
+              const category = article.attributes.categories.data?.[0];
+              const author = article.attributes.author.data;
+              const date = article.attributes.publishedAt;
+              const flexClass = index === 0 ? 'flex-[5_0_auto]' : 'flex-[1_0_auto]';
+              return (
+                <ArticleComponent
+                  href={'/p/' + article.attributes.slug}
+                  class={flexClass + ' h-[322px] flex-col transition-all overflow-hidden relative p-0'}
+                >
+                  <div
+                    class="w-full h-full absolute top-0 left-0 group-hover:scale-125 transition-all"
+                    style={bg}
+                  />
+                  <ArticleContent class={'h-full w-full z-10 p-24 justify-between'}>
+                    {category && <CategoryBadge>{category.attributes.title}</CategoryBadge>}
+                    <ArticleContent class={'gap-24'}>
+                      <ArticleTitle class={'text-white group-hover:text-primary-300'}>{article.attributes.title}</ArticleTitle>
+                      {
+                        author && (
+                        <AuthorBox>
+                        <AuthorBoxAvatar image={author.attributes.avatar?.data} name={author.attributes.name}/>
+                        <AuthorBoxBody >
+                          <AuthorBoxName class='text-white'>{author.attributes.name}</AuthorBoxName>
+                          <AuthorBoxArticleInfo class='text-white'>
+                            <FormattedDate date={new Date(date)} /> • {article.attributes.readingTime} min de leitura
+                          </AuthorBoxArticleInfo>
+                        </AuthorBoxBody>
+                      </AuthorBox>
+                        )
+                      }
+                     
+                    </ArticleContent>
+                  </ArticleContent>
+                </ArticleComponent>
+              );
+            })}
+          </div>
+        </div>
+      </Container>
+    </Screen>
+  )
+}

@@ -47,6 +47,7 @@ export const defaultBlogRequestsWithCategoriesAndTags = async () => {
       },
     }),
   ]);
+
   await Promise.all(
     categories.map((cat) => {
       fetchApi<Meta>({
@@ -67,11 +68,14 @@ export const defaultBlogRequestsWithCategoriesAndTags = async () => {
           },
         },
       }).then((res) => {
-        cat.attributes.qtd = res.pagination.total;
+        // console.count('set');
+        Object.assign(cat, {
+          id: cat.id,
+          attributes: { ...cat.attributes, qtd: res.pagination.total },
+        });
       });
     }),
   );
-
   return { categories, tags };
 };
 

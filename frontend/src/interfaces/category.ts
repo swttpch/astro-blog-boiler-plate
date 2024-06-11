@@ -14,5 +14,11 @@ export default interface Category {
     highlights: {
       data?: Array<Article>;
     };
+    subCategories: {
+      data?: Array<Category>;
+    };
+    parentCategory: {
+      data?: Category;
+    };
   };
 }

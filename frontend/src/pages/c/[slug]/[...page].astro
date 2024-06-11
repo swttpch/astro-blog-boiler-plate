@@ -67,7 +67,7 @@ const articlesResponse = await fetchApi<{ data: Article[]; meta: Meta }>({
   data={{
     description: categoryData.attributes.description,
     title: categoryData.attributes.title,
-    items: [{ title: 'Categorias' }, { title: categoryData.attributes.title, url: `/c/${slug}/` }],
+    items: [{ title: 'Categorias', url: '/c/' }, { title: categoryData.attributes.title, url: `/c/${slug}/` }],
   }}
   curPath={`/c/${slug}/`}
   totalPages={articlesResponse.meta.pagination.pageCount}

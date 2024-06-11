@@ -9,6 +9,7 @@ import type StrapiNavigation from '../interfaces/navigation';
 import type Article from '../interfaces/article';
 import type Meta from '../interfaces/meta';
 import type { Tag } from '../interfaces/tag';
+import ArticlesMosaic from '../components/ArticlesMosaic.astro';
 
 type Props = {
   blogInfo: BlogInfo;
@@ -19,13 +20,15 @@ type Props = {
   };
   categories: Category[];
   tags: Tag[];
+  articles: Article[];
 };
 
-const { blogInfo, headerNavigation, articleResponse, categories, tags } = Astro.props;
+const { blogInfo, headerNavigation, articleResponse, categories, tags, articles } = Astro.props;
 ---
 
 <DefaultLayout blogInfo={blogInfo} headerNavigation={headerNavigation}>
   <Hero />
+  <ArticlesMosaic articles={articles}/>
   <ArticleList
     curPath="/"
     curPage={articleResponse.meta.pagination.page}
@@ -37,5 +40,5 @@ const { blogInfo, headerNavigation, articleResponse, categories, tags } = Astro.
     socials={blogInfo.data.attributes.socials}
     description={blogInfo.data.attributes.summary}
   />
-  <NewsLetter />
+ 
 </DefaultLayout>
