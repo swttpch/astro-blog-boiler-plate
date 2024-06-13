@@ -63,12 +63,6 @@
       "pluginOptions": {},
       "required": false
     },
-    "isCategoryHighlight": {
-      "type": "boolean",
-      "default": false,
-      "required": true,
-      "pluginOptions": {}
-    },
     "relatedArticles": {
       "type": "relation",
       "relation": "oneToMany",
@@ -82,12 +76,6 @@
       },
       "customField": "plugin::ckeditor.CKEditor",
       "pluginOptions": {}
-    },
-    "isTagHighlight": {
-      "pluginOptions": {},
-      "type": "boolean",
-      "default": false,
-      "required": true
     },
     "categories": {
       "type": "relation",

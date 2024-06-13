@@ -1,9 +1,11 @@
-import type Article from './article';
-import type Author from './author';
-import type Category from './category';
-import type { Tag } from './tag';
+import type { ArticlePlain } from './article';
+import type { AuthorPlain } from './author';
+import type { CategoryPlain } from './category';
+import type { TagPlain } from './tag';
 
-export default interface StrapiNavigation<T extends Article | Category | Author | Tag> {
+export default interface StrapiNavigation<
+  T extends ArticlePlain | CategoryPlain | AuthorPlain | TagPlain,
+> {
   order: number;
   id: number;
   title: string;
@@ -17,10 +19,10 @@ export default interface StrapiNavigation<T extends Article | Category | Author 
   updatedAt: string;
   audience?: Array<object>;
   parent?: object;
-  related: T['attributes'] & {
-    id: number;
+  external: boolean;
+  related: T & {
     __contentType: string;
     navigationItemId: number;
   };
-  items?: object;
+  items?: StrapiNavigation<T>[];
 }

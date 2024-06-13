@@ -15,8 +15,12 @@ import ArticleList from '../../../components/ArticleList.astro';
 import ArticlesMosaic from '../../../components/ArticlesMosaic.astro';
 
 const {slug, page} = Astro.params;
+if(!page){
 
-const { blogInfo, headerNavigation } = await defaultBlogRequests();
+  Astro.response.status = 404;
+}
+
+const { blogInfo, headerNavigation, footerNavigation } = await defaultBlogRequests();
 const {categories,tags} = await defaultBlogRequestsWithCategoriesAndTags();
 const articles = await fetchApi<Article[]>({ endpoint: 'articles', wrappedByKey: 'data', query: {populate: '*'} });
 
@@ -79,7 +83,7 @@ const articlesResponse = await fetchApi<{ data: Article[]; meta: Meta }>({
 });
 ---
 
-<DefaultLayout blogInfo={blogInfo} headerNavigation={headerNavigation}>
+<DefaultLayout blogInfo={blogInfo} headerNavigation={headerNavigation} footerNavigation={footerNavigation}>
   <Screen class={'py-48'}>
     <Container class={'flex-col gap-32'}>
       <Breadcrumb
@@ -137,7 +141,7 @@ const articlesResponse = await fetchApi<{ data: Article[]; meta: Meta }>({
   />
   <ArticleList
   curPath={'/a/' + slug + '/'}
-  curPage={1}
+  curPage={page && +page || 1}
   totalPages={articlesResponse.meta.pagination.pageCount}
   categories={categories}
   tags={tags}

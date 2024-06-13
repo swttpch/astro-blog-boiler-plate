@@ -1,0 +1,19 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+type Props = HTMLAttributes<'svg'>;
+const { color = '#718096', ...props } = Astro.props;
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="16"
+  height="16"
+  color={color}
+  viewBox="0 0 16 16"
+  fill="none"
+  {...props}
+>
+<path d="M11.9997 13.1717L16.9497 8.22168L18.3637 9.63568L11.9997 15.9997L5.63574 9.63568L7.04974 8.22168L11.9997 13.1717Z" fill="currentColor"/>
+
+</svg>

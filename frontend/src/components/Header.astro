@@ -2,57 +2,114 @@
 import HeaderLink from './HeaderLink.astro';
 import Screen from './Screen.astro';
 import Container from './Container.astro';
-import type Image from '../interfaces/image';
 import ApiImage from './ApiImage.astro';
 import Search from './react/Seach';
+import type StrapiNavigation from '../interfaces/navigation';
+import type { CategoryPlain } from '../interfaces/category';
+import type { BlogInfo } from '../interfaces/blog-info';
+import MenuIcon from './icons/MenuIcon.astro';
+import CloseIcon from './icons/CloseIcon.astro';
+import ChevronDownIcon from './icons/ChevronDownIcon.astro';
+import MobileNavItem from './react/MobileNavItem';
 
 type Props = {
-  brand: Image;
-  items?: Array<{label: string, href: string}>;
+  blogInfo: BlogInfo;
+  headerNavigation: StrapiNavigation<CategoryPlain>[];
 }
-const {brand, items} = Astro.props;
+const {blogInfo, headerNavigation} = Astro.props;
 ---
-<header
+<x-header
   class="Navbar w-full lg:px-28 bg-white border-b lg:border-b box-border  border-gray-200 sticky top-0 justify-center items-center lg:items-stretch z-[100]"
 >
-  <Screen class="py-0 lg:py-0 h-[72px] lg:h-[96px] ">
+  <Screen class="py-0 lg:py-0 h-[72px] lg:h-[96px] border-b border-border-soft bg-white">
     <Container class={'py-0 lg:py-0 h-full items-center justify-between'}>
-      <ApiImage image={brand} class={'w-[139px] lg:w-[186px]'} />
+      <ApiImage image={blogInfo.data.attributes.brand.data} class={'w-[139px] lg:w-[186px]'} />
       <nav class="Navigation hidden lg:flex justify-start items-stretch self-stretch">
         <HeaderLink href="/"> Inicio </HeaderLink>
-        {items?.map(item => (
-          <HeaderLink href={item.href}>{item.label}</HeaderLink>
+        {headerNavigation?.map(item => (
+          <HeaderLink href={'/c/'+item.related.slug}>{item.related.title}</HeaderLink>
         ))}
       </nav>
       <Search client:load/>
-      <button class='lg:hidden'>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-        >
-          <path
-            d="M5.49805 12.0002H18.5031"
-            stroke="#596066"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"></path>
-          <path
-            d="M5.49805 16.0022H18.5031"
-            stroke="#596066"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"></path>
-          <path
-            d="M5.49707 7.99826H18.5021"
-            stroke="#596066"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"></path>
-        </svg>
+      <button class='x-with-modal-open lg:hidden'>
+        <MenuIcon
+          class={'size-24 text-gray-600'}
+        />
       </button>
     </Container>
   </Screen>
-</header>
+  <div id='x-with-modal' class='x-with-modal hidden flex-col  w-full h-screen bg-white absolute top-0 left-0 data-[active]:flex z-50'>
+    <Screen class="py-0 px-24 h-[72px] bg-white border-b border-border-soft">
+      <Container class={'p-0 h-full items-center justify-between'}>
+        <ApiImage image={blogInfo.data.attributes.brand.data} class={'w-[139px] lg:w-[186px]'} />
+        <button class='lg:hidden x-with-modal-close'>
+          <CloseIcon
+            class={'size-24 text-gray-600'}
+          />
+        </button>
+      </Container>
+    </Screen>
+    <Screen class="py-0 px-24">
+      <Container class={'p-0 items-center justify-stretch border-t border-border-soft'}>
+        <nav class='flex-col flex justify-center self-stretch w-full'>
+          <div class="flex h-80 justify-between items-center self-stretch ">
+            <a href={'/'} class="text-text-sub">
+              <span>Início</span>
+            </a>
+          </div>
+          {
+            headerNavigation?.map(item => (
+              <MobileNavItem client:load item={item}/>
+            ))
+          }
+        </nav>
+      </Container>
+    </Screen>
+  </div>
+</x-header>
+<script>
+  class WithModal extends HTMLElement {
+    isOpen = false;
+    modal: HTMLElement | null;
+    buttonOpen: HTMLElement | null;
+    buttonClose: HTMLElement | null;
+    buttonToggle: HTMLElement | null;
+    constructor() {
+      super();
+      
+      this.modal = this.querySelector('.x-with-modal');
+      this.buttonClose = this.querySelector('.x-with-modal-close');
+      this.buttonOpen = this.querySelector('.x-with-modal-open');
+      this.buttonToggle = this.querySelector('.x-with-modal-toggle');
+      if(!this.modal){
+        throw new Error('Modal not found');
+      }
+      this.buttonClose?.addEventListener('click', this.onClose.bind(this));
+      this.buttonOpen?.addEventListener('click', this.onOpen.bind(this));
+    }
+
+    onOpen(){
+      this.isOpen = true;
+      this.modal?.setAttribute('data-active', 'true');
+      this.buttonClose?.setAttribute('data-active', 'true');
+      this.buttonOpen?.setAttribute('data-active', 'true');
+      this.buttonToggle?.setAttribute('data-active', 'true');
+    }
+    onClose(){
+      this.isOpen = false;
+      this.modal?.removeAttribute('data-active');
+      this.buttonClose?.removeAttribute('data-active');
+      this.buttonOpen?.removeAttribute('data-active');
+      this.buttonToggle?.removeAttribute('data-active');
+    }
+    onToggle(){
+      if(this.isOpen){
+        this.onClose();
+      }else{
+        this.onOpen();
+      }
+    }
+  }
+
+  customElements.define('x-header', WithModal);
+</script>

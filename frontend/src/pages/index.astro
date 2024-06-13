@@ -12,5 +12,4 @@ const articles = await fetchApi<Article[]>({ endpoint: 'articles', wrappedByKey:
 const allProps = {...props, ...defaultProps, categories, tags, articles}
 
 ---
-
 <Home {...allProps} />

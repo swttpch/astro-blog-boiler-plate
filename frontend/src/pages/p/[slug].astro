@@ -22,6 +22,8 @@ import ArticleContent from '../../components/article-page/ArticleContent.astro';
 import type Category from '../../interfaces/category';
 import type StrapiNavigation from '../../interfaces/navigation';
 import { getImage } from 'astro:assets';
+import type { CategoryPlain } from '../../interfaces/category';
+import { defaultBlogRequests } from '../../lib/blog';
 
 export const prerender = true;
 
@@ -41,17 +43,7 @@ export async function getStaticPaths() {
 
 const { slug } = Astro.params;
 
-const blogInfo = await fetchApi<BlogInfo>({
-  endpoint: 'blog-info',
-  query: {
-    populate: '*',
-  },
-});
-
-  const headerNavigation = await fetchApi<StrapiNavigation<Category>[]>({
-  endpoint: 'navigation/render/1',
-});
-
+const {blogInfo, footerNavigation,headerNavigation} = await defaultBlogRequests()
 
 const postData = await fetchApi<Article>({
   endpoint: '/articles',
@@ -147,7 +139,7 @@ const h1List = postData.attributes.content.match(/<h1>(.*?)<\/h1>/g)?.map((h1) =
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
   </head>
   <body>
-    <Header brand={blogInfo.data.attributes.brand.data} items={headerNavigation.map(el => ( {href: el.path, label: el.title}))} />
+    <Header blogInfo={blogInfo} headerNavigation={headerNavigation}/>
     <Screen
       class="h-[424px] lg:h-[481px] justify-end relative"
       style={getStyleBackgroundImage(def?.src)}
@@ -218,10 +210,8 @@ const h1List = postData.attributes.content.match(/<h1>(.*?)<\/h1>/g)?.map((h1) =
     </Screen>
     <NewsLetter />
     <Footer
-      brand={blogInfo.data.attributes.brand.data}
-      description={blogInfo.data.attributes.summary}
-      name={blogInfo.data.attributes.name}
-      socials={blogInfo.data.attributes.socials}
+      footerNavigation={footerNavigation}
+      blogInfo={blogInfo}
     />
   </body>
 </html>

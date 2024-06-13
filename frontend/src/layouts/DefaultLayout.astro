@@ -5,15 +5,16 @@ import Header from "../components/Header.astro";
 import NewsLetter from "../components/NewsLetter.astro";
 import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
 import type { BlogInfo } from "../interfaces/blog-info";
-import type Category from "../interfaces/category";
+import type { CategoryPlain } from "../interfaces/category";
 import type StrapiNavigation from "../interfaces/navigation";
 
 type Props =  {
   blogInfo: BlogInfo;
-  headerNavigation: StrapiNavigation<Category>[];
+  headerNavigation: StrapiNavigation<CategoryPlain>[];
+  footerNavigation: StrapiNavigation<CategoryPlain>[];
 }
 
-const {blogInfo, headerNavigation} = Astro.props
+const {blogInfo, headerNavigation, footerNavigation} = Astro.props
 ---
 <!doctype html>
 <html lang="pt-br">
@@ -21,9 +22,9 @@ const {blogInfo, headerNavigation} = Astro.props
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
   </head>
   <body>
-    <Header items={headerNavigation.map(el => ( {href: el.path, label: el.title}))} brand={blogInfo.data.attributes.brand.data} />
+    <Header headerNavigation={headerNavigation} blogInfo={blogInfo} />
       <slot/>
     <NewsLetter/>
-    <Footer brand={blogInfo.data.attributes.brand.data} description={blogInfo.data.attributes.summary} name={blogInfo.data.attributes.name} socials={blogInfo.data.attributes.socials}/>
+    <Footer footerNavigation={footerNavigation} blogInfo={blogInfo}/>
   </body>
 </html>

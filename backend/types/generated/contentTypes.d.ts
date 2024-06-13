@@ -1146,9 +1146,6 @@ export interface ApiArticleArticle extends Schema.CollectionType {
         maxLength: 100;
       }>;
     seo: Attribute.Component<'shared.seo'>;
-    isCategoryHighlight: Attribute.Boolean &
-      Attribute.Required &
-      Attribute.DefaultTo<false>;
     relatedArticles: Attribute.Relation<
       'api::article.article',
       'oneToMany',
@@ -1162,9 +1159,6 @@ export interface ApiArticleArticle extends Schema.CollectionType {
           preset: 'standard';
         }
       >;
-    isTagHighlight: Attribute.Boolean &
-      Attribute.Required &
-      Attribute.DefaultTo<false>;
     categories: Attribute.Relation<
       'api::article.article',
       'oneToMany',

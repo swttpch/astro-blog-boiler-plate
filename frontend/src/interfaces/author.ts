@@ -19,3 +19,19 @@ export default interface Author {
     socials: Array<Socials>;
   };
 }
+
+export interface AuthorPlain {
+  id: number;
+  name: string;
+  jobTitle: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+  slug: string;
+  expertise: Array<{
+    id: number;
+    text: string;
+  }>;
+  avatar?: Image;
+  socials: Array<Socials>;
+}

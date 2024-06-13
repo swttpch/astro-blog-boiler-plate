@@ -6,24 +6,25 @@ import ApiImage from './ApiImage.astro';
 import type { Socials } from '../interfaces/socials';
 import SocialsComponent from './icons/Socials.astro';
 import SeeMoreLink from './LinkWithArrow.astro';
+import type StrapiNavigation from '../interfaces/navigation';
+import type { CategoryPlain } from '../interfaces/category';
+import type { BlogInfo } from '../interfaces/blog-info';
 type Props = {
-  brand: Image;
-  description: string;
-  name: string;
-  socials: Socials[];
+  blogInfo: BlogInfo;
+  footerNavigation: StrapiNavigation<CategoryPlain>[];
 };
-const { brand, description, name, socials } = Astro.props;
+const { blogInfo: {data: {attributes :{ brand, summary, name, socials,}}},  footerNavigation } = Astro.props;
 const today = new Date();
 ---
 
 <footer>
   <Screen class={'pb-0'}>
     <Container class={'flex-col gap-40 py-64'}>
-      <div class="flex items-start gap-12 justify-between self-stretch">
+      <div class="flex flex-col lg:flex-row items-start gap-40 justify-between self-stretch">
         <div class="lg:w-[295px] flex flex-col justify-start items-start gap-32">
-          <ApiImage image={brand} class={'w-[139px] lg:w-[186px]'} />
+          <ApiImage image={brand.data} class={'w-[139px] lg:w-[186px]'} />
           <div class="text-text-sub text-sm font-normal break-words">
-            {description}
+            {summary}
           </div>
           <div class="flex justify-start items-start gap-24 flex-wrap">
             {
@@ -35,8 +36,43 @@ const today = new Date();
             }
           </div>
         </div>
-        <div class="flex gap-32">
-          <div class="flex flex-col self-stretch items-start gap-24">
+        <div class="flex flex-col lg:flex-row gap-32">
+          {
+            footerNavigation.map(nav => {
+              
+              if(nav.related && nav.related !== null){
+                const categoryPlain = nav.related;
+              return (
+                <div class="flex flex-col self-stretch items-start gap-24">
+                  <p class="text-sm font-medium text-text-main self-stretch">{categoryPlain.title}</p>
+                  <div class="flex flex-col self-stretch gap-20">
+                    {
+                      categoryPlain.highlights.map(category => (
+                        <a href={'/p/'+category.slug} class="text-base font-medium text-text-sub">{category.title}</a>
+                      ))
+                    }
+                    <SeeMoreLink to={'/c/'+categoryPlain.slug}>
+                      Ver mais
+                    </SeeMoreLink>
+                  </div>
+                </div>
+              )
+              }
+               return (
+               <div class="flex flex-col self-stretch items-start gap-24">
+                  <p class="text-sm font-medium text-text-main self-stretch">{nav.title}</p>
+                  <div class="flex flex-col self-stretch gap-20">
+                    {
+                      nav.items?.map(item => (
+                        <a target={item.external ?  '_blank': '_parent'} href={item.path} class="text-base font-medium text-text-sub">{item.title}</a>
+                      ))
+                    }
+                  </div>
+                </div>
+               )
+            })
+          }
+          <!-- <div class="flex flex-col self-stretch items-start gap-24">
             <p class="text-sm font-medium text-text-main self-stretch">Maquiagem</p>
             <div class="flex flex-col self-stretch gap-20">
               <a href="" class="text-base font-medium text-text-sub">Máquiagem de cílios</a>
@@ -44,16 +80,8 @@ const today = new Date();
                 Ver mais
               </SeeMoreLink>
             </div>
-          </div>
-          <div class="flex flex-col self-stretch items-start gap-24">
-            <p class="text-sm font-medium text-text-main self-stretch">Maquiagem</p>
-            <div class="flex flex-col self-stretch gap-20">
-              <a href="" class="text-base font-medium text-text-sub">Máquiagem de cílios</a>
-              <SeeMoreLink to="/">
-                Ver mais
-              </SeeMoreLink>
-            </div>
-          </div>
+          </div> -->
+          
         </div>
       </div>
       <div class="w-full h-[1px] bg-border-soft"></div>
