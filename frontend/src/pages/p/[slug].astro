@@ -169,7 +169,7 @@ const h1List = postData.attributes.content.match(/<h1>(.*?)<\/h1>/g)?.map((h1) =
                 { title: postData.attributes.title, url: postData.attributes.slug },
               ]}
             />
-      <Screen class="pl-0 relative pr-24 py-32 lg:py-0 justify-end pb-0">
+      <Screen class="pl-0 relative pr-24 py-32 lg:py-0 justify-end">
         <Container class={'gap-24 lg:gap-64 '}>
           <Menu titles={h1List} idArticle={postData.id} likes={postData.attributes.likes} url={postData.attributes.slug} />
           <div class="flex flex-col gap-32 items-start flex-1 overflow-hidden">
@@ -184,30 +184,23 @@ const h1List = postData.attributes.content.match(/<h1>(.*?)<\/h1>/g)?.map((h1) =
               ]}
             />
             <ArticleContent content={postData.attributes.content} />
+            <div class="flex flex-col gap-32 items-start flex-1 overflow-hidden">
+              <ArticleFeedback id={postData.id} usefullCount={postData.attributes.usefullCount}/>
+              <Pagination
+                nextArticle={nextArticle ?? safeNextArticle}
+                prevArticle={prevArticle ?? safePrevArticle}
+              />
+              {
+                postData.attributes.author.data && (
+                  <AuthorInfo author={postData.attributes.author.data} />
+                )
+              }
+              <TagsAndShare tags={postData.attributes.tags.data} slug={postData.attributes.slug} />
+            </div>
           </div>
         </Container>
       </Screen>
     </div>
-    <Screen class="pl-0 pb-32 lg:pb-80 relative justify-end">
-      <Container class={'gap-24 lg:gap-64 pt-0 lg:pt-0'}>
-        <div class='w-[72px] h-10'>
-
-        </div>
-        <div class="flex flex-col gap-32 items-start flex-1 overflow-hidden">
-          <ArticleFeedback id={postData.id} usefullCount={postData.attributes.usefullCount}/>
-          <Pagination
-            nextArticle={nextArticle ?? safeNextArticle}
-            prevArticle={prevArticle ?? safePrevArticle}
-          />
-          {
-            postData.attributes.author.data && (
-              <AuthorInfo author={postData.attributes.author.data} />
-            )
-          }
-          <TagsAndShare tags={postData.attributes.tags.data} slug={postData.attributes.slug} />
-        </div>
-      </Container>
-    </Screen>
     <NewsLetter />
     <Footer
       footerNavigation={footerNavigation}

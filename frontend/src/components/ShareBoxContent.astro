@@ -9,7 +9,7 @@ const {url, class:className, ...props} = Astro.props;
 const refinedUrl = import.meta.env.PUBLIC_BASE_URL +"/"+ url;
 
 ---
-<modal-component id='share-modal-content' class={twMerge(["absolute top-[calc(100%_+_8px)] left-0 w-screen lg:max-w-[400px] p-16 bg-white rounded-md border border-gray-200 hidden flex-col justify-start items-start gap-8 z-50 shadow-xl ", className])} {...props}>
+<modal-component id='share-modal-content' class={twMerge(["absolute top-[calc(100%_+_8px)] left-0 mx-24 lg:mg-0 w-[calc(100vw_-_48px)] lg:max-w-[400px] p-16 bg-white rounded-md border border-gray-200 hidden flex-col justify-start items-start gap-8 z-50 shadow-xl ", className])} {...props}>
   <div class="self-stretch flex justify-start items-start gap-8"> 
     <div class="flex-1 self-stretch p-10 rounded-sm border border-gray-200 flex justify-start items-center gap-10 overflow-scroll">
       <span class="text-gray-600 text-sm font-normal whitespace-nowrap">{refinedUrl}</span>
