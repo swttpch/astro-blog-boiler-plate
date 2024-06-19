@@ -16,26 +16,24 @@ import Footer from '../../components/Footer.astro';
 import NewsLetter from '../../components/NewsLetter.astro';
 import fetchApi from '../../lib/strapi';
 import type Article from '../../interfaces/article';
-import type { BlogInfo } from '../../interfaces/blog-info';
 import { getStyleBackgroundImage } from '../../utils/getStyleBackgroundImage';
 import ArticleContent from '../../components/article-page/ArticleContent.astro';
-import type Category from '../../interfaces/category';
-import type StrapiNavigation from '../../interfaces/navigation';
 import { getImage } from 'astro:assets';
-import type { CategoryPlain } from '../../interfaces/category';
 import { defaultBlogRequests } from '../../lib/blog';
+import Comments from '../../components/react/Comments.tsx';
+const email = import.meta.env.PUBLIC_EMAIL;
 
 export const prerender = true;
 
 export async function getStaticPaths() {
   const postData = await fetchApi<Article[]>({
-  endpoint: '/articles',
-  wrappedByKey: 'data',
-  query: {
-    fields: ['slug'],
-    publicationState: 'live',
-  },
-});
+    endpoint: '/articles',
+    wrappedByKey: 'data',
+    query: {
+      fields: ['slug'],
+      publicationState: 'live',
+    },
+  });
   return postData.map((post) => ({
     params: { slug: post.attributes.slug },
   }));
@@ -43,7 +41,7 @@ export async function getStaticPaths() {
 
 const { slug } = Astro.params;
 
-const {blogInfo, footerNavigation,headerNavigation} = await defaultBlogRequests()
+const { blogInfo, footerNavigation, headerNavigation } = await defaultBlogRequests();
 
 const postData = await fetchApi<Article>({
   endpoint: '/articles',
@@ -130,7 +128,9 @@ const def = postData.attributes.mainImage.data
 
 const categories = postData.attributes.categories.data || [];
 
-const h1List = postData.attributes.content.match(/<h1>(.*?)<\/h1>/g)?.map((h1) => h1.replace(/<\/?h1>/g, '')) ?? [];
+const h1List =
+  postData.attributes.content.match(/<h1>(.*?)<\/h1>/g)?.map((h1) => h1.replace(/<\/?h1>/g, '')) ??
+  [];
 ---
 
 <!doctype html>
@@ -139,7 +139,7 @@ const h1List = postData.attributes.content.match(/<h1>(.*?)<\/h1>/g)?.map((h1) =
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
   </head>
   <body>
-    <Header blogInfo={blogInfo} headerNavigation={headerNavigation}/>
+    <Header blogInfo={blogInfo} headerNavigation={headerNavigation} />
     <Screen
       class="h-[424px] lg:h-[481px] justify-end relative"
       style={getStyleBackgroundImage(def?.src)}
@@ -156,36 +156,42 @@ const h1List = postData.attributes.content.match(/<h1>(.*?)<\/h1>/g)?.map((h1) =
         />
       </Container>
     </Screen>
-    
-    <div class='relative w-full lg:py-80'>
+
+    <div class="relative w-full lg:py-80">
       <ProgressReading />
       <Breadcrumb
-              class={'flex lg:hidden py-16 px-[36px]'}
-              items={[
-                categories?.map((category) => ({
-                    title: category.attributes.title,
-                    url: `/c/${category.attributes.slug}`,
-                  })),
-                { title: postData.attributes.title, url: postData.attributes.slug },
-              ]}
-            />
+        class={'flex lg:hidden py-16 px-[36px]'}
+        items={[
+          categories?.map((category) => ({
+            title: category.attributes.title,
+            url: `/c/${category.attributes.slug}`,
+          })),
+          { title: postData.attributes.title, url: postData.attributes.slug },
+        ]}
+      />
       <Screen class="pl-0 relative pr-24 py-32 lg:py-0 justify-end">
         <Container class={'gap-24 lg:gap-64 '}>
-          <Menu titles={h1List} idArticle={postData.id} likes={postData.attributes.likes} url={postData.attributes.slug} />
-          <div class="flex flex-col gap-32 items-start flex-1 overflow-hidden">
+          <Menu
+            email={email}
+            titles={h1List}
+            idArticle={postData.id}
+            likes={postData.attributes.likes}
+            url={postData.attributes.slug}
+          />
+          <div class="flex flex-col gap-32 items-start flex-1 overflow-visible">
             <Breadcrumb
               class={'hidden lg:flex'}
               items={[
                 categories?.map((category) => ({
-                    title: category.attributes.title,
-                    url: `/c/${category.attributes.slug}`,
-                  })),
+                  title: category.attributes.title,
+                  url: `/c/${category.attributes.slug}`,
+                })),
                 { title: postData.attributes.title, url: postData.attributes.slug },
               ]}
             />
             <ArticleContent content={postData.attributes.content} />
             <div class="flex flex-col gap-32 items-start flex-1 overflow-hidden">
-              <ArticleFeedback id={postData.id} usefullCount={postData.attributes.usefullCount}/>
+              <ArticleFeedback id={postData.id} usefullCount={postData.attributes.usefullCount} />
               <Pagination
                 nextArticle={nextArticle ?? safeNextArticle}
                 prevArticle={prevArticle ?? safePrevArticle}
@@ -196,15 +202,13 @@ const h1List = postData.attributes.content.match(/<h1>(.*?)<\/h1>/g)?.map((h1) =
                 )
               }
               <TagsAndShare tags={postData.attributes.tags.data} slug={postData.attributes.slug} />
+              <Comments client:visible id={postData.id} />
             </div>
           </div>
         </Container>
       </Screen>
     </div>
     <NewsLetter />
-    <Footer
-      footerNavigation={footerNavigation}
-      blogInfo={blogInfo}
-    />
+    <Footer footerNavigation={footerNavigation} blogInfo={blogInfo} />
   </body>
 </html>

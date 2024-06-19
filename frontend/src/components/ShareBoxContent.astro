@@ -1,24 +1,35 @@
 ---
-import type { HTMLAttributes } from "astro/types";
-import CopyIcon from "./icons/CopyIcon.astro";
-import { twMerge } from "tailwind-merge";
-import ShareReactComponent from "./react/Share2";
+import type { HTMLAttributes } from 'astro/types';
+import CopyIcon from './icons/CopyIcon.astro';
+import { twMerge } from 'tailwind-merge';
+import ShareReactComponent from './react/Share2';
 
-type Props = {url:string} & HTMLAttributes<'div'>
-const {url, class:className, ...props} = Astro.props; 
-const refinedUrl = import.meta.env.PUBLIC_BASE_URL +"/"+ url;
-
+type Props = { url: string; email: string } & HTMLAttributes<'div'>;
+const { url, email, class: className, ...props } = Astro.props;
+const refinedUrl = import.meta.env.PUBLIC_BASE_URL + '/' + url;
 ---
-<modal-component id='share-modal-content' class={twMerge(["absolute top-[calc(100%_+_8px)] left-0 mx-24 lg:mg-0 w-[calc(100vw_-_48px)] lg:max-w-[400px] p-16 bg-white rounded-md border border-gray-200 hidden flex-col justify-start items-start gap-8 z-50 shadow-xl ", className])} {...props}>
-  <div class="self-stretch flex justify-start items-start gap-8"> 
-    <div class="flex-1 self-stretch p-10 rounded-sm border border-gray-200 flex justify-start items-center gap-10 overflow-scroll">
+
+<modal-component
+  id="share-modal-content"
+  class={twMerge([
+    'absolute top-[calc(100%_+_8px)] left-0 mx-24 lg:mg-0 w-[calc(100vw_-_48px)] lg:max-w-[400px] p-16 bg-white rounded-md border border-gray-200 hidden flex-col justify-start items-start gap-8 z-50 shadow-xl ',
+    className,
+  ])}
+  {...props}
+>
+  <div class="self-stretch flex justify-start items-start gap-8">
+    <div
+      class="flex-1 self-stretch p-10 rounded-sm border border-gray-200 flex justify-start items-center gap-10 overflow-scroll"
+    >
       <span class="text-gray-600 text-sm font-normal whitespace-nowrap">{refinedUrl}</span>
     </div>
-    <button class="p-10 bg-white rounded-sm overflow-hidden border border-gray-200 flex justify-start items-start gap-8 text-icon-soft hover:text-icon-sub">
-      <CopyIcon color='currentColor'/>
+    <button
+      class="p-10 bg-white rounded-sm overflow-hidden border border-gray-200 flex justify-start items-start gap-8 text-icon-soft hover:text-icon-sub"
+    >
+      <CopyIcon color="currentColor" />
     </button>
   </div>
-  <ShareReactComponent url="url" client:load/>
+  <ShareReactComponent url={refinedUrl} email={email} client:load />
 </modal-component>
 <script>
   class Modal extends HTMLElement {

@@ -1,6 +1,11 @@
-import { FacebookShareButton, LinkedinShareButton, TwitterShareButton } from 'react-share';
+import {
+  EmailShareButton,
+  FacebookShareButton,
+  LinkedinShareButton,
+  TwitterShareButton,
+} from 'react-share';
 
-function ShareReactComponent({ url }: { url: string }) {
+function ShareReactComponent({ url, email }: { url: string; email: string }) {
   return (
     <>
       <div className="self-stretch border border-gray.100 flex justify-start items-start">
@@ -83,62 +88,22 @@ function ShareReactComponent({ url }: { url: string }) {
             </svg>
           </div>
         </FacebookShareButton>
-        <div className="flex-1">
+        <EmailShareButton url={email} className="flex-1">
           <div className="bgWhite hover:bg-gray-50 flex-1 px-12 py-24 border-r border-gray.100 flex justify-center items-center gap-10 text-gray-500 hover:text-gray-700">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="25"
+              width="24"
               height="24"
-              viewBox="0 0 25 24"
+              viewBox="0 0 24 24"
               fill="none"
             >
               <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M18.329 5.76205C16.683 4.11505 14.494 3.20705 12.162 3.20605C7.35502 3.20605 3.44402 7.11505 3.44302 11.9201C3.44102 13.4491 3.84202 14.9521 4.60602 16.2771L3.36902 20.7931L7.99102 19.5811C9.27002 20.2771 10.702 20.6421 12.158 20.6421H12.162C16.967 20.6421 20.878 16.7321 20.88 11.9271C20.881 9.59905 19.975 7.41005 18.329 5.76205Z"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M13.22 13.56L13.626 13.157C13.999 12.787 14.589 12.74 15.019 13.042C15.435 13.334 15.811 13.596 16.161 13.84C16.717 14.226 16.784 15.018 16.305 15.496L15.946 15.855"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M8.2699 8.17902L8.6289 7.82002C9.1069 7.34202 9.8989 7.40902 10.2849 7.96402C10.5279 8.31402 10.7899 8.69002 11.0829 9.10602C11.3849 9.53602 11.3389 10.126 10.9679 10.499L10.5649 10.905"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M15.946 15.855C14.465 17.329 11.976 16.077 10.011 14.111"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M10.0129 14.1141C8.04794 12.1481 6.79594 9.66008 8.26994 8.17908"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M10.5649 10.905C10.8839 11.408 11.2929 11.906 11.7549 12.368L11.7569 12.37C12.2189 12.832 12.7169 13.241 13.2199 13.56"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
+                d="M1.99992 2H13.9999C14.1767 2 14.3463 2.07024 14.4713 2.19526C14.5963 2.32029 14.6666 2.48986 14.6666 2.66667V13.3333C14.6666 13.5101 14.5963 13.6797 14.4713 13.8047C14.3463 13.9298 14.1767 14 13.9999 14H1.99992C1.82311 14 1.65354 13.9298 1.52851 13.8047C1.40349 13.6797 1.33325 13.5101 1.33325 13.3333V2.66667C1.33325 2.48986 1.40349 2.32029 1.52851 2.19526C1.65354 2.07024 1.82311 2 1.99992 2V2ZM8.03992 7.78867L3.76525 4.15867L2.90192 5.17467L8.04859 9.54467L13.1026 5.17133L12.2306 4.16267L8.04059 7.78867H8.03992Z"
+                fill="currentColor"
+              ></path>
             </svg>
           </div>
-        </div>
+        </EmailShareButton>
         <TwitterShareButton url={url} className="flex-1">
           <div className="bgWhite hover:bg-gray-50 flex-1 px-12 py-24 border-r border-gray.100 flex justify-center items-center gap-10 text-gray-500 hover:text-gray-700">
             <svg

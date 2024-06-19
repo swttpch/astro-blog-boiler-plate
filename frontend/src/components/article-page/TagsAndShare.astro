@@ -1,35 +1,33 @@
 ---
-import TagComponent from "../Tag.astro";
-import type { Tag } from "../../interfaces/tag";
-import ShareReactComponent from "../react/Share.tsx";
+import TagComponent from '../Tag.astro';
+import type { Tag } from '../../interfaces/tag';
+import ShareReactComponent from '../react/Share.tsx';
 type Props = {
   tags?: Tag[];
   slug: string;
 };
-const {tags = [], slug} = Astro.props
-const email = import.meta.env.PUBLIC_EMAIL
-const url = import.meta.env.PUBLIC_BASE_URL
+const { tags = [], slug } = Astro.props;
+const email = import.meta.env.PUBLIC_EMAIL;
+const url = import.meta.env.PUBLIC_BASE_URL;
 ---
 
-<div class="justify-between items-start lg:items-center flex self-stretch flex-col lg:flex-row gap-y-32">
+<div
+  class="justify-between items-start lg:items-center flex self-stretch flex-col lg:flex-row gap-y-32"
+>
   <div class="flex items-center gap-16 flex-wrap">
     <div class="text-text-sub text-base font-normal break-words">Tags:</div>
     <div class="flex items-center gap-8">
       {
-        tags.map(tag => (
-          <TagComponent href={tag.attributes.slug}>
-            {tag.attributes.name}
-          </TagComponent>
+        tags.map((tag) => (
+          <TagComponent href={tag.attributes.slug}>{tag.attributes.name}</TagComponent>
         ))
       }
     </div>
   </div>
   <div class="flex items-center gap-16 flex-wrap">
-    <div class="text-text-sub text-base font-medium break-words">
-      Compartilhar:
-    </div>
+    <div class="text-text-sub text-base font-medium break-words">Compartilhar:</div>
     <div class="flex items-center">
-      <ShareReactComponent email={email} url={url+'/'+slug} client:load/>
+      <ShareReactComponent email={email} url={url + '/' + slug} client:load />
     </div>
   </div>
 </div>

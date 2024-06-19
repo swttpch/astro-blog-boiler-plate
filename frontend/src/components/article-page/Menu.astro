@@ -10,22 +10,30 @@ import MenuBoxContent from '../MenuBoxContent.astro';
 type Props = {
   idArticle: number;
   likes: number;
-  url: string
-  titles: string[]
+  url: string;
+  titles: string[];
+  email: string;
 };
-const { idArticle, likes, url , titles} = Astro.props;
+const { idArticle, likes, url, titles, email } = Astro.props;
 ---
 
-<div id='modal-background' class='absolute top-0 hidden z-40 left-0 w-full h-full data-[active]:block '/>
+<div
+  id="modal-background"
+  class="absolute top-0 hidden z-40 left-0 w-full h-full data-[active]:block"
+>
+</div>
 
 <div
   class="top-[100px] lg:top-[200px] lg:mt-[-12px] sticky flex flex-col items-center gap-56 max-w-72 flex-1 text-gray-600 hover:text-black z-40"
 >
-  <menu-button data-id={idArticle} class='text-text-soft hover:text-text-sub data-[active]:text-text-sub'>
-    <button class='transition-colors'>
-      <MenuIcon color='currentColor' />
+  <menu-button
+    data-id={idArticle}
+    class="text-text-soft hover:text-text-sub data-[active]:text-text-sub"
+  >
+    <button class="transition-colors">
+      <MenuIcon color="currentColor" />
     </button>
-    <MenuBoxContent titles={titles}/>
+    <MenuBoxContent titles={titles} />
   </menu-button>
   <like-button
     data-id={idArticle}
@@ -44,15 +52,17 @@ const { idArticle, likes, url , titles} = Astro.props;
     </button>
     <span class="text-sm font-medium transition-colors">999999</span>
   </div> -->
-  <share-button data-id={idArticle} class="flex relative flex-col items-center gap-4 self-stretch group text-gray-600 hover:text-black">
+  <share-button
+    data-id={idArticle}
+    class="flex relative flex-col items-center gap-4 self-stretch group text-gray-600 hover:text-black"
+  >
     <button class="transition-colors">
-     <ShareIcon id='share-icon' color="currentColor" />
-     <ShareFullIcon id='share-full-icon' class={'hidden'}/>
+      <ShareIcon id="share-icon" color="currentColor" />
+      <ShareFullIcon id="share-full-icon" class={'hidden'} />
     </button>
     <!-- <span class="text-sm font-medium transition-colors">{shares}</span> -->
 
-    <ShareBoxContent url={url}/>
-
+    <ShareBoxContent url={url} email={email} />
   </share-button>
 </div>
 
@@ -66,9 +76,9 @@ const { idArticle, likes, url , titles} = Astro.props;
       super();
       const id = this.dataset.id;
 
-      if(!id) return 
+      if (!id) return;
 
-      if(liked) {
+      if (liked) {
         this.hearth?.classList.add('hidden');
         this.hearthFull?.classList.add('block');
       } else {
@@ -78,12 +88,12 @@ const { idArticle, likes, url , titles} = Astro.props;
 
       this.querySelector('button')?.addEventListener('click', () => {
         this.querySelector('button')?.setAttribute('disabled', 'true');
-        this.toggleStorage()
+        this.toggleStorage();
         this.hearth?.classList.toggle('block');
         this.hearth?.classList.toggle('hidden');
         this.hearthFull?.classList.toggle('hidden');
         this.hearthFull?.classList.toggle('block');
-        if(this.liked) {
+        if (this.liked) {
           this.addLike(+id);
         } else {
           this.removeLike(+id);
@@ -91,24 +101,28 @@ const { idArticle, likes, url , titles} = Astro.props;
       });
     }
 
-    async addLike(id:number) {
-      const res = await fetch(`/api/articles/${id}/likes/add.json`).then(res => res.json()).then(res => res)
-      this.querySelector('span')!.textContent = res.likes
+    async addLike(id: number) {
+      const res = await fetch(`/api/articles/${id}/likes/add.json`)
+        .then((res) => res.json())
+        .then((res) => res);
+      this.querySelector('span')!.textContent = res.likes;
       this.querySelector('button')?.removeAttribute('disabled');
     }
-    async removeLike(id:number) {
-      const res = await fetch(`/api/articles/${id}/likes/remove.json`).then(res => res.json()).then(res => res)
-      this.querySelector('span')!.textContent = res.likes
+    async removeLike(id: number) {
+      const res = await fetch(`/api/articles/${id}/likes/remove.json`)
+        .then((res) => res.json())
+        .then((res) => res);
+      this.querySelector('span')!.textContent = res.likes;
       this.querySelector('button')?.removeAttribute('disabled');
     }
     toggleStorage = () => {
       this.liked = !this.liked;
-      if(this.liked) {
+      if (this.liked) {
         sessionStorage.setItem('liked', 'true');
       } else {
         sessionStorage.removeItem('liked');
       }
-    }
+    };
   }
 
   class ShareButton extends HTMLElement {
@@ -122,15 +136,15 @@ const { idArticle, likes, url , titles} = Astro.props;
       super();
       const id = this.dataset.id;
 
-      if(!id) return 
+      if (!id) return;
       this.icon?.classList.add('block');
       this.iconFull?.classList.add('hidden');
       this.shared = false;
 
       this.querySelector('button')?.addEventListener('click', () => {
-        if(!this.shared) {
-            this.openModal();
-        }  else {
+        if (!this.shared) {
+          this.openModal();
+        } else {
           this.closeModal();
         }
       });
@@ -145,11 +159,11 @@ const { idArticle, likes, url , titles} = Astro.props;
       this.iconFull?.classList.add('hidden');
       this.modalbg?.classList.remove('block');
       this.modalbg?.classList.add('hidden');
-      this.modalbg?.removeEventListener('click', this.closeModal, true); 
+      this.modalbg?.removeEventListener('click', this.closeModal, true);
       this.menu?.removeEventListener('click', this.closeModal, true);
       this.shared = false;
       this.modal?.querySelector('button')?.classList.remove('text-green-500');
-    }
+    };
 
     openModal = () => {
       this.modal?.classList.remove('hidden');
@@ -161,11 +175,9 @@ const { idArticle, likes, url , titles} = Astro.props;
       this.modalbg?.classList.remove('hidden');
       this.modalbg?.classList.add('block');
       this.menu?.addEventListener('click', this.closeModal, true);
-      this.modalbg?.addEventListener('click', this.closeModal, true); 
+      this.modalbg?.addEventListener('click', this.closeModal, true);
       this.shared = true;
-
-    }
-
+    };
   }
 
   class MenuButton extends HTMLElement {
@@ -175,12 +187,12 @@ const { idArticle, likes, url , titles} = Astro.props;
       super();
       const id = this.dataset.id;
 
-      if(!id) return
+      if (!id) return;
 
       this.querySelector('button')?.addEventListener('click', () => {
         const isOpen = this.modal?.getAttribute('data-active');
-        if(!(isOpen === 'true')) {
-            this.openModal();
+        if (!(isOpen === 'true')) {
+          this.openModal();
         } else {
           this.closeModal();
         }
@@ -190,15 +202,14 @@ const { idArticle, likes, url , titles} = Astro.props;
     closeModal = () => {
       this.modal?.removeAttribute('data-active');
       this.modalbg?.removeAttribute('data-active');
-      this.modalbg?.removeEventListener('click', this.closeModal, true); 
-    }
+      this.modalbg?.removeEventListener('click', this.closeModal, true);
+    };
 
     openModal = () => {
       this.modal?.setAttribute('data-active', 'true');
       this.modalbg?.setAttribute('data-active', 'true');
-      this.modalbg?.addEventListener('click', this.closeModal, true); 
-    }
-
+      this.modalbg?.addEventListener('click', this.closeModal, true);
+    };
   }
 
   customElements.define('menu-button', MenuButton);
