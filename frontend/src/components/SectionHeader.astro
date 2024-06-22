@@ -3,7 +3,7 @@ type Props = { title: string };
 const { title } = Astro.props;
 ---
 
-<div class="flex justify-between items-center self-stretch">
+<div class="flex lg:justify-between gap-24 lg:items-center self-stretch lg:flex-row flex-col">
   <h2 class="text-[28px] font-medium leading-8 lg:text-4xl lg:leading-auto">{title}</h2>
   <slot />
 </div>

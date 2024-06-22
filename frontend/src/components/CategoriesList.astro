@@ -1,0 +1,37 @@
+---
+import SectionHeader from './SectionHeader.astro';
+import type Category from '../interfaces/category';
+import CategoryDefault from './CategoryDefault.astro';
+import Container from './Container.astro';
+import Screen from './Screen.astro';
+import LinkWithArrow from './LinkWithArrow.astro';
+
+type Props = {
+  categories: Category[];
+};
+
+const { categories } = Astro.props;
+
+const refinedArr = categories.splice(0, 6);
+---
+
+<Screen>
+  <Container class="flex-col">
+    <SectionHeader title="Categorias">
+      <LinkWithArrow to="/c"> Ver todas </LinkWithArrow>
+    </SectionHeader>
+    <div
+      class="flex w-screen px-24 lg:px-0 lg:w-auto items-start content-start gap-32 self-stretch overflow-scroll lg:overflow-hidden pb-10 lg:ml-0 -ml-24"
+    >
+      {
+        [...refinedArr, ...refinedArr, ...refinedArr].map((category) => (
+          <CategoryDefault
+            title={category.attributes.title}
+            slug={category.attributes.slug}
+            quantity={category.attributes.qtd || 0}
+          />
+        ))
+      }
+    </div>
+  </Container>
+</Screen>

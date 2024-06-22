@@ -3,7 +3,6 @@ import type Article from '../interfaces/article';
 import { getStyleBackgroundImage } from '../utils/getStyleBackgroundImage';
 import ArticleComponent from './article/Article.astro';
 import ArticleContent from './article/ArticleContent.astro';
-import ArticleImage from './article/ArticleImage.astro';
 import ArticleTitle from './article/ArticleTitle.astro';
 import AuthorBox from './author-box/AuthorBox.astro';
 import AuthorBoxArticleInfo from './author-box/AuthorBoxArticleInfo.astro';
@@ -13,7 +12,6 @@ import AuthorBoxName from './author-box/AuthorBoxName.astro';
 import CategoryBadge from './CategoryBadge.astro';
 import Container from './Container.astro';
 import FormattedDate from './FormattedDate.astro';
-import LinkWithArrow from './LinkWithArrow.astro';
 import Screen from './Screen.astro';
 import SectionHeader from './SectionHeader.astro';
 
@@ -27,7 +25,7 @@ const { articles } = Astro.props;
   articles.length >= 5 && (
     <Screen class={'py-64'}>
       <Container class={'flex-col gap-32'}>
-        <SectionHeader title="Destaques"></SectionHeader>
+        <SectionHeader title="Destaques" />
         <div class="flex flex-col gap-32 self-stretch">
           <div class="flex gap-32 self-stretch flex-col lg:flex-row">
             {articles.slice(0, 3).map((article) => {
@@ -41,7 +39,7 @@ const { articles } = Astro.props;
               const date = article.attributes.publishedAt;
               return (
                 <ArticleComponent
-                href={'/p/' + article.attributes.slug}
+                  href={'/p/' + article.attributes.slug}
                   class={'lg:flex-1 h-[322px] flex-col transition-all overflow-hidden relative p-0'}
                 >
                   <div
@@ -51,21 +49,26 @@ const { articles } = Astro.props;
                   <ArticleContent class={'h-full w-full z-10 p-24 justify-between'}>
                     {category && <CategoryBadge>{category.attributes.title}</CategoryBadge>}
                     <ArticleContent class={'gap-24'}>
-                      <ArticleTitle class={'text-white group-hover:text-primary-300'}>{article.attributes.title}</ArticleTitle>
-                      {
-                        author && (
+                      <ArticleTitle class={'text-white group-hover:text-primary-300'}>
+                        {article.attributes.title}
+                      </ArticleTitle>
+                      {author && (
                         <AuthorBox>
-                        <AuthorBoxAvatar image={author.attributes.avatar?.data} name={author.attributes.name}/>
-                        <AuthorBoxBody >
-                          <AuthorBoxName class='text-white'>{author.attributes.name}</AuthorBoxName>
-                          <AuthorBoxArticleInfo class='text-white'>
-                            <FormattedDate date={new Date(date)} /> • {article.attributes.readingTime} min de leitura
-                          </AuthorBoxArticleInfo>
-                        </AuthorBoxBody>
-                      </AuthorBox>
-                        )
-                      }
-                     
+                          <AuthorBoxAvatar
+                            image={author.attributes.avatar?.data}
+                            name={author.attributes.name}
+                          />
+                          <AuthorBoxBody>
+                            <AuthorBoxName class="text-white">
+                              {author.attributes.name}
+                            </AuthorBoxName>
+                            <AuthorBoxArticleInfo class="text-white">
+                              <FormattedDate date={new Date(date)} /> •{' '}
+                              {article.attributes.readingTime} min de leitura
+                            </AuthorBoxArticleInfo>
+                          </AuthorBoxBody>
+                        </AuthorBox>
+                      )}
                     </ArticleContent>
                   </ArticleContent>
                 </ArticleComponent>
@@ -86,7 +89,9 @@ const { articles } = Astro.props;
               return (
                 <ArticleComponent
                   href={'/p/' + article.attributes.slug}
-                  class={flexClass + ' h-[322px] flex-col transition-all overflow-hidden relative p-0'}
+                  class={
+                    flexClass + ' h-[322px] flex-col transition-all overflow-hidden relative p-0'
+                  }
                 >
                   <div
                     class="w-full h-full absolute top-0 left-0 group-hover:scale-125 transition-all"
@@ -95,21 +100,26 @@ const { articles } = Astro.props;
                   <ArticleContent class={'h-full w-full z-10 p-24 justify-between'}>
                     {category && <CategoryBadge>{category.attributes.title}</CategoryBadge>}
                     <ArticleContent class={'gap-24'}>
-                      <ArticleTitle class={'text-white group-hover:text-primary-300'}>{article.attributes.title}</ArticleTitle>
-                      {
-                        author && (
+                      <ArticleTitle class={'text-white group-hover:text-primary-300'}>
+                        {article.attributes.title}
+                      </ArticleTitle>
+                      {author && (
                         <AuthorBox>
-                        <AuthorBoxAvatar image={author.attributes.avatar?.data} name={author.attributes.name}/>
-                        <AuthorBoxBody >
-                          <AuthorBoxName class='text-white'>{author.attributes.name}</AuthorBoxName>
-                          <AuthorBoxArticleInfo class='text-white'>
-                            <FormattedDate date={new Date(date)} /> • {article.attributes.readingTime} min de leitura
-                          </AuthorBoxArticleInfo>
-                        </AuthorBoxBody>
-                      </AuthorBox>
-                        )
-                      }
-                     
+                          <AuthorBoxAvatar
+                            image={author.attributes.avatar?.data}
+                            name={author.attributes.name}
+                          />
+                          <AuthorBoxBody>
+                            <AuthorBoxName class="text-white">
+                              {author.attributes.name}
+                            </AuthorBoxName>
+                            <AuthorBoxArticleInfo class="text-white">
+                              <FormattedDate date={new Date(date)} /> •{' '}
+                              {article.attributes.readingTime} min de leitura
+                            </AuthorBoxArticleInfo>
+                          </AuthorBoxBody>
+                        </AuthorBox>
+                      )}
                     </ArticleContent>
                   </ArticleContent>
                 </ArticleComponent>

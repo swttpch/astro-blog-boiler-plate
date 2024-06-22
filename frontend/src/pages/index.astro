@@ -1,15 +1,22 @@
 ---
 import type Article from '../interfaces/article';
 import Home from '../layouts/HomeLayout.astro';
-import { defaultBlogRequests, defaultBlogRequestsWithCategoriesAndTags, homePageBlogRequests } from '../lib/blog';
+import {
+  defaultBlogRequests,
+  defaultBlogRequestsWithCategoriesAndTags,
+  homePageBlogRequests,
+} from '../lib/blog';
 import fetchApi from '../lib/strapi';
 
-
-const props = await homePageBlogRequests({currentPage: 1})
-const defaultProps = await defaultBlogRequests()
-const {categories,tags} = await defaultBlogRequestsWithCategoriesAndTags()
-const articles = await fetchApi<Article[]>({ endpoint: 'articles', wrappedByKey: 'data', query: {populate: '*'} });
-const allProps = {...props, ...defaultProps, categories, tags, articles}
-
+const props = await homePageBlogRequests({ currentPage: 1 });
+const defaultProps = await defaultBlogRequests();
+const { categories, tags } = await defaultBlogRequestsWithCategoriesAndTags();
+const articles = await fetchApi<Article[]>({
+  endpoint: 'articles',
+  wrappedByKey: 'data',
+  query: { populate: '*' },
+});
+const allProps = { ...props, ...defaultProps, categories, tags, articles };
 ---
+
 <Home {...allProps} />

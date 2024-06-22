@@ -7,10 +7,7 @@ const { class: className, ...props } = Astro.props;
 ---
 
 <div
-  class={twMerge([
-    'items-start flex flex-col justify-between self-stretch',
-    className,
-  ])}
+  class={twMerge(['items-start flex flex-col justify-between self-stretch', className])}
   {...props}
 >
   <slot />

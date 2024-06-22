@@ -1,0 +1,37 @@
+---
+interface Props {
+  title: string;
+  quantity: number;
+  slug: string;
+}
+
+const { title, quantity, slug } = Astro.props;
+---
+
+<a href={'/c/' + slug} class="flex-[0_0_160px] lg:flex-1">
+  <div class="flex flex-col items-start gap-16 self-stretch">
+    <div
+      class="flex py-4 h-[160px] justify-center items-center self-stretch rounded-[0.25rem] bg-primary-base"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="88"
+        height="88"
+        viewBox="0 0 88 88"
+        fill="none"
+      >
+        <path
+          d="M25.667 21.9999C25.667 19.9749 27.3086 18.3333 29.3337 18.3333H58.667C60.692 18.3333 62.3337 19.9749 62.3337 21.9999V29.3333C62.3337 31.3583 60.692 32.9999 58.667 32.9999H29.3337C27.3086 32.9999 25.667 31.3583 25.667 29.3333V21.9999ZM31.167 27.4999H56.8337V23.8333H31.167V27.4999ZM14.667 16.4999C14.667 11.4373 18.771 7.33325 23.8337 7.33325H66.0003C71.0629 7.33325 75.167 11.4373 75.167 16.4999V68.7499C75.167 70.2687 73.9358 71.4999 72.417 71.4999H20.167C20.167 73.525 21.8086 75.1666 23.8337 75.1666H72.417C73.9358 75.1666 75.167 76.3978 75.167 77.9166C75.167 79.4354 73.9358 80.6666 72.417 80.6666H23.8337C18.771 80.6666 14.667 76.5625 14.667 71.4999V16.4999ZM20.167 65.9999H69.667V16.4999C69.667 14.4749 68.0254 12.8333 66.0003 12.8333H23.8337C21.8086 12.8333 20.167 14.4749 20.167 16.4999V65.9999Z"
+          fill="#EEF0FF"></path>
+      </svg>
+    </div>
+    <div class="flex flex-col items-start gap-4">
+      <h3 class="text-gray-900 text-base font-medium leading-6">{title}</h3>
+      {
+        quantity > 0 && (
+          <p class="text-gray-600 text-xs font-medium leading-4">{quantity} publicações</p>
+        )
+      }
+    </div>
+  </div>
+</a>
