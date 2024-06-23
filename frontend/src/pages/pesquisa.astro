@@ -1,0 +1,14 @@
+---
+import DefaultLayout from '../layouts/DefaultLayout.astro';
+import { defaultBlogRequests } from '../lib/blog';
+const { blogInfo, headerNavigation, footerNavigation } = await defaultBlogRequests();
+const search = Astro.url.searchParams.get('s');
+---
+
+<DefaultLayout
+  blogInfo={blogInfo}
+  headerNavigation={headerNavigation}
+  footerNavigation={footerNavigation}
+>
+  {search}
+</DefaultLayout>

@@ -1,0 +1,110 @@
+---
+import HeaderLink from './HeaderLink.astro';
+import type StrapiNavigation from '../interfaces/navigation';
+import type { CategoryPlain } from '../interfaces/category';
+
+type Props = {
+  headerNavigation: StrapiNavigation<CategoryPlain>[];
+};
+const { headerNavigation } = Astro.props;
+---
+
+<nav class="hidden lg:flex justify-center items-stretch self-stretch w-full relative">
+  <HeaderLink href="/"> Inicio </HeaderLink>
+  {
+    headerNavigation?.map((item) => (
+      <HeaderLink href={'/c/' + item.related.slug}>{item.related.title}</HeaderLink>
+    ))
+  }
+  <form
+    action="/pesquisa"
+    class="modal-search-input max-w-0 data-[active]:max-w-full overflow-hidden left-0 top-0 absolute w-full h-full bg-white z-40 flex items-center justify-stretch transition-all duration-300 ease-in-out"
+  >
+    <div
+      class="h-56 p-8 pl-16 justify-stretch flex items-center w-full rounded-md border border-border-sub bg-white"
+    >
+      <input
+        name="s"
+        type="text"
+        placeholder="Pesquisar"
+        class="h-full w-full p-0 focus:outline-0"
+      />
+      <button
+        type="submit"
+        class="btn-search-input p-8 flex flex-col justify-center items-center gap-8 shrink-0"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="28"
+          height="28"
+          viewBox="0 0 28 28"
+          fill="none"
+        >
+          <path
+            d="M21.0361 19.3864L26.033 24.3821L24.3821 26.0329L19.3865 21.0361C17.5277 22.5262 15.2156 23.3366 12.8333 23.3333C7.03731 23.3333 2.33331 18.6293 2.33331 12.8333C2.33331 7.03725 7.03731 2.33325 12.8333 2.33325C18.6293 2.33325 23.3333 7.03725 23.3333 12.8333C23.3367 15.2156 22.5262 17.5276 21.0361 19.3864ZM18.6958 18.5208C20.1764 16.9981 21.0033 14.9571 21 12.8333C21 8.32059 17.3448 4.66659 12.8333 4.66659C8.32065 4.66659 4.66665 8.32059 4.66665 12.8333C4.66665 17.3448 8.32065 20.9999 12.8333 20.9999C14.9571 21.0033 16.9982 20.1764 18.5208 18.6958L18.6958 18.5208Z"
+            fill="#596066"></path>
+        </svg>
+      </button>
+      <button
+        class="btn-close-search-input p-8 flex flex-col justify-center items-center gap-8 shrink-0"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+        >
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M13.1406 1.82724C13.141 1.82724 13.1413 1.8276 13.1421 1.82831L14.1722 2.85867C14.173 2.85921 14.1731 2.85956 14.1733 2.8601C14.1734 2.86045 14.1734 2.86082 14.1733 2.86117C14.1733 2.86171 14.173 2.86206 14.1722 2.86278L9.03474 8.00028L14.1722 13.1378C14.173 13.1385 14.1731 13.1388 14.1733 13.1394C14.1734 13.1398 14.1734 13.1402 14.1733 13.1406C14.1733 13.141 14.173 13.1413 14.1722 13.1421L13.1419 14.1722C13.1413 14.173 13.141 14.1731 13.1406 14.1733C13.1402 14.1734 13.1398 14.1734 13.1394 14.1733C13.1388 14.1733 13.1385 14.173 13.1378 14.1722L8.00028 9.03474L2.86278 14.1722C2.86206 14.173 2.86171 14.1731 2.86117 14.1733C2.86076 14.1734 2.86033 14.1734 2.85992 14.1733C2.85956 14.1733 2.85921 14.173 2.85849 14.1722L1.82831 13.1419C1.8276 13.1413 1.82742 13.141 1.82724 13.1406C1.82712 13.1402 1.82712 13.1398 1.82724 13.1394C1.82724 13.1388 1.8276 13.1385 1.82831 13.1378L6.96581 8.00028L1.82831 2.86278C1.8276 2.86206 1.82742 2.86171 1.82724 2.86117C1.82712 2.86076 1.82712 2.86033 1.82724 2.85992C1.82724 2.85956 1.8276 2.85921 1.82831 2.85849L2.85867 1.82831C2.85921 1.8276 2.85956 1.82742 2.85992 1.82724C2.86033 1.82712 2.86076 1.82712 2.86117 1.82724C2.86171 1.82724 2.86206 1.8276 2.86278 1.82831L8.00028 6.96581L13.1378 1.82831C13.1385 1.8276 13.1388 1.82742 13.1394 1.82724C13.1398 1.82712 13.1402 1.82712 13.1406 1.82724Z"
+            fill="#596066"></path>
+        </svg>
+      </button>
+    </div>
+  </form>
+</nav>
+
+<div
+  class="action-search-input hidden lg:flex gap-16 self-stretch items-center relalive data-[active]:hidden"
+>
+  <button
+    class="btn-open-search-input p-8 flex flex-col justify-center items-center gap-8 shrink-0"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28" fill="none">
+      <path
+        d="M21.0361 19.3864L26.033 24.3821L24.3821 26.0329L19.3865 21.0361C17.5277 22.5262 15.2156 23.3366 12.8333 23.3333C7.03731 23.3333 2.33331 18.6293 2.33331 12.8333C2.33331 7.03725 7.03731 2.33325 12.8333 2.33325C18.6293 2.33325 23.3333 7.03725 23.3333 12.8333C23.3367 15.2156 22.5262 17.5276 21.0361 19.3864ZM18.6958 18.5208C20.1764 16.9981 21.0033 14.9571 21 12.8333C21 8.32059 17.3448 4.66659 12.8333 4.66659C8.32065 4.66659 4.66665 8.32059 4.66665 12.8333C4.66665 17.3448 8.32065 20.9999 12.8333 20.9999C14.9571 21.0033 16.9982 20.1764 18.5208 18.6958L18.6958 18.5208Z"
+        fill="#596066"></path>
+    </svg>
+  </button>
+</div>
+
+<script>
+  const btnOpen = document.querySelector('.btn-open-search-input');
+  const btnClose = document.querySelector('.btn-close-search-input');
+  const modal = document.querySelector('.modal-search-input') as HTMLFormElement;
+  const action = document.querySelector('.action-search-input');
+
+  const toggleAttributes = () => {
+    modal?.toggleAttribute('data-active');
+    action?.toggleAttribute('data-active');
+  };
+  const removeAttributes = () => {
+    modal?.removeAttribute('data-active');
+    action?.removeAttribute('data-active');
+  };
+  btnOpen?.addEventListener('click', toggleAttributes);
+  btnClose?.addEventListener('click', toggleAttributes);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      removeAttributes();
+    }
+    if (e.key === 'Enter') {
+      if (modal?.hasAttribute('data-active')) {
+        modal.submit();
+      }
+    }
+  });
+</script>

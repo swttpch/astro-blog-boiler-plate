@@ -16,10 +16,14 @@ const categories = await fetchApi<Category[]>({
   },
 });
 
-const {blogInfo, headerNavigation, footerNavigation} = await defaultBlogRequests()
+const { blogInfo, headerNavigation, footerNavigation } = await defaultBlogRequests();
 ---
 
-<DefaultLayout blogInfo={blogInfo} headerNavigation={headerNavigation} footerNavigation={footerNavigation}>
+<DefaultLayout
+  blogInfo={blogInfo}
+  headerNavigation={headerNavigation}
+  footerNavigation={footerNavigation}
+>
   <PageHeader
     description="Cuidados com a pele envolvem limpeza, hidratação e proteção solar. É importante escolher produtos adequados ao seu tipo de pele e evitar exposição ao sol sem proteção, além de manter uma rotina de cuidados diários para manter a saúde e aparência da pele."
     items={[{ title: 'Categorias', url: '/c/' }]}
@@ -30,27 +34,34 @@ const {blogInfo, headerNavigation, footerNavigation} = await defaultBlogRequests
       <div class="w-full grid grid-cols-1 lg:grid-cols-3 lg:grid-flow-row gap-32">
         {
           categories.map((category) => {
-            if(!category.attributes.subCategories.data || category.attributes.subCategories.data.length === 0) return (
-              <div class="flex flex-col self-stretch items-start gap-24">
-                <a href={'/c/'+category.attributes.slug}>
-                  <h2 class="font-medium text-text-main self-stretch">{category.attributes.title}</h2>
-                </a>
-              </div>
-            );
+            if (
+              !category.attributes.subCategories.data ||
+              category.attributes.subCategories.data.length === 0
+            )
+              return (
+                <div class="flex flex-col self-stretch items-start gap-24">
+                  <a href={'/c/' + category.attributes.slug}>
+                    <h2 class="font-medium text-text-main self-stretch">
+                      {category.attributes.title}
+                    </h2>
+                  </a>
+                </div>
+              );
             return (
               <div class="flex flex-col self-stretch items-start gap-24 ">
-                <a href={'/c/'+category.attributes.slug}>
-                <h2 class="font-medium text-text-main self-stretch hover:text-primary-base">{category.attributes.title}</h2>
+                <a href={'/c/' + category.attributes.slug}>
+                  <h2 class="font-medium text-text-main self-stretch hover:text-primary-base">
+                    {category.attributes.title}
+                  </h2>
                 </a>
                 <div class="flex flex-col gap-20">
-                  {
-                    category.attributes.subCategories.data.map((subCategory) => {
-                      return (
-                        <LinkWithArrow to={'/c/' + subCategory.attributes.slug}>{subCategory.attributes.title}</LinkWithArrow> 
-
-                      );
-                    })
-                  }
+                  {category.attributes.subCategories.data.map((subCategory) => {
+                    return (
+                      <LinkWithArrow to={'/c/' + subCategory.attributes.slug}>
+                        {subCategory.attributes.title}
+                      </LinkWithArrow>
+                    );
+                  })}
                 </div>
               </div>
             );

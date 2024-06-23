@@ -5,24 +5,33 @@ import HomeIcon from './icons/HomeIcon.astro';
 import type { HTMLAttributes } from 'astro/types';
 import type { BreadcrumbBullet } from '../interfaces/breadcrumb-bullet';
 
-
 type Props = {
-  items: Array<
-    BreadcrumbBullet | BreadcrumbBullet[]
-  >;
+  items: Array<BreadcrumbBullet | BreadcrumbBullet[]>;
 } & HTMLAttributes<'div'>;
-const { items = [], class: className , ...rest  } = Astro.props;
+const { items = [], class: className, ...rest } = Astro.props;
 ---
 
-<div id='breadcrumb' class={twMerge(["justify-items-start items-center gap-16 flex overflow-auto py-4 self-stretch", className])} {...rest}>
+<div
+  id="breadcrumb"
+  class={twMerge([
+    'justify-items-start items-center gap-16 flex overflow-auto py-4 self-stretch',
+    className,
+  ])}
+  {...rest}
+>
   <HomeIcon class={'flex-[0_0_24px]'} />
   <div class="flex items-center gap-[8px] flex-1">
     <div class="p-2 rounded-sm justify-center items-center gap-10 flex">
-      <a href='/' class="text-text-soft text-small font-normal break-words hover:text-text-sub">Início</a>
+      <a href="/" class="text-text-soft text-small font-normal break-words hover:text-text-sub"
+        >Início</a
+      >
     </div>
     {
       items.map((item, index) => {
-        const classTemp = index === items.length - 1 ? 'text-primary-base font-normal whitespace-nowrap hover:text-primary-dark' :  'text-text-soft font-normal whitespace-nowrap hover:text-text-sub';
+        const classTemp =
+          index === items.length - 1
+            ? 'text-primary-base font-normal whitespace-nowrap hover:text-primary-dark'
+            : 'text-text-soft font-normal whitespace-nowrap hover:text-text-sub';
         const LinkOrText = index !== items.length - 1 ? 'a' : 'p';
         return (
           <>
@@ -32,35 +41,20 @@ const { items = [], class: className , ...rest  } = Astro.props;
                 item.map((subitem, subindex) => {
                   const Component = subitem.url ? 'a' : 'p';
                   return (
-                    <div
-                    class={twMerge([classTemp, 'hover:text-none'])}
-
-                    >
+                    <div class={twMerge([classTemp, 'hover:text-none'])}>
                       {subindex === 0 ? '' : '/'}
-                      <Component
-                        href={subitem.url}
-                        class={twMerge([classTemp])}
-                      >
+                      <Component href={subitem.url} class={twMerge([classTemp])}>
                         {subitem.title}
                       </Component>
                     </div>
                   );
                 })
               ) : item.url ? (
-                <LinkOrText
-                  href={item.url}
-                  class={twMerge([classTemp])}
-
-                >
+                <LinkOrText href={item.url} class={twMerge([classTemp])}>
                   {item.title}
                 </LinkOrText>
               ) : (
-                <p
-                class={twMerge([classTemp])}
-
-                >
-                  {item.title}
-                </p>
+                <p class={twMerge([classTemp])}>{item.title}</p>
               )}
             </div>
           </>
@@ -72,7 +66,5 @@ const { items = [], class: className , ...rest  } = Astro.props;
 
 <script>
   const container = document.getElementById('breadcrumb');
-  console.log(container?.scrollWidth)
-  if(container) 
-  container.scrollLeft = container.scrollWidth - container.clientWidth;
+  if (container) container.scrollLeft = container.scrollWidth - container.clientWidth;
 </script>
