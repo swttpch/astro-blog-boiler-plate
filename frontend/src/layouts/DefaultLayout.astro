@@ -1,21 +1,22 @@
 ---
-import BaseHead from "../components/BaseHead.astro";
-import Footer from "../components/Footer.astro";
-import Header from "../components/Header.astro";
-import NewsLetter from "../components/NewsLetter.astro";
-import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
-import type { BlogInfo } from "../interfaces/blog-info";
-import type { CategoryPlain } from "../interfaces/category";
-import type StrapiNavigation from "../interfaces/navigation";
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import NewsLetter from '../components/NewsLetter.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import type { BlogInfo } from '../interfaces/blog-info';
+import type { CategoryPlain } from '../interfaces/category';
+import type StrapiNavigation from '../interfaces/navigation';
 
-type Props =  {
+type Props = {
   blogInfo: BlogInfo;
   headerNavigation: StrapiNavigation<CategoryPlain>[];
   footerNavigation: StrapiNavigation<CategoryPlain>[];
-}
+};
 
-const {blogInfo, headerNavigation, footerNavigation} = Astro.props
+const { blogInfo, headerNavigation, footerNavigation } = Astro.props;
 ---
+
 <!doctype html>
 <html lang="pt-br">
   <head>
@@ -23,8 +24,8 @@ const {blogInfo, headerNavigation, footerNavigation} = Astro.props
   </head>
   <body>
     <Header headerNavigation={headerNavigation} blogInfo={blogInfo} />
-      <slot/>
-    <NewsLetter/>
-    <Footer footerNavigation={footerNavigation} blogInfo={blogInfo}/>
+    <slot />
+    <NewsLetter />
+    <Footer footerNavigation={footerNavigation} blogInfo={blogInfo} />
   </body>
 </html>

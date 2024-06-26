@@ -1,21 +1,20 @@
 ---
-import ArticleList from "../components/ArticleList.astro";
-import PageHeader from "../components/PageHeader.astro";
-import type Article from "../interfaces/article";
-import type { BreadcrumbBullet } from "../interfaces/breadcrumb-bullet";
-import type Category from "../interfaces/category";
-import type Meta from "../interfaces/meta";
-import type { Tag } from "../interfaces/tag";
-import fetchApi from "../lib/strapi";
-import DefaultLayout from "./DefaultLayout.astro";
-import ThreePosts from "../components/ThreePostsSection.astro";
-import { defaultBlogRequests } from "../lib/blog";
+import ArticleList from '../components/ArticleList.astro';
+import PageHeader from '../components/PageHeader.astro';
+import type Article from '../interfaces/article';
+import type { BreadcrumbBullet } from '../interfaces/breadcrumb-bullet';
+import type Category from '../interfaces/category';
+import type { Tag } from '../interfaces/tag';
+import fetchApi from '../lib/strapi';
+import DefaultLayout from './DefaultLayout.astro';
+import ThreePosts from '../components/ThreePostsSection.astro';
+import { defaultBlogRequests } from '../lib/blog';
 
 type Props = {
   data: {
-    title: string
-    description: string
-    items: Array<BreadcrumbBullet | BreadcrumbBullet>
+    title: string;
+    description: string;
+    items: Array<BreadcrumbBullet | BreadcrumbBullet>;
   };
   curPath: string;
   curPage: number;
@@ -24,7 +23,7 @@ type Props = {
   highlights?: Article[];
 };
 
-const {articles,curPage,curPath,totalPages, highlights, data} = Astro.props;
+const { articles, curPage, curPath, totalPages, highlights, data } = Astro.props;
 
 const categories = await fetchApi<Category[]>({
   endpoint: 'categories',
@@ -38,31 +37,6 @@ const categories = await fetchApi<Category[]>({
   },
 });
 
-await Promise.all(
-  categories.map((cat) => {
-    fetchApi<Meta>({
-      endpoint: '/articles',
-      wrappedByKey: 'meta',
-      query: {
-        publicationState: 'live',
-        filters: {
-          categories: {
-            id: {
-              $eq: cat.id,
-            },
-          },
-        },
-        pagination: {
-          page: 1,
-          pageSize: 1,
-        },
-      },
-    }).then((res) => {
-      cat.attributes.qtd = res.pagination.total;
-    });
-  }),
-);
-
 const tags = await fetchApi<Tag[]>({
   endpoint: 'tags',
   wrappedByKey: 'data',
@@ -71,16 +45,17 @@ const tags = await fetchApi<Tag[]>({
   },
 });
 
-const {blogInfo, headerNavigation, footerNavigation} = await defaultBlogRequests()
+const { blogInfo, headerNavigation, footerNavigation } = await defaultBlogRequests();
 ---
-<DefaultLayout blogInfo={blogInfo} headerNavigation={headerNavigation} footerNavigation={footerNavigation}>
-  <PageHeader {...data}/> 
-  {
-    highlights && (
-      <ThreePosts articles={highlights}/>
-    )
-  }
-  
+
+<DefaultLayout
+  blogInfo={blogInfo}
+  headerNavigation={headerNavigation}
+  footerNavigation={footerNavigation}
+>
+  <PageHeader {...data} />
+  {highlights && <ThreePosts articles={highlights} />}
+
   <ArticleList
     curPath={curPath}
     curPage={curPage}

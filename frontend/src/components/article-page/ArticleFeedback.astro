@@ -48,7 +48,7 @@ const { usefullCount, id } = Astro.props;
       <div class="text-white text-lg font-medium break-words">Não</div>
     </button>
   </div>
-  <div id='usefull-count-show'>
+  <div id="usefull-count-show">
     <span id="usefull-count" class="text-primary-dark text-sm font-bold break-words"
       >{usefullCount} usuários</span
     >
@@ -58,27 +58,26 @@ const { usefullCount, id } = Astro.props;
 
 <script>
   class Feedback extends HTMLElement {
-    
     addUsefullCount = document.getElementById('add-usefull-count');
     addUselessCount = document.getElementById('add-useless-count');
     show = document.getElementById('usefull-count-show');
-    count = 0
-    id = ''
+    count = 0;
+    id = '';
     constructor() {
       super();
       const id = this.dataset.id;
       if (!id) return;
       this.id = id;
       const feedback = sessionStorage.getItem(`feedback-${this.id}`);
-      this.count = this.dataset.count && +this.dataset.count || 0;
-      this.check()
+      this.count = (this.dataset.count && +this.dataset.count) || 0;
+      this.check();
 
-      if(feedback === 'usefull') {
+      if (feedback === 'usefull') {
         this.addUsefullCount?.setAttribute('disabled', 'true');
-        this.addUsefullCount?.setAttribute('data-active', 'true')
-      } else if(feedback === 'useless') {
+        this.addUsefullCount?.setAttribute('data-active', 'true');
+      } else if (feedback === 'useless') {
         this.addUselessCount?.setAttribute('disabled', 'true');
-        this.addUselessCount?.setAttribute('data-active', 'true')
+        this.addUselessCount?.setAttribute('data-active', 'true');
       }
 
       this.addUsefullCount?.addEventListener('click', () => {
@@ -96,33 +95,35 @@ const { usefullCount, id } = Astro.props;
       });
     }
 
-    async setUsefull(id:number) {
-      const res = await fetch(`/api/articles/${id}/add-usefull.json`).then(res => res.json()).then(res => res)
-      this.querySelector('#usefull-count')!.textContent = res.usefullCount
+    async setUsefull(id: number) {
+      const res = await fetch(`/api/articles/${id}/add-usefull.json`)
+        .then((res) => res.json())
+        .then((res) => res);
+      this.querySelector('#usefull-count')!.textContent = res.usefullCount;
       this.count = res.usefullCount;
-      this.check()
+      this.check();
       this.addUselessCount?.removeAttribute('disabled');
-      this.addUsefullCount?.setAttribute('data-active', 'true')
-      this.addUselessCount?.removeAttribute('data-active')
+      this.addUsefullCount?.setAttribute('data-active', 'true');
+      this.addUselessCount?.removeAttribute('data-active');
     }
 
-    async setUseless(id:number) {
-      const res = await fetch(`/api/articles/${id}/add-useless.json`).then(res => res.json()).then(res => res)
-      this.querySelector('#usefull-count')!.textContent = res.usefullCount
+    async setUseless(id: number) {
+      const res = await fetch(`/api/articles/${id}/add-useless.json`)
+        .then((res) => res.json())
+        .then((res) => res);
+      this.querySelector('#usefull-count')!.textContent = res.usefullCount;
       this.count = res.usefullCount;
-      this.check()
+      this.check();
       this.addUsefullCount?.removeAttribute('disabled');
-      this.addUselessCount?.setAttribute('data-active', 'true')
-      this.addUsefullCount?.removeAttribute('data-active')
+      this.addUselessCount?.setAttribute('data-active', 'true');
+      this.addUsefullCount?.removeAttribute('data-active');
     }
 
     check() {
-      if(this.count === 0) {
-        this.show?.classList.add('hidden')
-
+      if (this.count === 0) {
+        this.show?.classList.add('hidden');
       } else {
-        this.show?.classList.remove('hidden')
-      
+        this.show?.classList.remove('hidden');
       }
     }
 

@@ -7,10 +7,13 @@ function MobileNavItem({ item }: { item: StrapiNavigation<CategoryPlain> }) {
   const onToggle = () => {
     setIsOpen((old) => !old);
   };
+  const maxH = isOpen ? 'max-h-full' : 'max-h-0';
   return (
     <>
-      <div className="flex flex-col self-stretch py-0 transition-all ">
-        <div className=" flex h-80 justify-between items-center self-stretch ">
+      <div className="flex flex-col self-stretch py-0 transition-all">
+        <div
+          className={`${isOpen ? 'border-primary-base' : 'border-transparent'} flex h-80 border-b-[3px] justify-between items-center self-stretch `}
+        >
           <a href={'/c/' + item.related.slug} className="text-text-sub">
             <span>{item.related.title}</span>
           </a>
@@ -33,19 +36,18 @@ function MobileNavItem({ item }: { item: StrapiNavigation<CategoryPlain> }) {
             </svg>
           </button>
         </div>
-        <div
-          {...(isOpen ? { 'data-active': true } : {})}
-          className={`${isOpen ? 'h-auto opacity-100' : 'h-0 opacity-0'} transition-all duration-500 px-24 ease-in-out overflow-hidden flex-col flex border-b border-border-soft`}
-        >
-          {item.related.highlights.map((subitem) => (
-            <a
-              href={'/p/' + subitem.slug}
-              key={subitem.id}
-              className="h-64 text-text-sub text-sm self-stretch"
-            >
-              <span>{subitem.title}</span>
-            </a>
-          ))}
+        <div className={`${maxH} transition-all overflow-hidden flex-col flex`}>
+          <div className={`py-24 px-20 gap-24 flex-col flex`}>
+            {item.related.highlights.map((subitem) => (
+              <a
+                href={'/p/' + subitem.slug}
+                key={subitem.id}
+                className="text-text-sub text-sm self-stretch"
+              >
+                <span>{subitem.title}</span>
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </>

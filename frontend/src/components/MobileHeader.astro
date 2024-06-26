@@ -4,6 +4,7 @@ import MobileNavItem from './react/MobileNavItem';
 import Screen from './Screen.astro';
 import Container from './Container.astro';
 import ApiImage from './ApiImage.astro';
+import MobileSearch from './MobileSearch.astro';
 import type StrapiNavigation from '../interfaces/navigation';
 import type { CategoryPlain } from '../interfaces/category';
 import type { BlogInfo } from '../interfaces/blog-info';
@@ -27,14 +28,15 @@ const { blogInfo, headerNavigation } = Astro.props;
     </Container>
   </Screen>
   <Screen class="py-0 px-24">
-    <Container class={'p-0 items-center justify-stretch border-t border-border-soft'}>
+    <Container class={'p-0 items-center justify-stretch flex-col'}>
+      <MobileSearch />
       <nav class="flex-col flex justify-center self-stretch w-full">
         <div class="flex h-80 justify-between items-center self-stretch">
           <a href={'/'} class="text-text-sub">
             <span>Início</span>
           </a>
         </div>
-        {headerNavigation?.map((item) => <MobileNavItem client:load item={item} />)}
+        {headerNavigation.map((item) => <MobileNavItem client:load item={item} />)}
       </nav>
     </Container>
   </Screen>

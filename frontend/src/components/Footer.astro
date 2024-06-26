@@ -1,9 +1,7 @@
 ---
 import Container from './Container.astro';
 import Screen from './Screen.astro';
-import type Image from '../interfaces/image';
 import ApiImage from './ApiImage.astro';
-import type { Socials } from '../interfaces/socials';
 import SocialsComponent from './icons/Socials.astro';
 import SeeMoreLink from './LinkWithArrow.astro';
 import type StrapiNavigation from '../interfaces/navigation';
@@ -13,7 +11,14 @@ type Props = {
   blogInfo: BlogInfo;
   footerNavigation: StrapiNavigation<CategoryPlain>[];
 };
-const { blogInfo: {data: {attributes :{ brand, summary, name, socials,}}},  footerNavigation } = Astro.props;
+const {
+  blogInfo: {
+    data: {
+      attributes: { brand, summary, name, socials },
+    },
+  },
+  footerNavigation,
+} = Astro.props;
 const today = new Date();
 ---
 
@@ -38,38 +43,41 @@ const today = new Date();
         </div>
         <div class="flex flex-col lg:flex-row gap-32">
           {
-            footerNavigation.map(nav => {
-              
-              if(nav.related && nav.related !== null){
+            footerNavigation.map((nav) => {
+              if (nav.related && nav.related !== null) {
                 const categoryPlain = nav.related;
+                return (
+                  <div class="flex flex-col self-stretch items-start gap-24">
+                    <p class="text-sm font-medium text-text-main self-stretch">
+                      {categoryPlain.title}
+                    </p>
+                    <div class="flex flex-col self-stretch gap-20">
+                      {categoryPlain.highlights.map((category) => (
+                        <a href={'/p/' + category.slug} class="text-base font-medium text-text-sub">
+                          {category.title}
+                        </a>
+                      ))}
+                      <SeeMoreLink to={'/c/' + categoryPlain.slug}>Ver mais</SeeMoreLink>
+                    </div>
+                  </div>
+                );
+              }
               return (
                 <div class="flex flex-col self-stretch items-start gap-24">
-                  <p class="text-sm font-medium text-text-main self-stretch">{categoryPlain.title}</p>
-                  <div class="flex flex-col self-stretch gap-20">
-                    {
-                      categoryPlain.highlights.map(category => (
-                        <a href={'/p/'+category.slug} class="text-base font-medium text-text-sub">{category.title}</a>
-                      ))
-                    }
-                    <SeeMoreLink to={'/c/'+categoryPlain.slug}>
-                      Ver mais
-                    </SeeMoreLink>
-                  </div>
-                </div>
-              )
-              }
-               return (
-               <div class="flex flex-col self-stretch items-start gap-24">
                   <p class="text-sm font-medium text-text-main self-stretch">{nav.title}</p>
                   <div class="flex flex-col self-stretch gap-20">
-                    {
-                      nav.items?.map(item => (
-                        <a target={item.external ?  '_blank': '_parent'} href={item.path} class="text-base font-medium text-text-sub">{item.title}</a>
-                      ))
-                    }
+                    {nav.items?.map((item) => (
+                      <a
+                        target={item.external ? '_blank' : '_parent'}
+                        href={item.path}
+                        class="text-base font-medium text-text-sub"
+                      >
+                        {item.title}
+                      </a>
+                    ))}
                   </div>
                 </div>
-               )
+              );
             })
           }
           <!-- <div class="flex flex-col self-stretch items-start gap-24">
@@ -81,7 +89,6 @@ const today = new Date();
               </SeeMoreLink>
             </div>
           </div> -->
-          
         </div>
       </div>
       <div class="w-full h-[1px] bg-border-soft"></div>
@@ -91,8 +98,10 @@ const today = new Date();
           {name}
         </div>
         <div class="flex gap-16 lg:gap-32 lg:flex-row flex-col items-center lg:items-start">
-          <a href='' class="text-text-main text-sm font-normal break-words">Política de Privacidade</a>
-          <a href='' class="text-text-main text-sm font-normal break-words">Política de Cookies</a>
+          <a href="" class="text-text-main text-sm font-normal break-words"
+            >Política de Privacidade</a
+          >
+          <a href="" class="text-text-main text-sm font-normal break-words">Política de Cookies</a>
         </div>
       </div>
     </Container>

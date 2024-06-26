@@ -4,39 +4,48 @@ import Home from '../layouts/HomeLayout.astro';
 import fetchApi from '../lib/strapi';
 import type Meta from '../interfaces/meta';
 import { PAGE_SIZE } from '../constants/common';
-import { defaultBlogRequests, defaultBlogRequestsWithCategoriesAndTags, homePageBlogRequests } from '../lib/blog';
+import {
+  defaultBlogRequests,
+  defaultBlogRequestsWithCategoriesAndTags,
+  homePageBlogRequests,
+} from '../lib/blog';
 import type Article from '../interfaces/article';
-export const prerender = true
+export const prerender = true;
 
 export const getStaticPaths = (async () => {
   const countArticles = await fetchApi<Meta>({ endpoint: 'articles', wrappedByKey: 'meta' });
-  const pages = Array.from({length: Math.ceil(countArticles.pagination.total / PAGE_SIZE)}, (_, i) => i+ 1)
-  const {blogInfo,headerNavigation, footerNavigation} = await defaultBlogRequests()
-  const articles = await fetchApi<Article[]>({ endpoint: 'articles', wrappedByKey: 'data', query: {populate: '*'}  });
+  const pages = Array.from(
+    { length: Math.ceil(countArticles.pagination.total / PAGE_SIZE) },
+    (_, i) => i + 1,
+  );
+  const { blogInfo, headerNavigation, footerNavigation } = await defaultBlogRequests();
+  const articles = await fetchApi<Article[]>({
+    endpoint: 'articles',
+    wrappedByKey: 'data',
+    query: { populate: '*' },
+  });
 
-
-  return pages.map((page, index) => ({
+  return pages.map((page) => ({
     params: {
-      page: page.toString()
+      page: page.toString(),
     },
-    props: {blogInfo, headerNavigation, articles, footerNavigation}
+    props: { blogInfo, headerNavigation, articles, footerNavigation },
   }));
 }) satisfies GetStaticPaths;
 
-const {blogInfo,headerNavigation, articles,footerNavigation} = Astro.props
-const {page} = Astro.params
+const { blogInfo, headerNavigation, articles, footerNavigation } = Astro.props;
+const { page } = Astro.params;
 
-const {articleResponse} = await homePageBlogRequests({currentPage: +page})
-const {categories,tags} = await defaultBlogRequestsWithCategoriesAndTags()
-
+const { articleResponse } = await homePageBlogRequests({ currentPage: +page });
+const { categories, tags } = await defaultBlogRequestsWithCategoriesAndTags();
 ---
 
-<Home 
-  blogInfo={blogInfo} 
-  headerNavigation={headerNavigation} 
+<Home
+  blogInfo={blogInfo}
+  headerNavigation={headerNavigation}
   footerNavigation={footerNavigation}
   articles={articles}
-  categories={categories} 
-  tags={tags} 
+  categories={categories}
+  tags={tags}
   articleResponse={articleResponse}
 />

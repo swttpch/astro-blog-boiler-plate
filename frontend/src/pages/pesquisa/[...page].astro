@@ -1,0 +1,82 @@
+---
+import DefaultLayout from '../../layouts/DefaultLayout.astro';
+import { defaultBlogRequests } from '../../lib/blog';
+const { blogInfo, headerNavigation, footerNavigation } = await defaultBlogRequests();
+import PageHeader from '../../components/PageHeader.astro';
+import ArticleList from '../../components/ArticleList.astro';
+import fetchApi from '../../lib/strapi';
+import { PAGE_SIZE } from '../../constants/common';
+import type Article from '../../interfaces/article';
+import type Meta from '../../interfaces/meta';
+import type Category from '../../interfaces/category';
+import { type Tag } from '../../interfaces/tag';
+const search = Astro.url.searchParams.get('s');
+const { page } = Astro.params;
+
+let curPage = page || 1;
+const articlesResponse = await fetchApi<{ data: Article[]; meta: Meta }>({
+  endpoint: '/articles',
+  query: {
+    publicationState: 'live',
+    sort: ['publishedAt:desc'],
+    populate: {
+      author: {
+        fields: '*',
+        populate: '*',
+      },
+      mainImage: '*',
+      categories: '*',
+    },
+    pagination: {
+      page: curPage,
+      pageSize: PAGE_SIZE,
+    },
+  },
+});
+const totalPages = articlesResponse.meta.pagination.pageCount;
+const totalItems = articlesResponse.meta.pagination.total;
+const articles = articlesResponse.data;
+const categories = await fetchApi<Category[]>({
+  endpoint: 'categories',
+  wrappedByKey: 'data',
+  query: {
+    sort: ['title:asc'],
+    pagination: {
+      page: 1,
+      pageSize: 5,
+    },
+  },
+});
+
+const tags = await fetchApi<Tag[]>({
+  endpoint: 'tags',
+  wrappedByKey: 'data',
+  query: {
+    sort: ['name:asc'],
+  },
+});
+---
+
+<DefaultLayout
+  blogInfo={blogInfo}
+  headerNavigation={headerNavigation}
+  footerNavigation={footerNavigation}
+>
+  <PageHeader
+    title={`Search results for: ${search}`}
+    description={`${totalItems} results`}
+    items={[{ title: 'Pesquisa' }, { title: search || '', url: '/pesquisa?s=' + search }]}
+  />
+  <ArticleList
+    curPath={'/pesquisa/'}
+    query={'s=' + search}
+    curPage={+curPage}
+    totalPages={totalPages}
+    categories={categories}
+    tags={tags}
+    articles={articles}
+    brand={blogInfo.data.attributes.brand.data}
+    socials={blogInfo.data.attributes.socials}
+    description={blogInfo.data.attributes.summary}
+  />
+</DefaultLayout>

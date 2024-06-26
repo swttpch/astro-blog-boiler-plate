@@ -66,5 +66,7 @@ const { items = [], class: className, ...rest } = Astro.props;
 
 <script>
   const container = document.getElementById('breadcrumb');
-  if (container) container.scrollLeft = container.scrollWidth - container.clientWidth;
+  if (container) {
+    container.scrollLeft = container.scrollWidth - container.clientWidth;
+  }
 </script>

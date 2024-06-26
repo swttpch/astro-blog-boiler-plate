@@ -33,17 +33,30 @@ type Props = {
   curPath: string;
   curPage: number;
   totalPages: number;
+  query?: string;
 };
-const { brand, socials, description, articles, categories, tags, curPage, curPath, totalPages } =
-  Astro.props;
-const next = curPath + (+curPage + 1) + '#articles-list';
-const prev = curPath + (+curPage - 1) +'#articles-list';
+const {
+  brand,
+  socials,
+  description,
+  articles,
+  categories,
+  tags,
+  curPage,
+  curPath,
+  totalPages,
+  query,
+} = Astro.props;
+const next = curPath + (+curPage + 1) + (query ? `?${query}` : '') + '#articles-list';
+const prev = curPath + (+curPage - 1) + (query ? `?${query}` : '') + '#articles-list';
 ---
 
 <Screen>
-  <Container class=" gap-64 lg:py-64 py-32 lg:flex-row flex-col">
+  <Container class="gap-64 lg:py-64 py-32 lg:flex-row flex-col">
     <div class="flex flex-col flex-1 gap-24 lg:gap-32">
-      <h2  class="font-medium relative">Publicados recentes <span id="articles-list" class='absolute top-[-120px]'></span></h2>
+      <h2 class="font-medium relative">
+        Publicados recentes <span id="articles-list" class="absolute top-[-120px]"></span>
+      </h2>
       <div class="flex flex-col self-stretch gap-16 lg:gap-32">
         {
           articles?.map((el) => {
@@ -53,14 +66,19 @@ const prev = curPath + (+curPage - 1) +'#articles-list';
             const category = el.attributes.categories.data?.[0];
             return (
               <ArticleComponent href={'/p/' + el.attributes.slug} class={'lg:flex-row flex-col'}>
-                <ArticleImage class={'lg:flex-[0_0_320px] lg:h-[266px]  flex-[0_0_125px]'} image={el.attributes.mainImage?.data} />
+                <ArticleImage
+                  class={'lg:flex-[0_0_320px] lg:h-[266px]  flex-[0_0_125px]'}
+                  image={el.attributes.mainImage?.data}
+                />
                 <ArticleContent class={'lg:px-0 px-16 gap-24'}>
                   <ArticleContent class={'gap-16'}>
                     <ArticleContent class={'gap-8'}>
                       {category && <CategoryBadge>{category.attributes.title}</CategoryBadge>}
                       <ArticleTitle>{el.attributes.title}</ArticleTitle>
                     </ArticleContent>
-                    <ArticleDescription class={'max-h-[84px] text-ellipsis overflow-hidden'}>{el.attributes.previewText}</ArticleDescription>
+                    <ArticleDescription class={'max-h-[84px] text-ellipsis overflow-hidden'}>
+                      {el.attributes.previewText}
+                    </ArticleDescription>
                   </ArticleContent>
                   {author && (
                     <AuthorBox>
@@ -82,7 +100,7 @@ const prev = curPath + (+curPage - 1) +'#articles-list';
           })
         }
       </div>
-      <Pagination 
+      <Pagination
         nextPage={next}
         previousPage={prev}
         currentPage={curPage}
@@ -103,7 +121,9 @@ const prev = curPath + (+curPage - 1) +'#articles-list';
                   >
                     <p class="text-text-main text-base font-medium">{el.attributes.title}</p>
                     <div class="flex justify-center items-center gap-2 h-24 px-12 py-4 bg-primary-lighter rounded-xs border border-primary-light">
-                      <div class="text-primary-dark text-sm font-medium">{el.attributes.qtd}</div>
+                      <div class="text-primary-dark text-sm font-medium">
+                        {el.attributes.articleCount}
+                      </div>
                     </div>
                   </a>
                 ))}

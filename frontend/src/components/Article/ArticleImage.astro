@@ -5,30 +5,23 @@ import ApiImage from '../ApiImage.astro';
 import type Image from '../../interfaces/image';
 import { getStyleBackgroundImage } from '../../utils/getStyleBackgroundImage';
 
-type Props = HTMLAttributes<'div'> & {image?: Image};
+type Props = HTMLAttributes<'div'> & { image?: Image };
 const { class: className, image, ...props } = Astro.props;
 
-const bg = getStyleBackgroundImage()
+const bg = getStyleBackgroundImage();
 ---
 
 <div class={twMerge(['self-stretch relative overflow-hidden rounded-xs', className])} {...props}>
   {
     image && (
-<ApiImage
-    class={twMerge([
-      'group-hover:scale-125 block w-full h-full object-cover object-center absolute top-0 left-0 z-0 transition-all',
-    ])}
-    image={image}
-  />
-    )
-
-    
-  }
-
-  {
-    !image && (
-      <div style={bg} class={twMerge(['w-full h-full'])}></div>
+      <ApiImage
+        class={twMerge([
+          'group-hover:scale-125 block w-full h-full object-cover object-center absolute top-0 left-0 z-0 transition-all',
+        ])}
+        image={image}
+      />
     )
   }
-  
+
+  {!image && <div style={bg} class={twMerge(['w-full h-full'])} />}
 </div>

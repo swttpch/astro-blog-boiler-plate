@@ -13,15 +13,14 @@ export const getStaticPaths = (async () => {
     wrappedByKey: 'data',
   });
 
-  return allTags.map(tag => ({
+  return allTags.map((tag) => ({
     params: {
       slug: tag.attributes.slug,
-    }
+    },
   }));
 }) satisfies GetStaticPaths;
 
 const { slug } = Astro.params;
-
 
 const tagsData = await fetchApi<Tag>({
   endpoint: `/tags`,
@@ -79,7 +78,7 @@ const articlesResponse = await fetchApi<{ data: Article[]; meta: Meta }>({
   curPage={articlesResponse.meta.pagination.page}
   data={{
     description: tagsData.attributes.description,
-    title: '#'+tagsData.attributes.name,
+    title: '#' + tagsData.attributes.name,
     items: [{ title: 'Tags' }, { title: tagsData.attributes.name, url: `/t/${slug}/` }],
   }}
   curPath={`/t/${slug}/`}

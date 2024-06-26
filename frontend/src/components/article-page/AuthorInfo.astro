@@ -64,7 +64,11 @@ const {
         <div class="text-text-main text-lg font-bold break-words">Redes sociais</div>
         <div class="self-stretch flex flex-col justify-start items-start gap-8">
           {author.attributes.socials.map((social) => (
-            <a href={social.url.startsWith('http') ? social.url: '//'+ social.url} target='_blank'  class="justify-start items-center gap-4 flex">
+            <a
+              href={social.url.startsWith('http') ? social.url : '//' + social.url}
+              target="_blank"
+              class="justify-start items-center gap-4 flex"
+            >
               <Socials social={social.type} class={'size-16'} />
               <div class="text-text-main text-base font-normal break-words">{social.type}</div>
             </a>

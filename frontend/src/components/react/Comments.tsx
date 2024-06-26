@@ -25,7 +25,7 @@ function Comments(props: CommentsProps) {
 
 function Component({ id }: CommentsProps) {
   const ref = useRef<HTMLFormElement | null>(null);
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryFn: async () => {
       const response = await fetch(
         `${url}/api/comments/api::article.article:${id}?filters[approvalStatus][$eq]=APPROVED`,
@@ -154,7 +154,7 @@ const CommentContent = ({
         },
         body,
       });
-      await refetch();
+      refetch();
       setIsOpen(false);
       toast('Comentario enviado para moderação', { theme: 'success', duration: 5000 });
       formElement.current?.reset();

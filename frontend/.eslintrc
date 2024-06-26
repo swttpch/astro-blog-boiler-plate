@@ -1,6 +1,6 @@
 {
   "root": true,
-  "parser": "@typescript-eslint/parser",
+  "parser": "babel-eslint",
   "plugins": ["@typescript-eslint", "prettier"],
   "extends": [
     "eslint:recommended",
@@ -12,7 +12,8 @@
   "parserOptions": {
     "tsconfigRootDir": "./",
     "sourceType": "module",
-    "ecmaVersion": "latest"
+    "ecmaVersion": 2020
+
   },
   "rules": {
     "prettier/prettier": "error",

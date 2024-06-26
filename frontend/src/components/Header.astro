@@ -32,7 +32,7 @@ const Component = Astro.url.pathname === '/' ? 'h1' : 'a';
       </button>
     </Container>
   </Screen>
-  <MobileHeader client:load headerNavigation={headerNavigation} blogInfo={blogInfo} />
+  <MobileHeader headerNavigation={headerNavigation} blogInfo={blogInfo} />
 </header>
 <script>
   const mobileHeader = document.getElementById('mobile-navbar');

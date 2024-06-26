@@ -2,7 +2,8 @@
 
 ---
 
-<div id="progress-bar" class="bg-primary-800 sticky top-72 lg:top-96 left-0 h-8 self-start z-[50]"></div>
+<div id="progress-bar" class="bg-primary-800 sticky top-72 lg:top-96 left-0 h-8 self-start z-[50]">
+</div>
 
 <style>
   #progress-bar {
@@ -35,7 +36,7 @@
       document.getElementById('progress-bar')?.style.setProperty('--scrollAmount', scrollPercent);
     } else if (yPlacement >= 0) {
       document.getElementById('progress-bar')?.style.setProperty('--scrollAmount', '0%');
-    } 
+    }
   };
 
   document.addEventListener('scroll', processScroll);

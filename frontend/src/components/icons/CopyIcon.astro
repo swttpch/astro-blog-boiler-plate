@@ -1,10 +1,33 @@
 ---
-import type { HTMLAttributes } from 'astro/types'
+import type { HTMLAttributes } from 'astro/types';
 
-type Props = HTMLAttributes<'svg'>
-const {color = '#596066', ...props} = Astro.props
+type Props = HTMLAttributes<'svg'>;
+const { color = '#596066', ...props } = Astro.props;
 ---
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" color={color} {...props}>
-  <rect x="6.99792" y="6.99792" width="14.0058" height="14.0058" rx="2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M6.99788 17.002H4.99705C3.89202 17.002 2.99622 16.1062 2.99622 15.0012V4.99705C2.99622 3.89202 3.89202 2.99622 4.99705 2.99622H15.0012C16.1062 2.99622 17.002 3.89202 17.002 4.99705V6.99788" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  </svg>
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  color={color}
+  {...props}
+>
+  <rect
+    x="6.99792"
+    y="6.99792"
+    width="14.0058"
+    height="14.0058"
+    rx="2"
+    stroke="currentColor"
+    stroke-width="1.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"></rect>
+  <path
+    d="M6.99788 17.002H4.99705C3.89202 17.002 2.99622 16.1062 2.99622 15.0012V4.99705C2.99622 3.89202 3.89202 2.99622 4.99705 2.99622H15.0012C16.1062 2.99622 17.002 3.89202 17.002 4.99705V6.99788"
+    stroke="currentColor"
+    stroke-width="1.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"></path>
+</svg>
