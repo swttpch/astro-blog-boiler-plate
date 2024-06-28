@@ -24,7 +24,7 @@ type Props = {
 const { articles } = Astro.props;
 ---
 
-<Screen>
+<Screen class={'lg:py-80'}>
   <Container class="flex-col">
     <SectionHeader title="Mais populares">
       <LinkWithArrow to="#articles-list"> Ver todos </LinkWithArrow>
@@ -32,8 +32,8 @@ const { articles } = Astro.props;
     <div class="flex gap-32 self-stretch overflow-scroll lg:overflow-hidden lg:flex-row flex-col">
       {
         articles.map((article) => {
-          const category = article.attributes.categories.data?.[0];
-          const author = article.attributes.author.data;
+          const category = article.attributes.categories?.data?.[0];
+          const author = article.attributes.author?.data;
           const date = article.attributes.publishedAt;
           return (
             <ArticleComponent
@@ -41,7 +41,7 @@ const { articles } = Astro.props;
               class={'lg:flex-1 h-[400px] lg:flex-row flex-col'}
             >
               <ArticleImage
-                image={article.attributes.mainImage.data}
+                image={article.attributes.mainImage?.data}
                 class={'w-full h-[184px] lg:w-auto lg:h-auto lg:self-stretch lg:flex-[1_0_0]'}
               />
               <ArticleContent class={'lg:flex-[1_0_0] h-full w-full py-16'}>

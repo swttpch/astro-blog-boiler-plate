@@ -28,6 +28,10 @@ module.exports = {
             },
           });
           category.articlesCount = count;
+          await strapi.db.query("api::category.category").update({
+            where: { id: category.id },
+            data: { articlesCount: count },
+          });
         }
       },
     });

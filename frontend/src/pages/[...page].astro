@@ -1,0 +1,41 @@
+---
+import type { GetStaticPaths, InferGetStaticPropsType } from 'astro';
+import DefaultLayout from '../layouts/DefaultLayout.astro';
+import Hero from '../components/home/Hero.astro';
+import ArticlesMosaic from '../components/ArticlesMosaic.astro';
+import CategoriesList from '../components/CategoriesList.astro';
+import Popular from '../components/home/Popular.astro';
+import CategorySection from '../components/home/CategorySection.astro';
+import ArticleList from '../components/ArticleList.astro';
+import { getStaticPathsBlogHome } from '../utils/getStaticPaths/home';
+export const prerender = true;
+
+export const getStaticPaths = (async () => {
+  return await getStaticPathsBlogHome();
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { props } = Astro;
+const { articles, blogInfo, footer, header, mainCategories, mainTags, meta, categories } = props;
+---
+
+<DefaultLayout blogInfo={blogInfo} headerNavigation={header} footerNavigation={footer}>
+  <Hero />
+  <ArticlesMosaic articles={articles} />
+  <CategoriesList categories={categories} />
+  <Popular articles={[articles[0], articles[1]]} />
+  <CategorySection articles={articles} category={mainCategories[0]} />
+
+  <ArticleList
+    curPath="/"
+    curPage={meta.pagination.page}
+    totalPages={meta.pagination.pageCount}
+    categories={mainCategories}
+    tags={mainTags}
+    articles={articles}
+    brand={blogInfo.data.attributes.brand.data}
+    socials={blogInfo.data.attributes.socials}
+    description={blogInfo.data.attributes.summary}
+  />
+</DefaultLayout>

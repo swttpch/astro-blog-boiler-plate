@@ -26,7 +26,7 @@ const { category, articles } = Astro.props;
 const refinedArray = [...articles, ...articles].splice(0, 6);
 ---
 
-<Screen>
+<Screen class={'lg:py-80'}>
   <Container class="flex-col">
     <SectionHeader title={category.attributes.title}>
       <LinkWithArrow to={'/c/' + category.attributes.slug}> Ver todos </LinkWithArrow>

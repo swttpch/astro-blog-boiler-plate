@@ -54,6 +54,11 @@
       "relation": "manyToOne",
       "target": "api::category.category",
       "inversedBy": "subCategories"
+    },
+    "articlesCount": {
+      "type": "integer",
+      "default": 0,
+      "min": 0
     }
   }
 }

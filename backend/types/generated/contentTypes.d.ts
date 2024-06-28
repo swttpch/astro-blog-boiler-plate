@@ -1434,6 +1434,14 @@ export interface ApiCategoryCategory extends Schema.CollectionType {
       'manyToOne',
       'api::category.category'
     >;
+    articlesCount: Attribute.Integer &
+      Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      > &
+      Attribute.DefaultTo<0>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<

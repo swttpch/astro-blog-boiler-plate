@@ -67,16 +67,24 @@ const tags = await fetchApi<Tag[]>({
     description={`${totalItems} results`}
     items={[{ title: 'Pesquisa' }, { title: search || '', url: '/pesquisa?s=' + search }]}
   />
-  <ArticleList
-    curPath={'/pesquisa/'}
-    query={'s=' + search}
-    curPage={+curPage}
-    totalPages={totalPages}
-    categories={categories}
-    tags={tags}
-    articles={articles}
-    brand={blogInfo.data.attributes.brand.data}
-    socials={blogInfo.data.attributes.socials}
-    description={blogInfo.data.attributes.summary}
-  />
+  {
+    articles.length === 0 ? (
+      <div class="text-center">
+        <h2 class="text-2xl font-medium">No articles found</h2>
+      </div>
+    ) : (
+      <ArticleList
+        curPath={'/pesquisa/'}
+        query={'s=' + search}
+        curPage={+curPage}
+        totalPages={totalPages}
+        categories={categories}
+        tags={tags}
+        articles={articles}
+        brand={blogInfo.data.attributes.brand.data}
+        socials={blogInfo.data.attributes.socials}
+        description={blogInfo.data.attributes.summary}
+      />
+    )
+  }
 </DefaultLayout>

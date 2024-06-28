@@ -11,7 +11,7 @@ export default interface Category {
     createdAt: string;
     updatedAt: string;
     seo?: object;
-    articleCount: number;
+    articlesCount: number;
     highlights: {
       data?: Array<Article>;
     };
