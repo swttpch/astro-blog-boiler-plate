@@ -1,5 +1,116 @@
 ---
+import DefaultLayout from '../layouts/DefaultLayout.astro';
+import { findDefaultBlogContent, findMostRelevantCategories } from '../utils/blog';
+import CategoriesList from '../components/CategoriesList.astro';
+import Screen from '../components/Screen.astro';
+import Container from '../components/Container.astro';
 export const prerender = true;
+const [blogInfo, header, footer] = await findDefaultBlogContent();
+const mostRelevantCategories = await findMostRelevantCategories();
 ---
 
-<h1>ERROOO</h1>
+<DefaultLayout blogInfo={blogInfo} footerNavigation={footer} headerNavigation={header}>
+  <Screen class={'lg:py-[112px] lg:pb-0  py-0'}>
+    <Container class={'lg:py64 py-48 flex-col gap-32 items-center'}>
+      <svg
+        width="384"
+        height="123"
+        viewBox="0 0 384 123"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-full"
+      >
+        <circle cx="75.4543" cy="16.4357" r="14.9416" stroke="#7367F0" stroke-width="1.49416"
+        ></circle>
+        <circle cx="75.4543" cy="106.085" r="14.9416" stroke="#7367F0" stroke-width="1.49416"
+        ></circle>
+        <circle cx="15.6894" cy="76.2024" r="14.9416" stroke="#7367F0" stroke-width="1.49416"
+        ></circle>
+        <circle cx="105.339" cy="76.2024" r="14.9416" stroke="#7367F0" stroke-width="1.49416"
+        ></circle>
+        <circle cx="144.188" cy="61.2605" r="14.9416" stroke="#7367F0" stroke-width="1.49416"
+        ></circle>
+        <circle cx="233.836" cy="61.2605" r="14.9416" stroke="#7367F0" stroke-width="1.49416"
+        ></circle>
+        <circle cx="189.011" cy="16.4357" r="14.9416" stroke="#7367F0" stroke-width="1.49416"
+        ></circle>
+        <circle cx="189.011" cy="106.085" r="14.9416" stroke="#7367F0" stroke-width="1.49416"
+        ></circle>
+        <path
+          d="M0.747803 76.2024C0.747803 67.9503 7.4374 61.2607 15.6894 61.2607H105.339C113.591 61.2607 120.281 67.9503 120.281 76.2024C120.281 84.4544 113.591 91.144 105.339 91.144H15.6894C7.4374 91.144 0.747803 84.4544 0.747803 76.2024Z"
+          stroke="#7367F0"
+          stroke-width="1.49416"></path>
+        <path
+          d="M75.4543 121.027C67.2023 121.027 60.5127 114.338 60.5127 106.086L60.5127 16.436C60.5127 8.18399 67.2023 1.49439 75.4543 1.49439C83.7064 1.49439 90.396 8.18399 90.396 16.436L90.396 106.086C90.396 114.338 83.7064 121.027 75.4543 121.027Z"
+          stroke="#7367F0"
+          stroke-width="1.49416"></path>
+        <path
+          d="M5.33559 86.6566C-0.499477 80.8216 -0.499477 71.361 5.33559 65.526L64.7798 6.08178C70.6149 0.246706 80.0754 0.246694 85.9105 6.08177C91.7455 11.9168 91.7455 21.3774 85.9105 27.2124L26.4663 86.6566C20.6312 92.4917 11.1707 92.4917 5.33559 86.6566Z"
+          stroke="#7367F0"
+          stroke-width="1.49416"></path>
+        <circle cx="338.429" cy="16.4357" r="14.9416" stroke="#7367F0" stroke-width="1.49416"
+        ></circle>
+        <circle cx="338.429" cy="106.085" r="14.9416" stroke="#7367F0" stroke-width="1.49416"
+        ></circle>
+        <circle cx="278.661" cy="76.2024" r="14.9416" stroke="#7367F0" stroke-width="1.49416"
+        ></circle>
+        <circle cx="368.311" cy="76.2024" r="14.9416" stroke="#7367F0" stroke-width="1.49416"
+        ></circle>
+        <path
+          d="M263.72 76.2024C263.72 67.9503 270.409 61.2607 278.661 61.2607H368.311C376.563 61.2607 383.253 67.9503 383.253 76.2024C383.253 84.4544 376.563 91.144 368.311 91.144H278.661C270.409 91.144 263.72 84.4544 263.72 76.2024Z"
+          stroke="#7367F0"
+          stroke-width="1.49416"></path>
+        <path
+          d="M338.429 121.027C330.177 121.027 323.487 114.338 323.487 106.086L323.487 16.436C323.487 8.18399 330.177 1.49439 338.429 1.49439C346.681 1.49439 353.371 8.18399 353.371 16.436L353.371 106.086C353.371 114.338 346.681 121.027 338.429 121.027Z"
+          stroke="#7367F0"
+          stroke-width="1.49416"></path>
+        <path
+          d="M268.308 86.6566C262.473 80.8216 262.473 71.361 268.308 65.526L327.752 6.08178C333.587 0.246706 343.048 0.246694 348.883 6.08177C354.718 11.9168 354.718 21.3774 348.883 27.2124L289.439 86.6566C283.604 92.4917 274.143 92.4917 268.308 86.6566Z"
+          stroke="#7367F0"
+          stroke-width="1.49416"></path>
+        <circle cx="189.013" cy="61.2606" r="59.7665" stroke="#7367F0" stroke-width="1.49416"
+        ></circle>
+        <circle cx="189.012" cy="61.261" r="29.8833" stroke="#7367F0" stroke-width="1.49416"
+        ></circle>
+      </svg>
+      <h1 class="font-bold text-text-main text-center">Ops! Página não econtrada</h1>
+      <p class="text-body-base font-medium text-text-sub text-center h-[54px]">
+        Sentimos muito, a página que você requisitou não foi encontrada.
+      </p>
+      <Screen class={'py-0 px-0'}>
+        <Container class="item-center py-0 px-0">
+          <form action="/pesquisa" class="w-full bg-white flex items-center justify-center">
+            <div
+              class="h-56 p-8 pl-16 justify-stretch flex items-center w-full max-w-[692px] rounded-md border border-border-sub bg-white"
+            >
+              <input
+                name="s"
+                type="text"
+                placeholder="Pesquisar"
+                class="h-full w-full p-0 focus:outline-0"
+              />
+              <button
+                type="submit"
+                class="btn-search-input p-8 flex flex-col justify-center items-center gap-8 shrink-0"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="28"
+                  height="28"
+                  viewBox="0 0 28 28"
+                  fill="none"
+                >
+                  <path
+                    d="M21.0361 19.3864L26.033 24.3821L24.3821 26.0329L19.3865 21.0361C17.5277 22.5262 15.2156 23.3366 12.8333 23.3333C7.03731 23.3333 2.33331 18.6293 2.33331 12.8333C2.33331 7.03725 7.03731 2.33325 12.8333 2.33325C18.6293 2.33325 23.3333 7.03725 23.3333 12.8333C23.3367 15.2156 22.5262 17.5276 21.0361 19.3864ZM18.6958 18.5208C20.1764 16.9981 21.0033 14.9571 21 12.8333C21 8.32059 17.3448 4.66659 12.8333 4.66659C8.32065 4.66659 4.66665 8.32059 4.66665 12.8333C4.66665 17.3448 8.32065 20.9999 12.8333 20.9999C14.9571 21.0033 16.9982 20.1764 18.5208 18.6958L18.6958 18.5208Z"
+                    fill="#596066"></path>
+                </svg>
+              </button>
+            </div>
+          </form>
+        </Container>
+      </Screen>
+    </Container>
+  </Screen>
+
+  <CategoriesList categories={mostRelevantCategories} />
+</DefaultLayout>

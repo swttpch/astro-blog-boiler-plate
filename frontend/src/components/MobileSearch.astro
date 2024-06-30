@@ -84,6 +84,9 @@
   const toggleAttributes = () => {
     modal?.toggleAttribute('data-active');
     action?.toggleAttribute('data-active');
+    if (modal.hasAttribute('data-active')) {
+      modal.querySelector('input')?.focus();
+    }
   };
   const removeAttributes = () => {
     modal?.removeAttribute('data-active');
