@@ -53,6 +53,7 @@ const { headerNavigation } = Astro.props;
         </svg>
       </button>
       <button
+        type="button"
         class="btn-close-search-input p-8 flex flex-col justify-center items-center gap-8 shrink-0"
       >
         <svg
@@ -86,7 +87,7 @@ const { headerNavigation } = Astro.props;
     </svg>
   </button>
 </div>
-<HeaderItemModal navigation={headerNavigation[0]} />
+{headerNavigation?.map((item) => <HeaderItemModal navigation={item} />)}
 
 <script>
   const btnOpen = document.querySelector('.btn-open-search-input');
@@ -103,7 +104,7 @@ const { headerNavigation } = Astro.props;
     action?.removeAttribute('data-active');
   };
   btnOpen?.addEventListener('click', toggleAttributes);
-  btnClose?.addEventListener('click', toggleAttributes);
+  btnClose?.addEventListener('click', removeAttributes);
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {

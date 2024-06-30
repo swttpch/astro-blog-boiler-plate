@@ -1,4 +1,3 @@
-import { PAGE_SIZE } from '../constants/common';
 import type Article from '../interfaces/article';
 import type { BlogInfo } from '../interfaces/blog-info';
 import type Category from '../interfaces/category';

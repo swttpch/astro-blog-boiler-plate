@@ -15,7 +15,6 @@ const { navigation } = Astro.props;
 ---
 
 <header-item-modal
-  data-active
   id={`header-modal--${navigation.id}`}
   class={`max-h-0 overflow-hidden data-[active]:max-h-max transition-all block absolute w-full bg-white top-full left-0 shadow-xl`}
 >
@@ -53,7 +52,7 @@ const { navigation } = Astro.props;
             );
           })
         }
-        <div class="flex flex-col gap-20 flex-1 self-stretch bg-white">
+        <div class="flex flex-col gap-20 flex-[0_0_280px] self-stretch bg-white">
           <div class="justify-between flex items-center self-stretch">
             <p class="text-body-base font-semibold text-text-main">Destaques</p>
             <a

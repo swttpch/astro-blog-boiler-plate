@@ -12,8 +12,8 @@ const isActive = href === pathname || href === '/' + subpath?.[0];
 
 <header-item
   data-active={isActive}
+  data-is-current={isActive}
   data-has-sub={`${hasSub}`}
-  href={href}
   class={twMerge(
     'px-20 transition-all flex justify-center items-center gap-2 text-text-sub text-base box-content font-normal leading-6 border-b border-transparent data-[active]:border-b-primary-base data-[active]:text-text-main hover:text-text-main hover:border-b-primary-base',
     className,
@@ -21,9 +21,9 @@ const isActive = href === pathname || href === '/' + subpath?.[0];
   id={id}
   {...props}
 >
-  <span>
+  <a href={href}>
     <slot />
-  </span>
+  </a>
   {
     hasSub && (
       <svg
@@ -49,11 +49,13 @@ const isActive = href === pathname || href === '/' + subpath?.[0];
     private modal: HTMLElement;
     private chevronIcon: HTMLElement;
     private itemId: string;
+    private isCurrent: boolean;
     constructor() {
       super();
       this.itemId = this.id.split('--')[1];
       this.modal = document.querySelector(`#header-modal--${this.itemId}`) as HTMLElement;
       this.chevronIcon = this.querySelector(`#${this.id}--chevron-icon`) as HTMLElement;
+      this.isCurrent = this.dataset['isCurrent'] !== undefined;
       if (this.dataset['hasSub'] === 'true') {
         this.addEventListener('mouseenter', this.openModal);
         this.addEventListener('mouseleave', this.closeModal);
@@ -70,7 +72,9 @@ const isActive = href === pathname || href === '/' + subpath?.[0];
     closeModal() {
       this.modal.removeAttribute('data-active');
       this.chevronIcon.removeAttribute('data-active');
-      this.removeAttribute('data-active');
+      if (!this.isCurrent) {
+        this.removeAttribute('data-active');
+      }
       this.modalOpened = false;
     }
   }

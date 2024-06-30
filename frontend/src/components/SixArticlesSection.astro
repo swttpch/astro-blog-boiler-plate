@@ -1,38 +1,38 @@
 ---
-import type Category from '../../interfaces/category';
-import type Article from '../../interfaces/article';
-import Container from '../Container.astro';
-import Screen from '../Screen.astro';
-import LinkWithArrow from '../LinkWithArrow.astro';
-import SectionHeader from '../SectionHeader.astro';
-import ArticleComponent from '../article/Article.astro';
-import ArticleContent from '../article/ArticleContent.astro';
-import ArticleTitle from '../article/ArticleTitle.astro';
-import ArticleImage from '../article/ArticleImage.astro';
-import AuthorBox from '../author-box/AuthorBox.astro';
-import AuthorBoxAvatar from '../author-box/AuthorBoxAvatar.astro';
-import AuthorBoxBody from '../author-box/AuthorBoxBody.astro';
-import AuthorBoxName from '../author-box/AuthorBoxName.astro';
-import AuthorBoxArticleInfo from '../author-box/AuthorBoxArticleInfo.astro';
-import FormattedDate from '../FormattedDate.astro';
+import type Article from '../interfaces/article';
+import Container from './Container.astro';
+import Screen from './Screen.astro';
+import LinkWithArrow from './LinkWithArrow.astro';
+import SectionHeader from './SectionHeader.astro';
+import ArticleComponent from './article/Article.astro';
+import ArticleContent from './article/ArticleContent.astro';
+import ArticleTitle from './article/ArticleTitle.astro';
+import ArticleImage from './article/ArticleImage.astro';
+import AuthorBox from './author-box/AuthorBox.astro';
+import AuthorBoxAvatar from './author-box/AuthorBoxAvatar.astro';
+import AuthorBoxBody from './author-box/AuthorBoxBody.astro';
+import AuthorBoxName from './author-box/AuthorBoxName.astro';
+import AuthorBoxArticleInfo from './author-box/AuthorBoxArticleInfo.astro';
+import FormattedDate from './FormattedDate.astro';
 
 type Props = {
-  category: Category;
+  title: string;
+  url?: string;
   articles: Article[];
 };
 
-const { category, articles } = Astro.props;
+const { title, url, articles } = Astro.props;
 
 const refinedArray = [...articles, ...articles].splice(0, 6);
 ---
 
 <Screen class={'lg:py-80'}>
   <Container class="flex-col">
-    <SectionHeader title={category.attributes.title}>
-      <LinkWithArrow to={'/c/' + category.attributes.slug}> Ver todos </LinkWithArrow>
+    <SectionHeader title={title}>
+      {url && <LinkWithArrow to={url}> Ver todos </LinkWithArrow>}
     </SectionHeader>
-    <div class="flex gap-32 self-stretch lg:flex-row flex-col">
-      <div class="flex flex-col lg:flex-row gap-32 flex-wrap">
+    <div class="flex gap-32 self-stretch lg:flex-row">
+      <div class="flex flex-col lg:flex-row gap-32 flex-wrap justify-between self-stretch w-full">
         {
           refinedArray.map((article) => {
             const author = article.attributes.author.data;
@@ -44,7 +44,7 @@ const refinedArray = [...articles, ...articles].splice(0, 6);
               >
                 <ArticleImage
                   image={article.attributes.mainImage.data}
-                  class={'hidden lg:flex flex-[1_0_200px]'}
+                  class={'hidden lg:flex flex-[0_0_200px]'}
                 />
                 <ArticleContent class={'lg:flex-0 gap-24 p-16 lg:p-0'}>
                   <ArticleTitle class="font-medium whitespace-break-spaces text-wrap break-words lg:h-[97px] overflow-hidden text-ellipsis">

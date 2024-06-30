@@ -5,7 +5,7 @@ import Hero from '../components/home/Hero.astro';
 import ArticlesMosaic from '../components/ArticlesMosaic.astro';
 import CategoriesList from '../components/CategoriesList.astro';
 import Popular from '../components/home/Popular.astro';
-import CategorySection from '../components/home/CategorySection.astro';
+import CategorySection from '../components/SixArticlesSection.astro';
 import ArticleList from '../components/ArticleList.astro';
 import { getStaticPathsBlogHome } from '../utils/getStaticPaths/home';
 export const prerender = true;
@@ -25,7 +25,11 @@ const { articles, blogInfo, footer, header, mainCategories, mainTags, meta, cate
   <ArticlesMosaic articles={articles} />
   <CategoriesList categories={categories} />
   <Popular articles={[articles[0], articles[1]]} />
-  <CategorySection articles={articles} category={mainCategories[0]} />
+  <CategorySection
+    articles={articles}
+    title={mainCategories[0].attributes.title}
+    url={'/c/' + mainCategories[0].attributes.slug}
+  />
 
   <ArticleList
     curPath="/"
