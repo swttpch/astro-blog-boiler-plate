@@ -1,0 +1,112 @@
+---
+import Screen from './Screen.astro';
+import Container from './Container.astro';
+import type StrapiNavigation from '../interfaces/navigation';
+import type { CategoryPlain } from '../interfaces/category';
+import { getStyleBackgroundImage } from '../utils/getStyleBackgroundImage';
+import ArticleComponent from './article/Article.astro';
+import ArticleContent from './article/ArticleContent.astro';
+import ArticleTitle from './article/ArticleTitle.astro';
+import CategoryBadge from './CategoryBadge.astro';
+type Props = {
+  navigation: StrapiNavigation<CategoryPlain>;
+};
+const { navigation } = Astro.props;
+---
+
+<header-item-modal
+  data-active
+  id={`header-modal--${navigation.id}`}
+  class={`max-h-0 overflow-hidden data-[active]:max-h-max transition-all block absolute w-full bg-white top-full left-0 shadow-xl`}
+>
+  <Screen>
+    <Container>
+      <ul class="flex-[0_0_258px] flex p-10 flex-col gap-24 shrink-0 self-stretch">
+        {
+          navigation.related.subCategories.map((item) => (
+            <li class="text-sm font-medium">
+              <a href={'/c/' + item.slug}>{item.title}</a>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="flex flex-row flex-1 gap-24">
+        {
+          navigation.related.highlights.slice(0, 2).map((item) => {
+            const bg = getStyleBackgroundImage();
+            return (
+              <ArticleComponent
+                href={'/p/' + item.slug}
+                class={'lg:flex-1 h-[322px] flex-col transition-all overflow-hidden relative p-0'}
+              >
+                <div
+                  class="w-full h-full absolute top-0 left-0 group-hover:scale-125 transition-all"
+                  style={bg}
+                />
+                <ArticleContent class={'h-full w-full z-10 p-24 justify-between'}>
+                  <CategoryBadge>{navigation.related.title}</CategoryBadge>
+                  <ArticleTitle class={'text-white group-hover:text-primary-300'}>
+                    {item.title}
+                  </ArticleTitle>
+                </ArticleContent>
+              </ArticleComponent>
+            );
+          })
+        }
+        <div class="flex flex-col gap-20 flex-1 self-stretch bg-white">
+          <div class="justify-between flex items-center self-stretch">
+            <p class="text-body-base font-semibold text-text-main">Destaques</p>
+            <a
+              href={'/c/' + navigation.related.slug}
+              class="text-body-extra-small font-semibold text-text-sub">Ver todos →</a
+            >
+          </div>
+          <ul class="flex flex-col items-center gap-20 list-disc">
+            {
+              navigation.related.highlights.slice(2, 5).map((item) => (
+                <li class={'ml-32 self-stretch text-body-large text-text-sub font-normal'}>
+                  <a href={'/p/' + item.slug}>{item.title}</a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </Container>
+  </Screen>
+</header-item-modal>
+<script>
+  class HeaderItemModal extends HTMLElement {
+    private modalOpened = false;
+    private item: HTMLElement;
+    private itemId: string;
+    private chevronIcon: HTMLElement;
+
+    constructor() {
+      super();
+      this.itemId = this.id.split('--')[1];
+      this.item = document.querySelector(`#header-item--${this.itemId}`) as HTMLElement;
+      this.chevronIcon = document.querySelector(
+        `#header-item--${this.itemId}--chevron-icon`,
+      ) as HTMLElement;
+      this.addEventListener('mouseenter', this.openModal);
+      this.addEventListener('mouseleave', this.closeModal);
+    }
+
+    openModal() {
+      this.item.setAttribute('data-active', '');
+      this.setAttribute('data-active', '');
+      this.chevronIcon.setAttribute('data-active', '');
+      this.modalOpened = true;
+    }
+
+    closeModal() {
+      this.item.removeAttribute('data-active');
+      this.chevronIcon.removeAttribute('data-active');
+      this.removeAttribute('data-active');
+      this.modalOpened = false;
+    }
+  }
+
+  customElements.define('header-item-modal', HeaderItemModal);
+</script>

@@ -2,23 +2,78 @@
 import type { HTMLAttributes } from 'astro/types';
 import { twMerge } from 'tailwind-merge';
 
-type Props = HTMLAttributes<'a'>;
+type Props = HTMLAttributes<'a'> & { hasSub?: boolean };
 
-const { href, class: className, ...props } = Astro.props;
-
+const { href, class: className, hasSub = false, id, ...props } = Astro.props;
 const { pathname } = Astro.url;
 const subpath = pathname.match(/[^/]+/g);
 const isActive = href === pathname || href === '/' + subpath?.[0];
 ---
 
-<a
-  data-is-active={isActive}
+<header-item
+  data-active={isActive}
+  data-has-sub={`${hasSub}`}
   href={href}
   class={twMerge(
-    'px-20 transition-all flex justify-center items-center gap-2 text-text-sub text-base box-content font-normal leading-6 border-b border-transparent data-[is-active]:border-b-primary-base data-[is-active]:text-text-main hover:text-text-main hover:border-b-primary-base',
+    'px-20 transition-all flex justify-center items-center gap-2 text-text-sub text-base box-content font-normal leading-6 border-b border-transparent data-[active]:border-b-primary-base data-[active]:text-text-main hover:text-text-main hover:border-b-primary-base',
     className,
   )}
+  id={id}
   {...props}
 >
-  <slot />
-</a>
+  <span>
+    <slot />
+  </span>
+  {
+    hasSub && (
+      <svg
+        id={id + '--chevron-icon'}
+        class="chevron-icon data-[active]:rotate-180 transition-all"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+      >
+        <path
+          d="M11.9997 13.1719L16.9497 8.22192L18.3637 9.63592L11.9997 15.9999L5.63574 9.63592L7.04974 8.22192L11.9997 13.1719Z"
+          fill="currentColor"
+        />
+      </svg>
+    )
+  }
+</header-item>
+<script>
+  class HeaderItem extends HTMLElement {
+    private modalOpened = false;
+    private modal: HTMLElement;
+    private chevronIcon: HTMLElement;
+    private itemId: string;
+    constructor() {
+      super();
+      this.itemId = this.id.split('--')[1];
+      this.modal = document.querySelector(`#header-modal--${this.itemId}`) as HTMLElement;
+      this.chevronIcon = this.querySelector(`#${this.id}--chevron-icon`) as HTMLElement;
+      if (this.dataset['hasSub'] === 'true') {
+        this.addEventListener('mouseenter', this.openModal);
+        this.addEventListener('mouseleave', this.closeModal);
+      }
+    }
+
+    openModal() {
+      this.modal.setAttribute('data-active', '');
+      this.chevronIcon.setAttribute('data-active', '');
+      this.setAttribute('data-active', '');
+      this.modalOpened = true;
+    }
+
+    closeModal() {
+      this.modal.removeAttribute('data-active');
+      this.chevronIcon.removeAttribute('data-active');
+      this.removeAttribute('data-active');
+      this.modalOpened = false;
+    }
+  }
+
+  customElements.define('header-item', HeaderItem);
+</script>

@@ -2,6 +2,7 @@
 import HeaderLink from './HeaderLink.astro';
 import type StrapiNavigation from '../interfaces/navigation';
 import type { CategoryPlain } from '../interfaces/category';
+import HeaderItemModal from './HeaderItemModal.astro';
 
 type Props = {
   headerNavigation: StrapiNavigation<CategoryPlain>[];
@@ -13,7 +14,13 @@ const { headerNavigation } = Astro.props;
   <HeaderLink href="/"> Inicio </HeaderLink>
   {
     headerNavigation?.map((item) => (
-      <HeaderLink href={'/c/' + item.related.slug}>{item.related.title}</HeaderLink>
+      <HeaderLink
+        hasSub={item.related.subCategories.length > 0 || item.related.highlights.length > 0}
+        id={`header-item--${item.id}`}
+        href={'/c/' + item.related.slug}
+      >
+        {item.related.title}
+      </HeaderLink>
     ))
   }
   <form
@@ -79,6 +86,7 @@ const { headerNavigation } = Astro.props;
     </svg>
   </button>
 </div>
+<HeaderItemModal navigation={headerNavigation[0]} />
 
 <script>
   const btnOpen = document.querySelector('.btn-open-search-input');
