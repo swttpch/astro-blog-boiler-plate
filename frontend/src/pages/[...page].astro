@@ -17,18 +17,29 @@ export const getStaticPaths = (async () => {
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const { props } = Astro;
-const { articles, blogInfo, footer, header, mainCategories, mainTags, meta, categories } = props;
+const {
+  articles,
+  blogInfo,
+  footer,
+  header,
+  mainCategories,
+  mainTags,
+  meta,
+  categories,
+  mostLikedPosts,
+  mostRelevantCategory,
+} = props;
 ---
 
 <DefaultLayout blogInfo={blogInfo} headerNavigation={header} footerNavigation={footer}>
   <Hero />
   <ArticlesMosaic articles={articles} />
   <CategoriesList categories={categories} />
-  <Popular articles={[articles[0], articles[1]]} />
+  <Popular articles={[mostLikedPosts.data[0], mostLikedPosts.data[1]]} />
   <CategorySection
-    articles={articles}
-    title={mainCategories[0].attributes.title}
-    url={'/c/' + mainCategories[0].attributes.slug}
+    articles={mostRelevantCategory.articles.data}
+    title={mostRelevantCategory.category.attributes.title}
+    url={'/c/' + mostRelevantCategory.category.attributes.slug}
   />
 
   <ArticleList

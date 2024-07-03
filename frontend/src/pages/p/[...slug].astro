@@ -19,60 +19,29 @@ import type Article from '../../interfaces/article.ts';
 import { getStyleBackgroundImage } from '../../utils/getStyleBackgroundImage.ts';
 import ArticleContent from '../../components/article-page/ArticleContent.astro';
 import { getImage } from 'astro:assets';
-import { defaultBlogRequests } from '../../lib/blog.ts';
 import Comments from '../../components/react/Comments.tsx';
-const email = import.meta.env.PUBLIC_EMAIL;
+import { getStaticPathsPost } from '../../utils/getStaticPaths/post.ts';
+import type { GetStaticPaths, InferGetStaticPropsType } from 'astro';
 
 export const prerender = true;
 
-export async function getStaticPaths() {
-  const postData = await fetchApi<Article[]>({
-    endpoint: '/articles',
-    wrappedByKey: 'data',
-    query: {
-      fields: ['slug'],
-      publicationState: 'live',
-    },
-  });
-  return postData.map((post) => ({
-    params: { slug: post.attributes.slug },
-  }));
+export const getStaticPaths = (async () => {
+  return await getStaticPathsPost();
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { props } = Astro;
+const { post, blogInfo, headerNavigation, footerNavigation } = props;
+
+if (!post || post === undefined || !post.id) {
+  Astro.response.status = 404;
+  Astro.response.statusText = 'Not found';
 }
 
-const { slug } = Astro.params;
-
-const { blogInfo, footerNavigation, headerNavigation } = await defaultBlogRequests();
-
-const postData = await fetchApi<Article>({
-  endpoint: '/articles',
-  wrappedByList: true,
-  wrappedByKey: 'data',
-  query: {
-    filters: {
-      slug: {
-        $eq: slug,
-      },
-    },
-    populate: {
-      author: {
-        fields: '*',
-        populate: '*',
-      },
-      mainImage: '*',
-      categories: '*',
-      tags: '*',
-      relatedArticles: '*',
-    },
-    publicationState: 'live',
-  },
-});
-if (!postData || postData === undefined || !postData.id) {
-  Astro.redirect('/404');
-}
-
-const prevId = postData.id === 1 ? postData.id + 2 : postData.id - 1;
+const prevId = post.id === 1 ? post.id + 2 : post.id - 1;
 const nextArticle = await fetchApi<Article | null>({
-  endpoint: `/articles/${postData.id + 1}`,
+  endpoint: `/articles/${post.id + 1}`,
   wrappedByKey: 'data',
   query: {
     fields: ['slug', 'title'],
@@ -117,20 +86,19 @@ const safeNextArticle = await fetchApi<Article>({
   },
 });
 const imgUrl = `${import.meta.env.NODE_ENV === 'development' ? import.meta.env.STRAPI_URL : ''}`;
-const def = postData.attributes.mainImage.data
+const def = post.attributes.mainImage.data
   ? await getImage({
-      src: imgUrl + postData.attributes.mainImage.data.attributes.url,
-      width: postData.attributes.mainImage.data.attributes.width,
-      height: postData.attributes.mainImage.data.attributes.height,
+      src: imgUrl + post.attributes.mainImage.data.attributes.url,
+      width: post.attributes.mainImage.data.attributes.width,
+      height: post.attributes.mainImage.data.attributes.height,
       format: 'webp',
     })
   : undefined;
 
-const categories = postData.attributes.categories.data || [];
+const categories = post.attributes.categories.data || [];
 
 const h1List =
-  postData.attributes.content.match(/<h1>(.*?)<\/h1>/g)?.map((h1) => h1.replace(/<\/?h1>/g, '')) ??
-  [];
+  post.attributes.content.match(/<h1>(.*?)<\/h1>/g)?.map((h1) => h1.replace(/<\/?h1>/g, '')) ?? [];
 ---
 
 <!doctype html>
@@ -147,12 +115,12 @@ const h1List =
       <Container class={'flex-col gap-32 lg:gap-64 pb-32 pt-80 lg:py-80'}>
         <div></div>
         <h1 class="font-semibold text-white text-center w-full">
-          {postData.attributes.title}
+          {post.attributes.title}
         </h1>
         <AuthorComplement
-          author={postData.attributes.author.data}
-          date={postData.attributes.createdAt}
-          readingTime={postData.attributes.readingTime}
+          author={post.attributes.author.data}
+          date={post.attributes.createdAt}
+          readingTime={post.attributes.readingTime}
         />
       </Container>
     </Screen>
@@ -166,17 +134,17 @@ const h1List =
             title: category.attributes.title,
             url: `/c/${category.attributes.slug}`,
           })),
-          { title: postData.attributes.title, url: postData.attributes.slug },
+          { title: post.attributes.title, url: post.attributes.slug },
         ]}
       />
       <Screen class="pl-0 relative pr-24 py-32 lg:py-0 justify-end">
         <Container class={'gap-24 lg:gap-64 '}>
           <Menu
-            email={email}
+            email={blogInfo.data.attributes.email}
             titles={h1List}
-            idArticle={postData.id}
-            likes={postData.attributes.likes}
-            url={postData.attributes.slug}
+            idArticle={post.id}
+            likes={post.attributes.likes}
+            url={post.attributes.slug}
           />
           <div class="flex flex-col gap-32 items-start flex-1 overflow-visible">
             <Breadcrumb
@@ -186,23 +154,19 @@ const h1List =
                   title: category.attributes.title,
                   url: `/c/${category.attributes.slug}`,
                 })),
-                { title: postData.attributes.title, url: postData.attributes.slug },
+                { title: post.attributes.title, url: post.attributes.slug },
               ]}
             />
-            <ArticleContent content={postData.attributes.content} />
+            <ArticleContent content={post.attributes.content} />
             <div class="flex flex-col gap-32 items-start flex-1 overflow-hidden">
-              <ArticleFeedback id={postData.id} usefullCount={postData.attributes.usefullCount} />
+              <ArticleFeedback id={post.id} usefullCount={post.attributes.usefullCount} />
               <Pagination
                 nextArticle={nextArticle ?? safeNextArticle}
                 prevArticle={prevArticle ?? safePrevArticle}
               />
-              {
-                postData.attributes.author.data && (
-                  <AuthorInfo author={postData.attributes.author.data} />
-                )
-              }
-              <TagsAndShare tags={postData.attributes.tags.data} slug={postData.attributes.slug} />
-              <Comments client:visible id={postData.id} />
+              {post.attributes.author.data && <AuthorInfo author={post.attributes.author.data} />}
+              <TagsAndShare tags={post.attributes.tags.data} slug={post.attributes.slug} />
+              <Comments client:visible id={post.id} />
             </div>
           </div>
         </Container>

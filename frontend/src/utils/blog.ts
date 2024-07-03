@@ -7,7 +7,7 @@ import type StrapiNavigation from '../interfaces/navigation';
 import type { Tag } from '../interfaces/tag';
 import fetchApi from '../lib/strapi';
 
-const findHeader = async () => {
+export const findHeader = async () => {
   return await fetchApi<StrapiNavigation<CategoryPlain>[]>({
     endpoint: 'navigation/render/1',
     query: {
@@ -16,7 +16,7 @@ const findHeader = async () => {
   });
 };
 
-const findFooter = async () => {
+export const findFooter = async () => {
   return await fetchApi<StrapiNavigation<CategoryPlain>[]>({
     endpoint: 'navigation/render/2',
     query: {
@@ -25,7 +25,7 @@ const findFooter = async () => {
   });
 };
 
-const findBlogInfo = async () => {
+export const findBlogInfo = async () => {
   return await fetchApi<BlogInfo>({
     endpoint: 'blog-info',
     query: {
@@ -66,10 +66,10 @@ export const findAllPostsSortedByPublishedAt = async () => {
         mainImage: '*',
         categories: '*',
         tags: '*',
+        relatedArticles: '*',
       },
     },
   });
-  return;
 };
 
 export const extractCategories = (articles: Article[]): Category[] => {
@@ -117,6 +117,25 @@ export const findPostsByCategory = async (id: number) => {
             $eq: id,
           },
         },
+      },
+    },
+  });
+};
+
+export const findMostLikedPost = async () => {
+  return await fetchApi<{ data: Article[]; meta: Meta }>({
+    endpoint: '/articles',
+    query: {
+      publicationState: 'live',
+      sort: ['likes:desc'],
+      populate: {
+        author: {
+          fields: '*',
+          populate: '*',
+        },
+        mainImage: '*',
+        categories: '*',
+        tags: '*',
       },
     },
   });

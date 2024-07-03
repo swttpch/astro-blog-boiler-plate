@@ -4,6 +4,7 @@ import {
   extractTags,
   findAllPostsSortedByPublishedAt,
   findDefaultBlogContent,
+  findMostLikedPost,
   findMostRelevantCategories,
   findPostsByCategory,
 } from '../blog';
@@ -12,13 +13,19 @@ export const getStaticPathsBlogHome = async () => {
   const [blogInfo, header, footer] = await findDefaultBlogContent();
   const allPosts = await findAllPostsSortedByPublishedAt();
   const mostRelevantCategories = await findMostRelevantCategories();
-  const categoryArticles = await findPostsByCategory(mostRelevantCategories[0].id);
+  const mostRelevantCategory = mostRelevantCategories[0];
+  const mostRelevantCategoryArticles = await findPostsByCategory(mostRelevantCategory?.id);
+  const mostLikedPosts = await findMostLikedPost();
   const obj = {
     blogInfo,
     header,
     footer,
     categories: mostRelevantCategories,
-    categoryArticles,
+    mostRelevantCategory: {
+      category: mostRelevantCategory,
+      articles: mostRelevantCategoryArticles,
+    },
+    mostLikedPosts,
   };
   if (!allPosts || allPosts.data.length === 0)
     return [

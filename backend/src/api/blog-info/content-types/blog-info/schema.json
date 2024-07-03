@@ -32,6 +32,9 @@
       "type": "component",
       "repeatable": true,
       "component": "list.socials"
+    },
+    "email": {
+      "type": "string"
     }
   }
 }

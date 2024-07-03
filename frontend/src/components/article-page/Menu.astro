@@ -12,7 +12,7 @@ type Props = {
   likes: number;
   url: string;
   titles: string[];
-  email: string;
+  email?: string;
 };
 const { idArticle, likes, url, titles, email } = Astro.props;
 ---
@@ -118,9 +118,9 @@ const { idArticle, likes, url, titles, email } = Astro.props;
     toggleStorage = () => {
       this.liked = !this.liked;
       if (this.liked) {
-        sessionStorage.setItem('liked', 'true');
+        localStorage.setItem('liked', 'true');
       } else {
-        sessionStorage.removeItem('liked');
+        localStorage.removeItem('liked');
       }
     };
   }

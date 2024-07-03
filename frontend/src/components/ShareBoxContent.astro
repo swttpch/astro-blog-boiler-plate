@@ -4,7 +4,7 @@ import CopyIcon from './icons/CopyIcon.astro';
 import { twMerge } from 'tailwind-merge';
 import ShareReactComponent from './react/Share2';
 
-type Props = { url: string; email: string } & HTMLAttributes<'div'>;
+type Props = { url: string; email?: string } & HTMLAttributes<'div'>;
 const { url, email, class: className, ...props } = Astro.props;
 const refinedUrl = import.meta.env.PUBLIC_BASE_URL + '/' + url;
 ---

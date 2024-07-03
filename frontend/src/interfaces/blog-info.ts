@@ -10,6 +10,7 @@ export type BlogInfo = {
       createdAt: string;
       updatedAt: string;
       publishedAt: string;
+      email?: string;
       brand: {
         data: Image;
       };

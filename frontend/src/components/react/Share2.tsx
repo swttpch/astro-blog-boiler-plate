@@ -5,7 +5,7 @@ import {
   TwitterShareButton,
 } from 'react-share';
 
-function ShareReactComponent({ url, email }: { url: string; email: string }) {
+function ShareReactComponent({ url, email }: { url: string; email?: string }) {
   return (
     <>
       <div className="self-stretch border border-gray.100 flex justify-start items-start">
@@ -88,22 +88,25 @@ function ShareReactComponent({ url, email }: { url: string; email: string }) {
             </svg>
           </div>
         </FacebookShareButton>
-        <EmailShareButton url={email} className="flex-1">
-          <div className="bgWhite hover:bg-gray-50 flex-1 px-12 py-24 border-r border-gray.100 flex justify-center items-center gap-10 text-gray-500 hover:text-gray-700">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-            >
-              <path
-                d="M1.99992 2H13.9999C14.1767 2 14.3463 2.07024 14.4713 2.19526C14.5963 2.32029 14.6666 2.48986 14.6666 2.66667V13.3333C14.6666 13.5101 14.5963 13.6797 14.4713 13.8047C14.3463 13.9298 14.1767 14 13.9999 14H1.99992C1.82311 14 1.65354 13.9298 1.52851 13.8047C1.40349 13.6797 1.33325 13.5101 1.33325 13.3333V2.66667C1.33325 2.48986 1.40349 2.32029 1.52851 2.19526C1.65354 2.07024 1.82311 2 1.99992 2V2ZM8.03992 7.78867L3.76525 4.15867L2.90192 5.17467L8.04859 9.54467L13.1026 5.17133L12.2306 4.16267L8.04059 7.78867H8.03992Z"
-                fill="currentColor"
-              ></path>
-            </svg>
-          </div>
-        </EmailShareButton>
+        {email && (
+          <EmailShareButton url={email} className="flex-1">
+            <div className="bgWhite hover:bg-gray-50 flex-1 px-12 py-24 border-r border-gray.100 flex justify-center items-center gap-10 text-gray-500 hover:text-gray-700">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
+                <path
+                  d="M1.99992 2H13.9999C14.1767 2 14.3463 2.07024 14.4713 2.19526C14.5963 2.32029 14.6666 2.48986 14.6666 2.66667V13.3333C14.6666 13.5101 14.5963 13.6797 14.4713 13.8047C14.3463 13.9298 14.1767 14 13.9999 14H1.99992C1.82311 14 1.65354 13.9298 1.52851 13.8047C1.40349 13.6797 1.33325 13.5101 1.33325 13.3333V2.66667C1.33325 2.48986 1.40349 2.32029 1.52851 2.19526C1.65354 2.07024 1.82311 2 1.99992 2V2ZM8.03992 7.78867L3.76525 4.15867L2.90192 5.17467L8.04859 9.54467L13.1026 5.17133L12.2306 4.16267L8.04059 7.78867H8.03992Z"
+                  fill="currentColor"
+                ></path>
+              </svg>
+            </div>
+          </EmailShareButton>
+        )}
+
         <TwitterShareButton url={url} className="flex-1">
           <div className="bgWhite hover:bg-gray-50 flex-1 px-12 py-24 border-r border-gray.100 flex justify-center items-center gap-10 text-gray-500 hover:text-gray-700">
             <svg

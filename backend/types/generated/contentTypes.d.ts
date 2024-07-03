@@ -1382,6 +1382,7 @@ export interface ApiBlogInfoBlogInfo extends Schema.SingleType {
     brand: Attribute.Media<'images'>;
     summary: Attribute.Text;
     socials: Attribute.Component<'list.socials', true>;
+    email: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

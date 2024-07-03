@@ -1,16 +1,16 @@
 import rss from '@astrojs/rss';
-import { getCollection } from 'astro:content';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { findAllPostsSortedByPublishedAt, findBlogInfo } from '../utils/blog';
 
 export async function GET(context) {
-  const posts = await getCollection('blog');
+  const blogInfo = await findBlogInfo();
+  const articles = await findAllPostsSortedByPublishedAt();
   return rss({
-    title: SITE_TITLE,
-    description: SITE_DESCRIPTION,
+    title: blogInfo.data.attributes.name,
+    description: blogInfo.data.attributes.description,
     site: context.site,
-    items: posts.map((post) => ({
-      ...post.data,
-      link: `/blog/${post.slug}/`,
+    items: articles.data.map((post) => ({
+      ...post,
+      link: `/p/${post.attributes.slug}/`,
     })),
   });
 }
