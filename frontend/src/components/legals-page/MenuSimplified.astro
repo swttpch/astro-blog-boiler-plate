@@ -1,0 +1,59 @@
+---
+import MenuIcon from '../icons/MenuIcon.astro';
+import MenuBoxContent from './MenuBoxContent.astro';
+
+type Props = {
+  list: Array<{ title: string; id: string }>;
+};
+const { list } = Astro.props;
+---
+
+<div
+  id="modal-background"
+  class="absolute top-0 hidden z-40 left-0 w-full h-full data-[active]:block"
+>
+</div>
+
+<div
+  class="top-[100px] lg:top-[200px] lg:mt-[-12px] sticky flex flex-col items-center gap-56 max-w-72 flex-1 text-gray-600 hover:text-black z-40"
+>
+  <menu-button class="text-text-soft hover:text-text-sub data-[active]:text-text-sub">
+    <button class="transition-colors">
+      <MenuIcon color="currentColor" />
+    </button>
+    <MenuBoxContent list={list} />
+  </menu-button>
+</div>
+
+<script>
+  class MenuButton extends HTMLElement {
+    modal = this.querySelector('#menu-modal-content');
+    modalbg = document.querySelector('#modal-background');
+    constructor() {
+      super();
+
+      this.querySelector('button')?.addEventListener('click', () => {
+        const isOpen = this.modal?.getAttribute('data-active');
+        if (!(isOpen === 'true')) {
+          this.openModal();
+        } else {
+          this.closeModal();
+        }
+      });
+    }
+
+    closeModal = () => {
+      this.modal?.removeAttribute('data-active');
+      this.modalbg?.removeAttribute('data-active');
+      this.modalbg?.removeEventListener('click', this.closeModal, true);
+    };
+
+    openModal = () => {
+      this.modal?.setAttribute('data-active', 'true');
+      this.modalbg?.setAttribute('data-active', 'true');
+      this.modalbg?.addEventListener('click', this.closeModal, true);
+    };
+  }
+
+  customElements.define('menu-button', MenuButton);
+</script>

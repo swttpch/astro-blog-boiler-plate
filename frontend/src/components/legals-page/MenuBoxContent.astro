@@ -1,0 +1,53 @@
+---
+type Props = {
+  list: Array<{ title: string; id: string }>;
+};
+const { list } = Astro.props;
+---
+
+<div
+  id="menu-modal-content"
+  class="hidden p-16 bg-white rounded-lg border border-gray-300 flex-col justify-start items-start gap-2 absolute top-0 left-[calc(100%_+_8px)] shadow-lg data-[active]:flex"
+>
+  <div class="flex flex-col justify-start items-center gap-12">
+    <p class="text-gray-800 text-2xl font-medium">Índice</p>
+    <div
+      class="p-24 bg-white rounded-lg border border-gray-200 flex flex-col justify-start items-start gap-24 max-h-[400px] max-w-[300px] overflow-y-scroll"
+    >
+      {
+        list.map((item, index) => {
+          return (
+            <div class="flex justify-start items-center gap-8">
+              <div class="h-24 px-8 bg-primary-lighter rounded-full flex justify-center items-center">
+                <span class="text-center text-primary-base text-base font-semibold leading-6 ">
+                  {index + 1}
+                </span>
+              </div>
+              <a
+                id={`link-to-${item.id}`}
+                class="text-gray-800 text-base font-medium leading-6 w-full cursor-pointer text-wrap whitespace-pre-wrap"
+              >
+                {item.title}
+              </a>
+            </div>
+          );
+        })
+      }
+    </div>
+  </div>
+</div>
+
+<script>
+  const links = document.querySelectorAll('#menu-modal-content a');
+  links.forEach((link) => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      //@ts-ignore
+      const target = e.target?.getAttribute('id').replace('link-to-', '');
+      const element = document.getElementById(target);
+      element?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      document.querySelector('#modal-background')?.removeAttribute('data-active');
+      document.querySelector('#menu-modal-content')?.removeAttribute('data-active');
+    });
+  });
+</script>

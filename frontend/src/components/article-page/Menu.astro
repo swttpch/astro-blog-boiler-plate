@@ -45,13 +45,6 @@ const { idArticle, likes, url, titles, email } = Astro.props;
     </button>
     <span class="text-sm font-medium transition-colors">{likes}</span>
   </like-button>
-  <!-- <div class="flex flex-col items-center gap-4 self-stretch group text-gray-600 hover:text-black">
-    <button class="transition-colors">
-      <CommentsIcon id={'comment-icon'} color="currentColor" />
-      <CommentsFullIcon id={'comment-full-icon'} />
-    </button>
-    <span class="text-sm font-medium transition-colors">999999</span>
-  </div> -->
   <share-button
     data-id={idArticle}
     class="flex relative flex-col items-center gap-4 self-stretch group text-gray-600 hover:text-black"
@@ -60,7 +53,6 @@ const { idArticle, likes, url, titles, email } = Astro.props;
       <ShareIcon id="share-icon" color="currentColor" />
       <ShareFullIcon id="share-full-icon" class={'hidden'} />
     </button>
-    <!-- <span class="text-sm font-medium transition-colors">{shares}</span> -->
 
     <ShareBoxContent url={url} email={email} />
   </share-button>
