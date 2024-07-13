@@ -3,6 +3,10 @@ import HeaderLink from './HeaderLink.astro';
 import type StrapiNavigation from '../interfaces/navigation';
 import type { CategoryPlain } from '../interfaces/category';
 import HeaderItemModal from './HeaderItemModal.astro';
+import { getLang, useTranslations } from '../i18n/utils';
+
+const lang = getLang();
+const t = useTranslations(lang);
 
 type Props = {
   headerNavigation: StrapiNavigation<CategoryPlain>[];
@@ -11,7 +15,7 @@ const { headerNavigation } = Astro.props;
 ---
 
 <nav class="hidden lg:flex justify-center items-stretch self-stretch w-full relative">
-  <HeaderLink href="/"> Inicio </HeaderLink>
+  <HeaderLink href={'/'}> {t('nav.home')} </HeaderLink>
   {
     headerNavigation?.map((item) => (
       <HeaderLink
@@ -24,7 +28,7 @@ const { headerNavigation } = Astro.props;
     ))
   }
   <form
-    action="/pesquisa"
+    action="/s"
     class="modal-search-input max-w-0 data-[active]:max-w-full overflow-hidden left-0 top-0 absolute w-full h-full bg-white z-40 flex items-center justify-stretch transition-all duration-300 ease-in-out"
   >
     <div
@@ -33,7 +37,7 @@ const { headerNavigation } = Astro.props;
       <input
         name="s"
         type="text"
-        placeholder="Pesquisar"
+        placeholder={t('placeholder.search')}
         class="h-full w-full p-0 focus:outline-0"
       />
       <button

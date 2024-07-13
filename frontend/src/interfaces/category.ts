@@ -1,5 +1,6 @@
 import type { ArticlePlain } from './article';
 import type Article from './article';
+import type { Seo } from './seo';
 
 export default interface Category {
   id: number;
@@ -10,7 +11,7 @@ export default interface Category {
     color: string;
     createdAt: string;
     updatedAt: string;
-    seo?: object;
+    seo?: Seo;
     articlesCount: number;
     highlights: {
       data?: Array<Article>;
@@ -36,4 +37,5 @@ export interface CategoryPlain {
   highlights: Array<ArticlePlain>;
   subCategories: Array<CategoryPlain>;
   parentCategory: CategoryPlain;
+  seo: Seo;
 }

@@ -1,4 +1,5 @@
 import type Image from './image';
+import type { Seo } from './seo';
 import type { Socials } from './socials';
 
 export default interface Author {
@@ -15,7 +16,7 @@ export default interface Author {
       text: string;
     }>;
     avatar?: { data: Image };
-    seo?: object;
+    seo?: Seo;
     socials: Array<Socials>;
   };
 }
@@ -34,4 +35,5 @@ export interface AuthorPlain {
   }>;
   avatar?: Image;
   socials: Array<Socials>;
+  seo: Seo;
 }

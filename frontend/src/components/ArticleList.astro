@@ -22,6 +22,9 @@ import AuthorBox from './author-box/AuthorBox.astro';
 import AuthorBoxBody from './author-box/AuthorBoxBody.astro';
 import AuthorBoxName from './author-box/AuthorBoxName.astro';
 import AuthorBoxArticleInfo from './author-box/AuthorBoxArticleInfo.astro';
+import { getLang, useTranslations } from '../i18n/utils';
+const lang = getLang();
+const t = useTranslations(lang);
 
 type Props = {
   brand: Image;
@@ -89,7 +92,7 @@ const prev = curPath + (+curPage - 1) + (query ? `?${query}` : '') + '#articles-
                       <AuthorBoxBody>
                         <AuthorBoxName>{author.attributes.name}</AuthorBoxName>
                         <AuthorBoxArticleInfo>
-                          <FormattedDate date={publishedAt} /> • {readingTime} min de leitura
+                          <FormattedDate date={publishedAt} /> • {readingTime} {t('readingTime')}
                         </AuthorBoxArticleInfo>
                       </AuthorBoxBody>
                     </AuthorBox>
@@ -116,7 +119,7 @@ const prev = curPath + (+curPage - 1) + (query ? `?${query}` : '') + '#articles-
         {
           categories.length > 0 && (
             <div class="flex flex-col justify-start items-center gap-24">
-              <h3 class="w-full text-text-main text-2xl font-medium">Principais categorias</h3>
+              <h3 class="w-full text-text-main text-2xl font-medium">{t('mainCategories')}</h3>
               <div class="flex flex-col justify-start items-center gap-16 w-full">
                 {categories.map((el) => (
                   <a
@@ -138,7 +141,7 @@ const prev = curPath + (+curPage - 1) + (query ? `?${query}` : '') + '#articles-
         {
           tags.length > 0 && (
             <div class="flex flex-col justify-start items-center gap-24 ">
-              <h3 class="w-full text-text-main text-2xl font-medium">Principais tags</h3>
+              <h3 class="w-full text-text-main text-2xl font-medium">{t('mainTags')}</h3>
               <div class="flex justify-start items-center flex-wrap gap-12 w-full p-24 border border-border-soft bg-white rounded-md">
                 {tags.map((el) => (
                   <TagComponent href={el.attributes.slug}>{el.attributes.name}</TagComponent>
@@ -159,6 +162,7 @@ const prev = curPath + (+curPage - 1) + (query ? `?${query}` : '') + '#articles-
               socials.map((social) => (
                 <a
                   href={social.url}
+                  target="_blank"
                   class="flex justify-center items-center size-40 flex-wrap p-2 bg-primary-base rounded-full overflow-hidden"
                 >
                   <SocialsComponent social={social.type} class={'text-white size-20'} />

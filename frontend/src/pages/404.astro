@@ -1,15 +1,23 @@
 ---
 import DefaultLayout from '../layouts/DefaultLayout.astro';
-import { findDefaultBlogContent, findMostRelevantCategories } from '../utils/blog';
 import CategoriesList from '../components/CategoriesList.astro';
 import Screen from '../components/Screen.astro';
 import Container from '../components/Container.astro';
+import { getLang, useTranslations } from '../i18n/utils';
+import { getStaticPathFourOhFour } from '../utils/getStaticPaths/four-oh-four';
 export const prerender = true;
-const [blogInfo, header, footer] = await findDefaultBlogContent();
-const mostRelevantCategories = await findMostRelevantCategories();
+const lang = getLang();
+const t = useTranslations(lang);
+const { blogInfo, categories, footer, header } = await getStaticPathFourOhFour({ language: lang });
 ---
 
-<DefaultLayout blogInfo={blogInfo} footerNavigation={footer} headerNavigation={header}>
+<DefaultLayout
+  title={t('404.title')}
+  description={t('404.subtitle')}
+  blogInfo={blogInfo}
+  footerNavigation={footer}
+  headerNavigation={header}
+>
   <Screen class={'lg:py-[112px] lg:pb-0  py-0'}>
     <Container class={'lg:py64 py-48 flex-col gap-32 items-center'}>
       <svg
@@ -73,20 +81,20 @@ const mostRelevantCategories = await findMostRelevantCategories();
         <circle cx="189.012" cy="61.261" r="29.8833" stroke="#7367F0" stroke-width="1.49416"
         ></circle>
       </svg>
-      <h1 class="font-bold text-text-main text-center">Ops! Página não econtrada</h1>
+      <h1 class="font-bold text-text-main text-center">{t('404.title')}</h1>
       <p class="text-body-base font-medium text-text-sub text-center h-[54px]">
-        Sentimos muito, a página que você requisitou não foi encontrada.
+        {t('404.subtitle')}
       </p>
       <Screen class={'py-0 px-0'}>
         <Container class="item-center py-0 px-0">
-          <form action="/pesquisa" class="w-full bg-white flex items-center justify-center">
+          <form action="/s" class="w-full bg-white flex items-center justify-center">
             <div
               class="h-56 p-8 pl-16 justify-stretch flex items-center w-full max-w-[692px] rounded-md border border-border-sub bg-white"
             >
               <input
                 name="s"
                 type="text"
-                placeholder="Pesquisar"
+                placeholder={t('placeholder.search')}
                 class="h-full w-full p-0 focus:outline-0"
               />
               <button
@@ -112,5 +120,5 @@ const mostRelevantCategories = await findMostRelevantCategories();
     </Container>
   </Screen>
 
-  <CategoriesList categories={mostRelevantCategories} />
+  <CategoriesList categories={categories} />
 </DefaultLayout>

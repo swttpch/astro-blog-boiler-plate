@@ -37,6 +37,7 @@ export const findArticlesAndMetaBySearch = async ({
         mainImage: '*',
         categories: '*',
         tags: '*',
+        localizations: '*',
       },
       pagination: {
         page: curPage,

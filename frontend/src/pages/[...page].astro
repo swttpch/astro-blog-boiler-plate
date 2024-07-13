@@ -8,10 +8,13 @@ import Popular from '../components/home/Popular.astro';
 import CategorySection from '../components/SixArticlesSection.astro';
 import ArticleList from '../components/ArticleList.astro';
 import { getStaticPathsBlogHome } from '../utils/getStaticPaths/home';
+import { getLang, useTranslations } from '../i18n/utils';
 export const prerender = true;
-
+const lang = getLang();
+const t = useTranslations(lang);
 export const getStaticPaths = (async () => {
-  return await getStaticPathsBlogHome();
+  const lang = getLang();
+  return await getStaticPathsBlogHome({ language: lang });
 }) satisfies GetStaticPaths;
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
@@ -28,11 +31,18 @@ const {
   categories,
   mostLikedPosts,
   mostRelevantCategory,
+  heroArticles,
 } = props;
 ---
 
-<DefaultLayout blogInfo={blogInfo} headerNavigation={header} footerNavigation={footer}>
-  <Hero />
+<DefaultLayout
+  title={t('home.title')}
+  description={t('home.description')}
+  blogInfo={blogInfo}
+  headerNavigation={header}
+  footerNavigation={footer}
+>
+  <Hero articles={heroArticles} />
   <ArticlesMosaic articles={articles} />
   <CategoriesList categories={categories} />
   <Popular articles={[mostLikedPosts.data[0], mostLikedPosts.data[1]]} />

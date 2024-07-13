@@ -16,6 +16,10 @@ import AuthorBoxName from '../author-box/AuthorBoxName.astro';
 import AuthorBoxArticleInfo from '../author-box/AuthorBoxArticleInfo.astro';
 import FormattedDate from '../FormattedDate.astro';
 import ArticleDescription from '../article/ArticleDescription.astro';
+import { getLang, useTranslations } from '../../i18n/utils';
+
+const lang = getLang();
+const t = useTranslations(lang);
 
 type Props = {
   articles: [Article, Article];
@@ -27,7 +31,7 @@ const { articles } = Astro.props;
 <Screen class={'lg:py-80'}>
   <Container class="flex-col">
     <SectionHeader title="Mais populares">
-      <LinkWithArrow to="#articles-list"> Ver todos </LinkWithArrow>
+      <LinkWithArrow to="#articles-list"> {t('seeAll_male')} </LinkWithArrow>
     </SectionHeader>
     <div class="flex gap-32 self-stretch overflow-scroll lg:overflow-hidden lg:flex-row flex-col">
       {
@@ -64,7 +68,7 @@ const { articles } = Astro.props;
                       <AuthorBoxName>{author.attributes.name}</AuthorBoxName>
                       <AuthorBoxArticleInfo>
                         <FormattedDate date={new Date(date)} /> • {article.attributes.readingTime}{' '}
-                        min de leitura
+                        {t('readingTime')}
                       </AuthorBoxArticleInfo>
                     </AuthorBoxBody>
                   </AuthorBox>

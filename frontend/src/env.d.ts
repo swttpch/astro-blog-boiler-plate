@@ -3,4 +3,5 @@
 
 interface ImportMetaEnv {
   readonly STRAPI_URL: string;
+  readonly DEFAULT_LANG: string;
 }

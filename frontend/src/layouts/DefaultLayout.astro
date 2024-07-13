@@ -3,24 +3,28 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import NewsLetter from '../components/NewsLetter.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 import type { BlogInfo } from '../interfaces/blog-info';
 import type { CategoryPlain } from '../interfaces/category';
 import type StrapiNavigation from '../interfaces/navigation';
+
+import { getLang } from '../i18n/utils';
+const lang = getLang();
 
 type Props = {
   blogInfo: BlogInfo;
   headerNavigation: StrapiNavigation<CategoryPlain>[];
   footerNavigation: StrapiNavigation<CategoryPlain>[];
+  title: string;
+  description: string;
 };
 
-const { blogInfo, headerNavigation, footerNavigation } = Astro.props;
+const { blogInfo, headerNavigation, footerNavigation, title, description } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="pt-br">
+<html lang={lang.toLowerCase()}>
   <head>
-    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <BaseHead title={title} description={description} />
   </head>
   <body>
     <Header headerNavigation={headerNavigation} blogInfo={blogInfo} />

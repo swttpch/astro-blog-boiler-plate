@@ -7,6 +7,7 @@ import SeeMoreLink from './LinkWithArrow.astro';
 import type StrapiNavigation from '../interfaces/navigation';
 import type { CategoryPlain } from '../interfaces/category';
 import type { BlogInfo } from '../interfaces/blog-info';
+import { getLang, useTranslations } from '../i18n/utils';
 type Props = {
   blogInfo: BlogInfo;
   footerNavigation: StrapiNavigation<CategoryPlain>[];
@@ -20,6 +21,8 @@ const {
   footerNavigation,
 } = Astro.props;
 const today = new Date();
+const lang = getLang();
+const t = useTranslations(lang);
 ---
 
 <footer>
@@ -53,11 +56,11 @@ const today = new Date();
                     </p>
                     <div class="flex flex-col self-stretch gap-20">
                       {categoryPlain.highlights.map((category) => (
-                        <a href={'/p/' + category.slug} class="text-base font-medium text-text-sub">
+                        <a href={category.slug} class="text-base font-medium text-text-sub">
                           {category.title}
                         </a>
                       ))}
-                      <SeeMoreLink to={'/c/' + categoryPlain.slug}>Ver mais</SeeMoreLink>
+                      <SeeMoreLink to={'/c/' + categoryPlain.slug}>{t('seeMore')}</SeeMoreLink>
                     </div>
                   </div>
                 );
@@ -80,15 +83,6 @@ const today = new Date();
               );
             })
           }
-          <!-- <div class="flex flex-col self-stretch items-start gap-24">
-            <p class="text-sm font-medium text-text-main self-stretch">Maquiagem</p>
-            <div class="flex flex-col self-stretch gap-20">
-              <a href="" class="text-base font-medium text-text-sub">Máquiagem de cílios</a>
-              <SeeMoreLink to="/">
-                Ver mais
-              </SeeMoreLink>
-            </div>
-          </div> -->
         </div>
       </div>
       <div class="w-full h-[1px] bg-border-soft"></div>
@@ -98,10 +92,9 @@ const today = new Date();
           {name}
         </div>
         <div class="flex gap-16 lg:gap-32 lg:flex-row flex-col items-center lg:items-start">
-          <a href="" class="text-text-main text-sm font-normal break-words"
-            >Política de Privacidade</a
+          <a href={'/privacidade'} class="text-text-main text-sm font-normal break-words"
+            >{t('footer.privacy')}</a
           >
-          <a href="" class="text-text-main text-sm font-normal break-words">Política de Cookies</a>
         </div>
       </div>
     </Container>

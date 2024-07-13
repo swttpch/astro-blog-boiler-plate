@@ -1,4 +1,6 @@
 import { PAGE_SIZE } from '../../constants/common';
+import type Article from '../../interfaces/article';
+import fetchApi from '../../lib/strapi';
 import {
   extractCategories,
   extractTags,
@@ -9,13 +11,16 @@ import {
   findPostsByCategory,
 } from '../blog';
 
-export const getStaticPathsBlogHome = async () => {
-  const [blogInfo, header, footer] = await findDefaultBlogContent();
-  const allPosts = await findAllPostsSortedByPublishedAt();
-  const mostRelevantCategories = await findMostRelevantCategories();
+export const getStaticPathsBlogHome = async ({ language }: { language: string }) => {
+  const [blogInfo, header, footer] = await findDefaultBlogContent({ language });
+  const allPosts = await findAllPostsSortedByPublishedAt({ language });
+  const mostRelevantCategories = await findMostRelevantCategories({ language });
   const mostRelevantCategory = mostRelevantCategories[0];
-  const mostRelevantCategoryArticles = await findPostsByCategory(mostRelevantCategory?.id);
-  const mostLikedPosts = await findMostLikedPost();
+  const mostRelevantCategoryArticles = await findPostsByCategory({
+    language,
+    id: mostRelevantCategory?.id,
+  });
+  const mostLikedPosts = await findMostLikedPost({ language });
   const obj = {
     blogInfo,
     header,
@@ -35,6 +40,7 @@ export const getStaticPathsBlogHome = async () => {
           articles: [],
           mainTags: [],
           mainCategories: [],
+          heroArticles: [],
           meta: {
             pagination: {
               page: 1,
@@ -47,6 +53,8 @@ export const getStaticPathsBlogHome = async () => {
         },
       },
     ];
+
+  const heroArticles = await getHeroArticles(language);
   const pages = Array.from(
     { length: Math.ceil(allPosts.meta.pagination.total / PAGE_SIZE) },
     (_, i) => i + 1,
@@ -64,6 +72,7 @@ export const getStaticPathsBlogHome = async () => {
         ),
         mainTags: extractTags(allPosts.data.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)),
         meta: allPosts.meta,
+        heroArticles,
       },
     })),
     {
@@ -74,7 +83,31 @@ export const getStaticPathsBlogHome = async () => {
         mainCategories: extractCategories(allPosts.data.slice(0, PAGE_SIZE)),
         mainTags: extractTags(allPosts.data.slice(0, PAGE_SIZE)),
         meta: allPosts.meta,
+        heroArticles,
       },
     },
   ];
+};
+
+const getHeroArticles = async (lang: string): Promise<Article[]> => {
+  return await fetchApi<Article[]>({
+    endpoint: 'articles',
+    wrappedByKey: 'data',
+    query: {
+      populate: {
+        mainImage: {
+          fields: ['url', 'alternativeText', 'width', 'height', 'formats'],
+        },
+        categories: {
+          fields: ['title'],
+        },
+      },
+      pagination: {
+        pageSize: 3,
+      },
+      publicationState: 'live',
+      sort: ['publishedAt:desc'],
+      locale: lang,
+    },
+  });
 };

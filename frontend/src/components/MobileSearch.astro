@@ -1,5 +1,7 @@
 ---
-
+import { getLang, useTranslations } from '../i18n/utils';
+const lang = getLang();
+const t = useTranslations(lang);
 ---
 
 <div
@@ -11,14 +13,14 @@
     >
       <div class="p-20 w-full h-full flex justify-stretch">
         <form
-          action="/pesquisa"
+          action="/s"
           class="h-full w-full self-stretch flex pl-16 justify-between items-center gap-16 border border-border-soft rounded-md"
         >
           <input
             type="text"
-            name=""
+            name="s"
             class="flex-1 focus:outline-none"
-            placeholder="Search for products"
+            placeholder={t('placeholder.search')}
           />
           <button
             type="submit"

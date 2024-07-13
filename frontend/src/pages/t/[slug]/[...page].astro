@@ -1,75 +1,37 @@
 ---
-import { PAGE_SIZE } from '../../../constants/common';
-import type Article from '../../../interfaces/article';
-import type Meta from '../../../interfaces/meta';
-import type { Tag } from '../../../interfaces/tag';
 import CategoriesAndTags from '../../../layouts/CategoriesAndTagsLayout.astro';
-import fetchApi from '../../../lib/strapi';
+import { getLang, useTranslations } from '../../../i18n/utils';
+import { getStaticPathsTags } from '../../../utils/getStaticPaths/tags';
+import type { GetStaticPaths } from 'astro';
 
-const { page, slug } = Astro.params;
+export const prerender = true;
+const lang = getLang();
+const t = useTranslations(lang);
+export const getStaticPaths = (async () => {
+  const lang = getLang();
 
-let cp = page || 1;
+  return await getStaticPathsTags({ language: lang });
+}) satisfies GetStaticPaths;
 
-const tagsData = await fetchApi<Tag>({
-  endpoint: `/tags`,
-  wrappedByKey: 'data',
-  wrappedByList: true,
-  query: {
-    filters: {
-      slug: {
-        $eq: slug,
-      },
-    },
-    populate: {
-      highlights: {
-        populate: '*',
-      },
-    },
-  },
-});
+const { page = '1', slug } = Astro.params;
 
-if (!tagsData) {
-  Astro.response.status = 404;
-  Astro.response.statusText = 'Not found';
-}
-
-const articlesResponse = await fetchApi<{ data: Article[]; meta: Meta }>({
-  endpoint: '/articles',
-  query: {
-    publicationState: 'live',
-    sort: ['publishedAt:desc'],
-    filters: {
-      tags: {
-        id: {
-          $eq: tagsData.id,
-        },
-      },
-    },
-    populate: {
-      author: {
-        fields: '*',
-        populate: '*',
-      },
-      mainImage: '*',
-      categories: '*',
-    },
-    pagination: {
-      page: cp,
-      pageSize: PAGE_SIZE,
-    },
-  },
-});
+const { tag, blogInfo, footer, header, articles, meta } = Astro.props;
 ---
 
 <CategoriesAndTags
-  articles={articlesResponse.data}
-  curPage={articlesResponse.meta.pagination.page}
+  title={tag.attributes.seo?.metaTitle || tag.attributes.name}
+  description={tag.attributes.seo?.metaDescription || tag.attributes.description}
+  blogInfo={blogInfo}
+  headerNavigation={header}
+  footerNavigation={footer}
+  articles={articles}
+  curPage={+page}
   data={{
-    description: tagsData.attributes.description,
-    title: '#' + tagsData.attributes.name,
-    items: [{ title: 'Tags' }, { title: tagsData.attributes.name, url: `/t/${slug}/` }],
+    description: tag.attributes.description,
+    title: '#' + tag.attributes.name,
+    items: [{ title: t('tags') }, { title: tag.attributes.name, url: `/t/${slug}/` }],
   }}
   curPath={`/t/${slug}/`}
-  totalPages={articlesResponse.meta.pagination.pageCount}
-  highlights={tagsData.attributes.highlights.data}
+  totalPages={meta.pagination.pageCount}
+  highlights={tag.attributes.highlights.data}
 />

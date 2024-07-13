@@ -1,5 +1,6 @@
 ---
 import type Article from '../../interfaces/article';
+import { getLang, useTranslations } from '../../i18n/utils';
 
 type Props = {
   prevArticle: Article;
@@ -7,11 +8,15 @@ type Props = {
 };
 
 const { prevArticle, nextArticle } = Astro.props;
+const lang = getLang();
+const t = useTranslations(lang);
 ---
 
 <div class="pb-[48px] border-tl-8 border-tr-8 justify-center items-start gap-32 flex self-stretch">
   <div class="flex-[1] flex flex-col justify-start items-start gap-12">
-    <p class="self-stretch text-text-soft text-sm font-semibold break-words">Artigo anterior</p>
+    <p class="self-stretch text-text-soft text-sm font-semibold break-words">
+      {t('previousArticle')}
+    </p>
     <a
       href={prevArticle.attributes.slug}
       class="self-start text-text-main text-lg font-semibold break-words"
@@ -20,7 +25,7 @@ const { prevArticle, nextArticle } = Astro.props;
   </div>
   <div class="flex-[1] flex flex-col justify-start items-end gap-12">
     <p class="text-text-soft text-sm font-semibold break-words self-stretch text-right">
-      Próximo Artigo
+      {t('nextArticle')}
     </p>
     <a
       href={nextArticle.attributes.slug}

@@ -7,7 +7,9 @@ import type Category from '../../interfaces/category';
 import DefaultLayout from '../../layouts/DefaultLayout.astro';
 import fetchApi from '../../lib/strapi';
 import { defaultBlogRequests } from '../../lib/blog';
-
+import { getLang, useTranslations } from '../../i18n/utils';
+const lang = getLang();
+const t = useTranslations(lang);
 const categories = await fetchApi<Category[]>({
   endpoint: 'categories',
   wrappedByKey: 'data',
@@ -20,14 +22,16 @@ const { blogInfo, headerNavigation, footerNavigation } = await defaultBlogReques
 ---
 
 <DefaultLayout
+  title={t('categories.title')}
+  description={t('categories.description')}
   blogInfo={blogInfo}
   headerNavigation={headerNavigation}
   footerNavigation={footerNavigation}
 >
   <PageHeader
-    description="Cuidados com a pele envolvem limpeza, hidratação e proteção solar. É importante escolher produtos adequados ao seu tipo de pele e evitar exposição ao sol sem proteção, além de manter uma rotina de cuidados diários para manter a saúde e aparência da pele."
-    items={[{ title: 'Categorias', url: '/c/' }]}
-    title="Todas as categorias"
+    description={t('categories.description')}
+    items={[{ title: t('categories'), url: '/c/' }]}
+    title={t('categories.title')}
   />
   <Screen class={'py-32 lg:pb-80'}>
     <Container>

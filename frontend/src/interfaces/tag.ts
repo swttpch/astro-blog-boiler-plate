@@ -1,5 +1,6 @@
 import type { ArticlePlain } from './article';
 import type Article from './article';
+import type { Seo } from './seo';
 
 export interface Tag {
   id: number;
@@ -9,7 +10,7 @@ export interface Tag {
     createdAt: string;
     updatedAt: string;
     slug: string;
-    seo?: object;
+    seo?: Seo;
     highlights: {
       data?: Array<Article>;
     };
@@ -23,6 +24,6 @@ export interface TagPlain {
   createdAt: string;
   updatedAt: string;
   slug: string;
-  seo?: object;
+  seo?: Seo;
   highlights: Array<ArticlePlain>;
 }

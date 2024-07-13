@@ -1,11 +1,14 @@
 ---
 import Container from './Container.astro';
 import Screen from './Screen.astro';
+import { getLang, useTranslations } from '../i18n/utils';
+const lang = getLang();
+const t = useTranslations(lang);
 ---
 
 <Screen class="relative bg-primary-dark overflow-visible py-56 lg:py-80">
   <Container class="items-center flex-col lg:flex-row">
-    <h2 class="font-semibold self-stretch flex-1 text-white">Inscreva-se na newsletter</h2>
+    <h2 class="font-semibold self-stretch flex-1 text-white">{t('newsletter.title')}</h2>
     <form
       id="newsletter-form"
       class="self-stretch lg:w-[592px] py-8 px-24 pr-8 bg-white rounded-lg border border-primary-300 justify-between items-center flex gap-8"
@@ -21,7 +24,7 @@ import Screen from './Screen.astro';
         class="flex-1 px-24 py-10 bg-primary-base rounded-sm border border-primary-base justify-center items-center gap-8 flex"
       >
         <div id="newsletter-submit-button" class="text-white text-base font-medium text-nowrap">
-          vamos conversar
+          {t('button.subscribe')}
         </div>
       </button>
     </form>

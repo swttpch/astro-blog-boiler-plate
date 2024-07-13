@@ -1,32 +1,24 @@
 ---
 import { getImage } from 'astro:assets';
 import type Article from '../../interfaces/article';
-import fetchApi from '../../lib/strapi';
+
 import CategoryBadge from '../CategoryBadge.astro';
 import Screen from '../Screen.astro';
 import Container from '../Container.astro';
 import { getStyleBackgroundImage } from '../../utils/getStyleBackgroundImage';
+import { getLang, useTranslations } from '../../i18n/utils';
+import FormattedDate from '../FormattedDate.astro';
+
+type Props = {
+  articles: Article[];
+};
+
+const { articles } = Astro.props;
+
+const lang = getLang();
+const t = useTranslations(lang);
 
 export const prerender = true;
-
-const articles = await fetchApi<Article[]>({
-  endpoint: 'articles',
-  wrappedByKey: 'data',
-  query: {
-    populate: {
-      mainImage: {
-        fields: ['url', 'alternativeText', 'width', 'height', 'formats'],
-      },
-      categories: {
-        fields: ['title'],
-      },
-    },
-    pagination: {
-      pageSize: 3,
-    },
-    publicationState: 'live',
-  },
-});
 const imgUrl = `${import.meta.env.NODE_ENV === 'development' ? import.meta.env.STRAPI_URL : ''}`;
 const betterImages = await Promise.all(
   articles.map((el) =>
@@ -57,11 +49,12 @@ const bgs = betterImages.map((el) => {
             class={`article-content-${index} hidden flex-1 data-[active]:flex justify-start items-end gap-[48px] max-w-[640px]`}
           >
             <div class="Content flex-1 flex flex-col justify-start items-start gap-[24px] ">
-              {article.attributes.categories.data && (
-                <CategoryBadge>
-                  {article.attributes.categories.data[0].attributes.title}
-                </CategoryBadge>
-              )}
+              {article.attributes.categories.data &&
+                article.attributes.categories.data.length > 0 && (
+                  <CategoryBadge>
+                    {article.attributes.categories.data[0].attributes.title}
+                  </CategoryBadge>
+                )}
               <div class="TitleParagraph self-stretch flex flex-col justify-start items-start gap-[16px]">
                 <a
                   href={'/p/' + article.attributes.slug}
@@ -97,8 +90,7 @@ const bgs = betterImages.map((el) => {
     >
       {
         articles?.map((el, index) => {
-          const category = el.attributes.categories.data?.[0].attributes.title;
-          const published_at = new Date(el.attributes.createdAt).toLocaleDateString('pt-BR');
+          const category = el.attributes.categories.data?.[0]?.attributes.title;
           const reading_time = el.attributes.readingTime;
           const slug = '/p/' + el.attributes.slug;
           const title = el.attributes.title;
@@ -121,7 +113,8 @@ const bgs = betterImages.map((el) => {
                   <div class="self-stretch flex justify-between items-center">
                     {category && <CategoryBadge class={'self-start'}>{category}</CategoryBadge>}
                     <div class="self-stretch text-primary-lighter text-xs font-medium">
-                      {published_at} • {reading_time} min de leitura
+                      <FormattedDate date={new Date(el.attributes.createdAt)} /> • {reading_time}{' '}
+                      {t('readingTime')}
                     </div>
                   </div>
                 </div>

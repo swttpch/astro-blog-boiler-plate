@@ -196,7 +196,7 @@ const CommentContent = ({
             className="text-xs text-gray-600"
             dateTime={new Date(comment.createdAt).toISOString()}
           >
-            {new Date(comment.createdAt).toLocaleDateString('pt-br', {
+            {new Date(comment.createdAt).toLocaleDateString('pt-BR', {
               year: 'numeric',
               month: 'short',
               day: 'numeric',
@@ -291,7 +291,7 @@ const CommentContent = ({
                   className="text-xs text-gray-600"
                   dateTime={new Date(child.createdAt).toISOString()}
                 >
-                  {new Date(child.createdAt).toLocaleDateString('pt-br', {
+                  {new Date(child.createdAt).toLocaleDateString('pt-BR', {
                     year: 'numeric',
                     month: 'short',
                     day: 'numeric',

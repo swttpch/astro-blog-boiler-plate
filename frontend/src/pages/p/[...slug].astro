@@ -1,13 +1,11 @@
 ---
 import BaseHead from '../../components/BaseHead.astro';
 import Header from '../../components/Header.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts.ts';
 import AuthorComplement from '../../components/AuthorComplement.astro';
 import Screen from '../../components/Screen.astro';
 import Container from '../../components/Container.astro';
 import ProgressReading from '../../components/ProgressReading.astro';
 import Menu from '../../components/article-page/Menu.astro';
-import ArticleFeedback from '../../components/article-page/ArticleFeedback.astro';
 import AuthorInfo from '../../components/article-page/AuthorInfo.astro';
 import TagsAndShare from '../../components/article-page/TagsAndShare.astro';
 import Pagination from '../../components/article-page/Pagination.astro';
@@ -22,22 +20,19 @@ import { getImage } from 'astro:assets';
 import Comments from '../../components/react/Comments.tsx';
 import { getStaticPathsPost } from '../../utils/getStaticPaths/post.ts';
 import type { GetStaticPaths, InferGetStaticPropsType } from 'astro';
+import { getLang } from '../../i18n/utils.ts';
 
 export const prerender = true;
-
+const lang = getLang();
 export const getStaticPaths = (async () => {
-  return await getStaticPathsPost();
+  const lang = getLang();
+
+  return await getStaticPathsPost({ language: lang });
 }) satisfies GetStaticPaths;
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
-const { props } = Astro;
-const { post, blogInfo, headerNavigation, footerNavigation } = props;
-
-if (!post || post === undefined || !post.id) {
-  Astro.response.status = 404;
-  Astro.response.statusText = 'Not found';
-}
+const { post, blogInfo, headerNavigation, footerNavigation } = Astro.props;
 
 const prevId = post.id === 1 ? post.id + 2 : post.id - 1;
 const nextArticle = await fetchApi<Article | null>({
@@ -46,6 +41,7 @@ const nextArticle = await fetchApi<Article | null>({
   query: {
     fields: ['slug', 'title'],
     publicationState: 'live',
+    locate: lang,
   },
 });
 
@@ -55,6 +51,7 @@ const prevArticle = await fetchApi<Article | null>({
   query: {
     fields: ['slug', 'title'],
     publicationState: 'live',
+    locate: lang,
   },
 });
 
@@ -65,6 +62,7 @@ const safePrevArticle = await fetchApi<Article>({
   query: {
     fields: ['slug', 'title'],
     publicationState: 'live',
+    locate: lang,
     pagination: {
       pageSize: 1,
       page: 1,
@@ -79,6 +77,7 @@ const safeNextArticle = await fetchApi<Article>({
   query: {
     fields: ['slug', 'title'],
     publicationState: 'live',
+    locate: lang,
     pagination: {
       pageSize: 1,
       page: 2,
@@ -102,9 +101,12 @@ const h1List =
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang.toLowerCase()}>
   <head>
-    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <BaseHead
+      title={post.attributes.seo?.metaTitle || post.attributes.title}
+      description={post.attributes.seo?.metaDescription || post.attributes.previewText}
+    />
   </head>
   <body>
     <Header blogInfo={blogInfo} headerNavigation={headerNavigation} />
@@ -129,13 +131,14 @@ const h1List =
       <ProgressReading />
       <Breadcrumb
         class={'flex lg:hidden py-16 px-[36px]'}
-        items={[
-          categories?.map((category) => ({
-            title: category.attributes.title,
-            url: `/c/${category.attributes.slug}`,
-          })),
-          { title: post.attributes.title, url: post.attributes.slug },
-        ]}
+        items={(categories &&
+          categories.length > 0 && [
+            categories?.map((category) => ({
+              title: category.attributes.title,
+              url: `/c/${category.attributes.slug}`,
+            })),
+            { title: post.attributes.title, url: post.attributes.slug },
+          ]) || [{ title: post.attributes.title, url: post.attributes.slug }]}
       />
       <Screen class="pl-0 relative pr-24 py-32 lg:py-0 justify-end">
         <Container class={'gap-24 lg:gap-64 '}>
@@ -149,17 +152,18 @@ const h1List =
           <div class="flex flex-col gap-32 items-start flex-1 overflow-visible">
             <Breadcrumb
               class={'hidden lg:flex'}
-              items={[
-                categories?.map((category) => ({
-                  title: category.attributes.title,
-                  url: `/c/${category.attributes.slug}`,
-                })),
-                { title: post.attributes.title, url: post.attributes.slug },
-              ]}
+              items={(categories &&
+                categories.length > 0 && [
+                  categories?.map((category) => ({
+                    title: category.attributes.title,
+                    url: `/c/${category.attributes.slug}`,
+                  })),
+                  { title: post.attributes.title, url: post.attributes.slug },
+                ]) || [{ title: post.attributes.title, url: post.attributes.slug }]}
             />
             <ArticleContent content={post.attributes.content} />
-            <div class="flex flex-col gap-32 items-start flex-1 overflow-hidden">
-              <ArticleFeedback id={post.id} usefullCount={post.attributes.usefullCount} />
+            <div class="flex flex-col gap-32 items-start flex-1 overflow-hidden w-full">
+              <!-- <ArticleFeedback id={post.id} usefullCount={post.attributes.usefullCount} /> -->
               <Pagination
                 nextArticle={nextArticle ?? safeNextArticle}
                 prevArticle={prevArticle ?? safePrevArticle}

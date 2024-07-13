@@ -1,78 +1,40 @@
 ---
-import { PAGE_SIZE } from '../../../constants/common';
-import type Article from '../../../interfaces/article';
-import type Category from '../../../interfaces/category';
-import type Meta from '../../../interfaces/meta';
 import CategoriesAndTags from '../../../layouts/CategoriesAndTagsLayout.astro';
-import fetchApi from '../../../lib/strapi';
+import { getLang, useTranslations } from '../../../i18n/utils';
+import { getStaticPathsCategoriesSlug } from '../../../utils/getStaticPaths/categories';
+import type { GetStaticPaths } from 'astro';
 
-const { page, slug } = Astro.params;
+export const prerender = true;
+const lang = getLang();
+const t = useTranslations(lang);
+export const getStaticPaths = (async () => {
+  const lang = getLang();
 
-let cp = page || 1;
+  return await getStaticPathsCategoriesSlug({ language: lang });
+}) satisfies GetStaticPaths;
 
-const categoryData = await fetchApi<Category>({
-  endpoint: `/categories`,
-  wrappedByKey: 'data',
-  wrappedByList: true,
-  query: {
-    filters: {
-      slug: {
-        $eq: slug,
-      },
-    },
-    populate: {
-      highlights: {
-        populate: '*',
-      },
-    },
-  },
-});
+const { page = '1', slug } = Astro.params;
 
-if (!categoryData) {
-  Astro.response.status = 404;
-  Astro.response.statusText = 'Not found';
-}
-
-const articlesResponse = await fetchApi<{ data: Article[]; meta: Meta }>({
-  endpoint: '/articles',
-  query: {
-    publicationState: 'live',
-    sort: ['publishedAt:desc'],
-    filters: {
-      categories: {
-        id: {
-          $eq: categoryData.id,
-        },
-      },
-    },
-    populate: {
-      author: {
-        fields: '*',
-        populate: '*',
-      },
-      mainImage: '*',
-      categories: '*',
-    },
-    pagination: {
-      page: cp,
-      pageSize: PAGE_SIZE,
-    },
-  },
-});
+const { category, blogInfo, footer, header, articles, meta } = Astro.props;
 ---
 
 <CategoriesAndTags
-  articles={articlesResponse.data}
-  curPage={articlesResponse.meta.pagination.page}
+  title={category.attributes.seo?.metaTitle || category.attributes.title}
+  description={category.attributes.seo?.metaDescription || category.attributes.description}
+  blogInfo={blogInfo}
+  headerNavigation={header}
+  footerNavigation={footer}
+  articles={articles}
+  curPage={+page}
   data={{
-    description: categoryData.attributes.description,
-    title: categoryData.attributes.title,
+    description: category.attributes.description,
+    title: category.attributes.title,
     items: [
-      { title: 'Categorias', url: '/c/' },
-      { title: categoryData.attributes.title, url: `/c/${slug}/` },
+      { title: t('categories'), url: '/c/' },
+      { title: category.attributes.title, url: `/c/${slug}/` },
     ],
   }}
   curPath={`/c/${slug}/`}
-  totalPages={articlesResponse.meta.pagination.pageCount}
-  highlights={categoryData.attributes.highlights.data}
+  totalPages={meta.pagination.pageCount}
+  highlights={category.attributes.highlights.data}
 />

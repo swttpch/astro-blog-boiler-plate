@@ -1,4 +1,5 @@
 ---
+import { getLang, useTranslations } from '../i18n/utils';
 type Props = {
   currentPage: number;
   totalPages: number;
@@ -6,6 +7,8 @@ type Props = {
   previousPage: string;
 };
 const { currentPage, nextPage, previousPage, totalPages } = Astro.props;
+const lang = getLang();
+const t = useTranslations(lang);
 ---
 
 <div class="flex gap-32 rounded-md p-12 bg-white lg:items-center lg:flex-row flex-col">
@@ -31,7 +34,7 @@ const { currentPage, nextPage, previousPage, totalPages } = Astro.props;
             />
           </g>
         </svg>
-        <span>Anterior</span>
+        <span>{t('previous')}</span>
       </button>
     ) : (
       <a
@@ -53,12 +56,15 @@ const { currentPage, nextPage, previousPage, totalPages } = Astro.props;
             />
           </g>
         </svg>
-        <span>Anterior</span>
+        <span>{t('previous')}</span>
       </a>
     )
   }
   <p class="text-md text-gray-400 lg:self-auto self-stretch text-center">
-    Página {currentPage} de {totalPages}
+    {t('page')}
+    {currentPage}
+    {t('of')}
+    {totalPages}
   </p>
   {
     currentPage == totalPages ? (
@@ -67,7 +73,7 @@ const { currentPage, nextPage, previousPage, totalPages } = Astro.props;
         data-disabled
         class="px-24 py-10 gap-8 rounded-xs flex items-center justify-center data-[disabled]:bg-primary-400  data-[disabled]:hover:bg-primary-400 flex-1 text-lg font-semibold text-white hover:bg-primary-800 bg-primary-700"
       >
-        <span>Próxima</span>
+        <span>{t('next')}</span>
         <svg
           width="19"
           height="18"
@@ -89,7 +95,7 @@ const { currentPage, nextPage, previousPage, totalPages } = Astro.props;
         href={nextPage}
         class="px-24 py-10 gap-8 rounded-xs flex items-center justify-center data-[disabled]:bg-primary-400  data-[disabled]:hover:bg-primary-400 flex-1 text-lg font-semibold text-white hover:bg-primary-800 bg-primary-700"
       >
-        <span>Próxima</span>
+        <span>{t('next')}</span>
         <svg
           width="19"
           height="18"

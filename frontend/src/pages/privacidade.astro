@@ -5,26 +5,34 @@ import Container from '../components/Container.astro';
 import DefaultLayout from '../layouts/DefaultLayout.astro';
 import Menu from '../components/legals-page/MenuSimplified.astro';
 import PageHeader from '../components/PageHeader.astro';
-import { defaultBlogRequests } from '../lib/blog';
+import { getStaticPathsPrivacy } from '../utils/getStaticPaths/privacy';
+import { getLang, useTranslations } from '../i18n/utils';
 const entry = await getEntry('legal', 'privacidade');
 const { Content, headings } = await entry.render();
 
-const { blogInfo, headerNavigation, footerNavigation } = await defaultBlogRequests();
+const lang = getLang();
+const t = useTranslations(lang);
+
+const { blogInfo, header, footer } = await getStaticPathsPrivacy({
+  language: lang,
+});
 ---
 
 <DefaultLayout
+  title={t('privacy.title')}
+  description={t('privacy.description')}
   blogInfo={blogInfo}
-  headerNavigation={headerNavigation}
-  footerNavigation={footerNavigation}
+  headerNavigation={header}
+  footerNavigation={footer}
 >
   <PageHeader
-    description={`Atualizado em: ${new Date(entry.data.updatedAt).toLocaleDateString('pt-br', {
+    description={`${t('updatedIn')}: ${new Date(entry.data.updatedAt).toLocaleDateString('pt-BR', {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
     })}`}
-    items={[{ title: 'Politica de privacidade', url: '/privacidade' }]}
-    title="Politica de Privacidade"
+    items={[{ title: t('footer.privacy'), url: '/privacidade' }]}
+    title={t('footer.privacy')}
   />
   <Screen class="pl-0 relative pr-24 py-32 lg:py-80 justify-end">
     <Container class={'gap-24 lg:gap-64 '}>

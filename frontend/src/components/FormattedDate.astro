@@ -2,13 +2,15 @@
 interface Props {
   date: Date;
 }
+import { getLang } from '../i18n/utils';
 
+const lang = getLang();
 const { date } = Astro.props;
 ---
 
 <time datetime={date.toISOString()}>
   {
-    date.toLocaleDateString('pt-br', {
+    date.toLocaleDateString(lang, {
       year: 'numeric',
       month: 'short',
       day: 'numeric',

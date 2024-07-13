@@ -14,7 +14,9 @@ import Container from './Container.astro';
 import FormattedDate from './FormattedDate.astro';
 import Screen from './Screen.astro';
 import SectionHeader from './SectionHeader.astro';
-
+import { getLang, useTranslations } from '../i18n/utils';
+const lang = getLang();
+const t = useTranslations(lang);
 type Props = {
   articles: Article[];
 };
@@ -63,8 +65,8 @@ const { articles } = Astro.props;
                               {author.attributes.name}
                             </AuthorBoxName>
                             <AuthorBoxArticleInfo class="text-white">
-                              <FormattedDate date={new Date(date)} /> •{' '}
-                              {article.attributes.readingTime} min de leitura
+                              <FormattedDate date={new Date(date)} /> •
+                              {article.attributes.readingTime} {t('readingTime')}
                             </AuthorBoxArticleInfo>
                           </AuthorBoxBody>
                         </AuthorBox>
@@ -114,8 +116,8 @@ const { articles } = Astro.props;
                               {author.attributes.name}
                             </AuthorBoxName>
                             <AuthorBoxArticleInfo class="text-white">
-                              <FormattedDate date={new Date(date)} /> •{' '}
-                              {article.attributes.readingTime} min de leitura
+                              <FormattedDate date={new Date(date)} /> •
+                              {article.attributes.readingTime} {t('readingTime')}
                             </AuthorBoxArticleInfo>
                           </AuthorBoxBody>
                         </AuthorBox>

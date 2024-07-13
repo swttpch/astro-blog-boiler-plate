@@ -3,12 +3,12 @@ import ArticleList from '../components/ArticleList.astro';
 import PageHeader from '../components/PageHeader.astro';
 import type Article from '../interfaces/article';
 import type { BreadcrumbBullet } from '../interfaces/breadcrumb-bullet';
-import type Category from '../interfaces/category';
-import type { Tag } from '../interfaces/tag';
-import fetchApi from '../lib/strapi';
 import DefaultLayout from './DefaultLayout.astro';
 import ThreePosts from '../components/ThreePostsSection.astro';
-import { defaultBlogRequests } from '../lib/blog';
+import type { BlogInfo } from '../interfaces/blog-info';
+import type { CategoryPlain } from '../interfaces/category';
+import type StrapiNavigation from '../interfaces/navigation';
+import { extractCategories, extractTags } from '../utils/blog';
 
 type Props = {
   data: {
@@ -21,37 +21,36 @@ type Props = {
   totalPages: number;
   articles: Article[];
   highlights?: Article[];
+  blogInfo: BlogInfo;
+  headerNavigation: StrapiNavigation<CategoryPlain>[];
+  footerNavigation: StrapiNavigation<CategoryPlain>[];
+  title: string;
+  description: string;
 };
 
-const { articles, curPage, curPath, totalPages, highlights, data } = Astro.props;
-
-const categories = await fetchApi<Category[]>({
-  endpoint: 'categories',
-  wrappedByKey: 'data',
-  query: {
-    sort: ['title:asc'],
-    pagination: {
-      page: 1,
-      pageSize: 5,
-    },
-  },
-});
-
-const tags = await fetchApi<Tag[]>({
-  endpoint: 'tags',
-  wrappedByKey: 'data',
-  query: {
-    sort: ['name:asc'],
-  },
-});
-
-const { blogInfo, headerNavigation, footerNavigation } = await defaultBlogRequests();
+const {
+  articles,
+  curPage,
+  curPath,
+  totalPages,
+  highlights,
+  data,
+  blogInfo,
+  footerNavigation,
+  headerNavigation,
+  title,
+  description,
+} = Astro.props;
+const categories = extractCategories(articles);
+const tags = extractTags(articles);
 ---
 
 <DefaultLayout
   blogInfo={blogInfo}
   headerNavigation={headerNavigation}
   footerNavigation={footerNavigation}
+  title={title}
+  description={description}
 >
   <PageHeader {...data} />
   {highlights && <ThreePosts articles={highlights} />}

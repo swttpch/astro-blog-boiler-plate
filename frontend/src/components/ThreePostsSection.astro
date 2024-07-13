@@ -14,6 +14,9 @@ import ArticleImage from './article/ArticleImage.astro';
 import ArticleContent from './article/ArticleContent.astro';
 import ArticleTitle from './article/ArticleTitle.astro';
 import ArticleDescription from './article/ArticleDescription.astro';
+import { getLang, useTranslations } from '../i18n/utils';
+const lang = getLang();
+const t = useTranslations(lang);
 
 type Props = {
   articles: Article[];
@@ -28,7 +31,7 @@ const length = articles.length;
     <Screen class={'lg:p-32'}>
       <Container class={'lg:py-0 gap-16 lg:gap-32 lg:flex-row flex-col'}>
         {articles.slice(0, 3).map((el) => {
-          const category = el.attributes.categories.data?.[0];
+          const category = el.attributes.categories?.data?.[0];
           const author = el.attributes.author.data;
           const date = new Date(el.attributes.createdAt);
           const image = el.attributes.mainImage?.data;
@@ -47,7 +50,8 @@ const length = articles.length;
                     <div class="self-stretch flex items-center justify-between">
                       {category && <CategoryBadge>{category.attributes.title}</CategoryBadge>}
                       <AuthorBoxArticleInfo class="flex items-center">
-                        <FormattedDate date={date} /> • {el.attributes.readingTime} min de leitura
+                        <FormattedDate date={date} /> • {el.attributes.readingTime}{' '}
+                        {t('readingTime')}
                       </AuthorBoxArticleInfo>
                     </div>
                     <ArticleTitle>{el.attributes.title}</ArticleTitle>

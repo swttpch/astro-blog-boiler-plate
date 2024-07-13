@@ -14,6 +14,7 @@ import AuthorBoxBody from './author-box/AuthorBoxBody.astro';
 import AuthorBoxName from './author-box/AuthorBoxName.astro';
 import AuthorBoxArticleInfo from './author-box/AuthorBoxArticleInfo.astro';
 import FormattedDate from './FormattedDate.astro';
+import { getLang, useTranslations } from '../i18n/utils';
 
 type Props = {
   title: string;
@@ -24,53 +25,57 @@ type Props = {
 const { title, url, articles } = Astro.props;
 
 const refinedArray = [...articles, ...articles].splice(0, 6);
+const lang = getLang();
+const t = useTranslations(lang);
 ---
 
-<Screen class={'lg:py-80'}>
-  <Container class="flex-col">
-    <SectionHeader title={title}>
-      {url && <LinkWithArrow to={url}> Ver todos </LinkWithArrow>}
-    </SectionHeader>
-    <div class="flex gap-32 self-stretch lg:flex-row">
-      <div class="flex flex-col lg:flex-row gap-32 flex-wrap justify-between self-stretch w-full">
-        {
-          refinedArray.map((article) => {
-            const author = article.attributes.author.data;
-            const date = article.attributes.publishedAt;
-            return (
-              <ArticleComponent
-                href={'/p/' + article.attributes.slug}
-                class={'lg:max-w-[calc((100%/2)-16px)] lg:flex-[1_0_100%] flex-col lg:flex-row'}
-              >
-                <ArticleImage
-                  image={article.attributes.mainImage.data}
-                  class={'hidden lg:flex flex-[0_0_200px]'}
-                />
-                <ArticleContent class={'lg:flex-0 gap-24 p-16 lg:p-0'}>
-                  <ArticleTitle class="font-medium whitespace-break-spaces text-wrap break-words lg:h-[97px] overflow-hidden text-ellipsis">
-                    {article.attributes.title}
-                  </ArticleTitle>
-                  {author && (
-                    <AuthorBox>
-                      <AuthorBoxAvatar
-                        image={author.attributes.avatar?.data}
-                        name={author.attributes.name}
-                      />
-                      <AuthorBoxBody>
-                        <AuthorBoxName>{author.attributes.name}</AuthorBoxName>
-                        <AuthorBoxArticleInfo class={'text-text-soft'}>
-                          <FormattedDate date={new Date(date)} /> • {article.attributes.readingTime}{' '}
-                          min de leitura
-                        </AuthorBoxArticleInfo>
-                      </AuthorBoxBody>
-                    </AuthorBox>
-                  )}
-                </ArticleContent>
-              </ArticleComponent>
-            );
-          })
-        }
-      </div>
-    </div>
-  </Container>
-</Screen>
+{
+  articles && articles.length > 0 && (
+    <Screen class={'lg:py-80'}>
+      <Container class="flex-col">
+        <SectionHeader title={title}>
+          {url && <LinkWithArrow to={url}> {t('seeAll_male')} </LinkWithArrow>}
+        </SectionHeader>
+        <div class="flex gap-32 self-stretch lg:flex-row">
+          <div class="flex flex-col lg:flex-row gap-32 flex-wrap justify-between self-stretch w-full">
+            {refinedArray.map((article) => {
+              const author = article.attributes.author.data;
+              const date = article.attributes.publishedAt;
+              return (
+                <ArticleComponent
+                  href={'/p/' + article.attributes.slug}
+                  class={'lg:max-w-[calc((100%/2)-16px)] lg:flex-[1_0_100%] flex-col lg:flex-row'}
+                >
+                  <ArticleImage
+                    image={article.attributes.mainImage.data}
+                    class={'hidden lg:flex flex-[0_0_200px]'}
+                  />
+                  <ArticleContent class={'lg:flex-0 gap-24 p-16 lg:p-0'}>
+                    <ArticleTitle class="font-medium whitespace-break-spaces text-wrap break-words lg:h-[97px] overflow-hidden text-ellipsis">
+                      {article.attributes.title}
+                    </ArticleTitle>
+                    {author && (
+                      <AuthorBox>
+                        <AuthorBoxAvatar
+                          image={author.attributes.avatar?.data}
+                          name={author.attributes.name}
+                        />
+                        <AuthorBoxBody>
+                          <AuthorBoxName>{author.attributes.name}</AuthorBoxName>
+                          <AuthorBoxArticleInfo class={'text-text-soft'}>
+                            <FormattedDate date={new Date(date)} /> •{' '}
+                            {article.attributes.readingTime} {t('readingTime')}
+                          </AuthorBoxArticleInfo>
+                        </AuthorBoxBody>
+                      </AuthorBox>
+                    )}
+                  </ArticleContent>
+                </ArticleComponent>
+              );
+            })}
+          </div>
+        </div>
+      </Container>
+    </Screen>
+  )
+}

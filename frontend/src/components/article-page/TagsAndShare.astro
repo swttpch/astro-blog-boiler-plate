@@ -2,6 +2,9 @@
 import TagComponent from '../Tag.astro';
 import type { Tag } from '../../interfaces/tag';
 import ShareReactComponent from '../react/Share.tsx';
+import { getLang, useTranslations } from '../../i18n/utils';
+const lang = getLang();
+const t = useTranslations(lang);
 type Props = {
   tags?: Tag[];
   slug: string;
@@ -15,7 +18,7 @@ const url = import.meta.env.PUBLIC_BASE_URL;
   class="justify-between items-start lg:items-center flex self-stretch flex-col lg:flex-row gap-y-32"
 >
   <div class="flex items-center gap-16 flex-wrap">
-    <div class="text-text-sub text-base font-normal break-words">Tags:</div>
+    <div class="text-text-sub text-base font-normal break-words">{t('tags')}:</div>
     <div class="flex items-center gap-8">
       {
         tags.map((tag) => (
@@ -25,7 +28,7 @@ const url = import.meta.env.PUBLIC_BASE_URL;
     </div>
   </div>
   <div class="flex items-center gap-16 flex-wrap">
-    <div class="text-text-sub text-base font-medium break-words">Compartilhar:</div>
+    <div class="text-text-sub text-base font-medium break-words">{t('share')}:</div>
     <div class="flex items-center">
       <ShareReactComponent email={email} url={url + '/' + slug} client:load />
     </div>

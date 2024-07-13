@@ -6,7 +6,9 @@ import AuthorBoxAvatar from './author-box/AuthorBoxAvatar.astro';
 import AuthorBoxBody from './author-box/AuthorBoxBody.astro';
 import AuthorBoxName from './author-box/AuthorBoxName.astro';
 import FormattedDate from './FormattedDate.astro';
-
+import { getLang, useTranslations } from '../i18n/utils';
+const lang = getLang();
+const t = useTranslations(lang);
 type Props = { author?: Author; date: string; readingTime: string };
 const { author, date, readingTime } = Astro.props;
 ---
@@ -30,6 +32,6 @@ const { author, date, readingTime } = Astro.props;
       <FormattedDate date={new Date(date)} />
     </p>
     <div class="size-4 shrink-0 rounded-full bg-primary-light"></div>
-    <p class="font-semibold text-base text-primary-lighter">{readingTime} min de leitura</p>
+    <p class="font-semibold text-base text-primary-lighter">{readingTime} {t('readingTime')}</p>
   </div>
 </div>

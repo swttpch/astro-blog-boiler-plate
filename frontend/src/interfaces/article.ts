@@ -3,6 +3,7 @@ import type Author from './author';
 import type { CategoryPlain } from './category';
 import type Category from './category';
 import type Image from './image';
+import type { Seo } from './seo';
 import type { Tag, TagPlain } from './tag';
 
 export default interface Article {
@@ -38,7 +39,10 @@ export default interface Article {
     relatedArticles: {
       data?: Array<Article>;
     };
-    seo?: object;
+    seo?: Seo;
+    localizations: {
+      data: Array<Article>;
+    };
   };
 }
 
@@ -64,4 +68,5 @@ export interface ArticlePlain {
   tags: Array<TagPlain>;
   categories: Array<CategoryPlain>;
   relatedArticles: Array<ArticlePlain>;
+  seo: Seo;
 }

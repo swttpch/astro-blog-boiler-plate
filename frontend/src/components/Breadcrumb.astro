@@ -4,7 +4,9 @@ import ChevronRightIcon from './icons/ChevronRightIcon.astro';
 import HomeIcon from './icons/HomeIcon.astro';
 import type { HTMLAttributes } from 'astro/types';
 import type { BreadcrumbBullet } from '../interfaces/breadcrumb-bullet';
-
+import { getLang, useTranslations } from '../i18n/utils';
+const lang = getLang();
+const t = useTranslations(lang);
 type Props = {
   items: Array<BreadcrumbBullet | BreadcrumbBullet[]>;
 } & HTMLAttributes<'div'>;
@@ -22,8 +24,8 @@ const { items = [], class: className, ...rest } = Astro.props;
   <HomeIcon class={'flex-[0_0_24px]'} />
   <div class="flex items-center gap-[8px] flex-1">
     <div class="p-2 rounded-sm justify-center items-center gap-10 flex">
-      <a href="/" class="text-text-soft text-small font-normal break-words hover:text-text-sub"
-        >Início</a
+      <a href={'/'} class="text-text-soft text-small font-normal break-words hover:text-text-sub"
+        >{t('nav.home')}</a
       >
     </div>
     {
@@ -43,7 +45,7 @@ const { items = [], class: className, ...rest } = Astro.props;
                   return (
                     <div class={twMerge([classTemp, 'hover:text-none'])}>
                       {subindex === 0 ? '' : '/'}
-                      <Component href={subitem.url} class={twMerge([classTemp])}>
+                      <Component href={'/'} class={twMerge([classTemp])}>
                         {subitem.title}
                       </Component>
                     </div>

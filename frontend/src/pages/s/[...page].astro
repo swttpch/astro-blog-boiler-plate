@@ -7,7 +7,10 @@ import ArticleList from '../../components/ArticleList.astro';
 import type Article from '../../interfaces/article';
 import { extractCategories, extractTags } from '../../utils/blog';
 import { findArticlesAndMetaBySearch, findSafeArticlesAndMetaBySearch } from '../../utils/search';
+import { getLang, useTranslations } from '../../i18n/utils';
 
+const lang = getLang();
+const t = useTranslations(lang);
 const { blogInfo, headerNavigation, footerNavigation } = await defaultBlogRequests();
 const search = Astro.url.searchParams.get('s');
 const { page } = Astro.params;
@@ -33,21 +36,29 @@ const tags = articles && extractTags(articles);
 ---
 
 <DefaultLayout
+  title={t('results_by_search').replace('{{search}}', search?.toString() || '')}
+  description={t(totalItems > 1 ? 'results_found_many' : 'results_found_one').replace(
+    '{{count}}',
+    totalItems.toString(),
+  )}
   blogInfo={blogInfo}
   headerNavigation={headerNavigation}
   footerNavigation={footerNavigation}
 >
   <PageHeader
-    title={`Resultados da busca por: "${search}"`}
-    description={`${totalItems} resultados encontrados`}
-    items={[{ title: 'Pesquisa' }, { title: search || '', url: '/pesquisa?s=' + search }]}
+    title={t('results_by_search').replace('{{search}}', search?.toString() || '')}
+    description={t(totalItems > 1 ? 'results_found_many' : 'results_found_one').replace(
+      '{{count}}',
+      totalItems.toString(),
+    )}
+    items={[{ title: t('placeholder.search') }, { title: search || '', url: '/s?s=' + search }]}
   />
   {
     !articles || articles.length === 0 ? (
-      <SixArticlesSection title="Você pode gostar" articles={safeArticles} />
+      <SixArticlesSection title={t('you_might_like')} articles={safeArticles} />
     ) : (
       <ArticleList
-        curPath={'/pesquisa/'}
+        curPath={'/s/'}
         query={'s=' + search}
         curPage={+curPage}
         totalPages={totalPages}

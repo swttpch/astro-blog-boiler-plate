@@ -5,10 +5,14 @@ import CategoryDefault from './CategoryDefault.astro';
 import Container from './Container.astro';
 import Screen from './Screen.astro';
 import LinkWithArrow from './LinkWithArrow.astro';
+import { getLang, useTranslations } from '../i18n/utils';
 
 type Props = {
   categories: Category[];
 };
+
+const lang = getLang();
+const t = useTranslations(lang);
 
 const { categories } = Astro.props;
 ---
@@ -16,7 +20,7 @@ const { categories } = Astro.props;
 <Screen class={'lg:py-80'}>
   <Container class="flex-col">
     <SectionHeader title="Categorias">
-      <LinkWithArrow to="/c"> Ver todas </LinkWithArrow>
+      <LinkWithArrow to="/c"> {t('seeAll_female')} </LinkWithArrow>
     </SectionHeader>
     <div
       class="flex w-screen px-24 lg:px-0 lg:w-auto items-start content-start gap-32 self-stretch overflow-scroll lg:overflow-hidden pb-10 lg:ml-0 -ml-24"
