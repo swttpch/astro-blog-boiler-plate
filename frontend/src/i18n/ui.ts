@@ -5,7 +5,6 @@ export const languages = {
 };
 export const showDefaultLang = false;
 export const defaultLang = (import.meta.env.DEFAULT_LANGUAGE as keyof typeof languages) || 'pt-BR';
-console.log(defaultLang);
 export const ui = {
   en: {
     'nav.home': 'Home',
@@ -60,7 +59,7 @@ export const ui = {
     results_found_many: '{{count}} results found',
     results_by_search: 'Results by search "{{search}}"',
     'categories.title': '',
-    'categories.description': ''
+    'categories.description': '',
   },
   'pt-BR': {
     'nav.home': 'Inicio',
@@ -115,7 +114,7 @@ export const ui = {
     results_found_many: '{{count}} resultados encontrados',
     results_by_search: 'Resultados por busca "{{search}}"',
     'categories.title': '',
-    'categories.description': ''
+    'categories.description': '',
   },
   es: {
     'nav.home': 'Inicio',
@@ -170,6 +169,6 @@ export const ui = {
     results_found_many: '{{count}} resultados encontrados',
     results_by_search: 'Resultados por búsqueda "{{search}}"',
     'categories.title': '',
-    'categories.description': ''
+    'categories.description': '',
   },
 } as const;
