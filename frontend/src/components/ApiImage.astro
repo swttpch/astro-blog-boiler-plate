@@ -10,7 +10,7 @@ const { image, ...rest } = Astro.props;
 ---
 
 <img
-  src={`${import.meta.env.NODE_ENV === 'development' ? import.meta.env.STRAPI_URL : ''}` +
+  src={`${import.meta.env.NODE_ENV === 'local' ? import.meta.env.STRAPI_URL : ''}` +
     image.attributes.url}
   width={image.attributes.width}
   height={image.attributes.height}
